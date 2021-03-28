@@ -7,10 +7,4 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Management.Automation">
-      <HintPath>System.Management.Automation.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
