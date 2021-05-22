@@ -1,7 +1,7 @@
 ﻿
 namespace monitoring_tool
 {
-    partial class CustomScript
+    partial class FormCustomScript
     {
         /// <summary>
         /// Required designer variable.
