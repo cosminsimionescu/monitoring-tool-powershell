@@ -42,14 +42,14 @@
             this.server = new System.Windows.Forms.Label();
             this.targetServer = new System.Windows.Forms.TextBox();
             this.txtCmd = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtCPU = new System.Windows.Forms.TextBox();
+            this.txtMem = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtVolume = new System.Windows.Forms.TextBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -164,19 +164,21 @@
             this.txtCmd.Size = new System.Drawing.Size(206, 102);
             this.txtCmd.TabIndex = 7;
             // 
-            // textBox2
+            // txtCPU
             // 
-            this.textBox2.Location = new System.Drawing.Point(656, 77);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 23);
-            this.textBox2.TabIndex = 8;
+            this.txtCPU.Location = new System.Drawing.Point(656, 77);
+            this.txtCPU.Multiline = true;
+            this.txtCPU.Name = "txtCPU";
+            this.txtCPU.Size = new System.Drawing.Size(75, 37);
+            this.txtCPU.TabIndex = 8;
             // 
-            // textBox3
+            // txtMem
             // 
-            this.textBox3.Location = new System.Drawing.Point(522, 77);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 23);
-            this.textBox3.TabIndex = 9;
+            this.txtMem.Location = new System.Drawing.Point(522, 77);
+            this.txtMem.Multiline = true;
+            this.txtMem.Name = "txtMem";
+            this.txtMem.Size = new System.Drawing.Size(91, 37);
+            this.txtMem.TabIndex = 9;
             // 
             // label1
             // 
@@ -223,13 +225,13 @@
             this.label5.TabIndex = 15;
             this.label5.Text = "Volume ussage";
             // 
-            // textBox4
+            // txtVolume
             // 
-            this.textBox4.Location = new System.Drawing.Point(762, 77);
-            this.textBox4.Multiline = true;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(143, 49);
-            this.textBox4.TabIndex = 14;
+            this.txtVolume.Location = new System.Drawing.Point(762, 77);
+            this.txtVolume.Multiline = true;
+            this.txtVolume.Name = "txtVolume";
+            this.txtVolume.Size = new System.Drawing.Size(86, 37);
+            this.txtVolume.TabIndex = 14;
             // 
             // MainForm
             // 
@@ -237,13 +239,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(930, 526);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.txtVolume);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtMem);
+            this.Controls.Add(this.txtCPU);
             this.Controls.Add(this.txtCmd);
             this.Controls.Add(this.targetServer);
             this.Controls.Add(this.server);
@@ -276,7 +278,7 @@
         private System.Windows.Forms.Label server;
         private System.Windows.Forms.TextBox targetServer;
         private System.Windows.Forms.TextBox txtCmd;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtCPU;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -284,6 +286,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtMem;
+        private System.Windows.Forms.TextBox txtVolume;
     }
 }
 

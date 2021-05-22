@@ -11,13 +11,12 @@ namespace monitoring_tool
         public string NewPsSession(string ServerName, string command)
         {
             Runspace runspace = RunspaceFactory.CreateRunspace();
-          
             runspace.Open();   //open the runspace
             Pipeline pipeline = runspace.CreatePipeline();
 
-            pipeline.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine
-            + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine
-            + "Remove-PSSession -Session $sessions");
+            pipeline.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  //Script for remotely
+            + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine                 //running PS commands
+            + "Remove-PSSession -Session $sessions");                                                                  //on servers from same domain;
 
             pipeline.Commands.Add("Out-String");
 
@@ -31,7 +30,6 @@ namespace monitoring_tool
             {
                 results.Add(new PSObject((object)ex.Message));
             }
-
             runspace.Close(); //close the runspace
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -40,6 +38,7 @@ namespace monitoring_tool
             {
                 stringBuilder.AppendLine(obj.ToString());
             }
+
             return stringBuilder.ToString(); //return output
         }
     }
