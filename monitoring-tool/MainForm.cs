@@ -61,8 +61,8 @@ namespace monitoring_tool
         }
         public void GetVolume() 
         {
-            dataGridViewFreeSpace.Columns.Add("Drive","Drive");
-            dataGridViewFreeSpace.Columns.Add("Free space", "Free space");
+            //dataGridViewFreeSpace.Columns.Add("columnDrive","Drive");
+            //dataGridViewFreeSpace.Columns.Add("columnFreespace", "Free space");
             
             RemoteSession newSession = new RemoteSession();
             Scripts volumeS = new Scripts();
@@ -76,13 +76,15 @@ namespace monitoring_tool
                              .Where(l=>l!="\r").ToList();
             corectLines.Remove("");
 
-            for(int i=0;i<corectLines.Count();i+=2)
+            for(int i=0;i<corectLines.Count();i+=4)
             {
-                string driveSpace = corectLines[i].Split(':')[1].Trim().Split('\r')[0];
-                string driveId = corectLines[i+1].Split(':')[1].Trim();
-
-                dataGridViewFreeSpace.Rows.Add(driveId, driveSpace);
-                driveInformations.Add(driveId, driveSpace);
+                string driveId = corectLines[i+3].Split(':')[1].Trim();
+                string driveSize = corectLines[i].Split(':')[1].Trim();
+                string driveSpace = corectLines[i + 1].Split(':')[1].Trim();
+                string driveSpacePercentage = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
+                
+                dataGridViewFreeSpace.Rows.Add(driveId, driveSize, driveSpace, driveSpacePercentage);
+                driveInformations.Add(driveId, driveSpacePercentage);
             }
             
         }

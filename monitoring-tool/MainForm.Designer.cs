@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.optionsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,6 +53,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.dataGridViewFreeSpace = new System.Windows.Forms.DataGridView();
+            this.columnDrive = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnFreespace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnFreePercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Drive = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menu.SuspendLayout();
@@ -119,16 +127,17 @@
             this.helpMenu});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(930, 24);
+            this.menu.Size = new System.Drawing.Size(957, 24);
             this.menu.TabIndex = 1;
             this.menu.Text = "menuitem1";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(588, 301);
+            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.textBox1.Location = new System.Drawing.Point(592, 175);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(316, 201);
+            this.textBox1.Size = new System.Drawing.Size(316, 106);
             this.textBox1.TabIndex = 2;
             // 
             // btnConnect
@@ -163,7 +172,7 @@
             this.txtCmd.Location = new System.Drawing.Point(176, 96);
             this.txtCmd.Multiline = true;
             this.txtCmd.Name = "txtCmd";
-            this.txtCmd.Size = new System.Drawing.Size(206, 102);
+            this.txtCmd.Size = new System.Drawing.Size(206, 18);
             this.txtCmd.TabIndex = 7;
             // 
             // txtCPU
@@ -171,7 +180,7 @@
             this.txtCPU.Location = new System.Drawing.Point(656, 77);
             this.txtCPU.Multiline = true;
             this.txtCPU.Name = "txtCPU";
-            this.txtCPU.Size = new System.Drawing.Size(75, 136);
+            this.txtCPU.Size = new System.Drawing.Size(75, 21);
             this.txtCPU.TabIndex = 8;
             // 
             // txtMem
@@ -179,7 +188,7 @@
             this.txtMem.Location = new System.Drawing.Point(522, 77);
             this.txtMem.Multiline = true;
             this.txtMem.Name = "txtMem";
-            this.txtMem.Size = new System.Drawing.Size(91, 136);
+            this.txtMem.Size = new System.Drawing.Size(91, 21);
             this.txtMem.TabIndex = 9;
             // 
             // label1
@@ -212,7 +221,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(588, 283);
+            this.label4.Location = new System.Drawing.Point(592, 157);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 15);
             this.label4.TabIndex = 13;
@@ -222,16 +231,82 @@
             // 
             this.dataGridViewFreeSpace.AllowUserToAddRows = false;
             this.dataGridViewFreeSpace.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Gray;
+            this.dataGridViewFreeSpace.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewFreeSpace.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridViewFreeSpace.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewFreeSpace.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewFreeSpace.BackgroundColor = System.Drawing.Color.Gray;
+            this.dataGridViewFreeSpace.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.MintCream;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.PaleTurquoise;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.DarkGreen;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewFreeSpace.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewFreeSpace.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFreeSpace.Location = new System.Drawing.Point(47, 356);
+            this.dataGridViewFreeSpace.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.columnDrive,
+            this.columnSize,
+            this.columnFreespace,
+            this.columnFreePercentage});
+            this.dataGridViewFreeSpace.Cursor = System.Windows.Forms.Cursors.Default;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewFreeSpace.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridViewFreeSpace.GridColor = System.Drawing.SystemColors.WindowFrame;
+            this.dataGridViewFreeSpace.Location = new System.Drawing.Point(26, 387);
             this.dataGridViewFreeSpace.Name = "dataGridViewFreeSpace";
             this.dataGridViewFreeSpace.ReadOnly = true;
+            this.dataGridViewFreeSpace.RowHeadersVisible = false;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewFreeSpace.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewFreeSpace.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
             this.dataGridViewFreeSpace.RowTemplate.Height = 25;
-            this.dataGridViewFreeSpace.Size = new System.Drawing.Size(229, 129);
+            this.dataGridViewFreeSpace.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewFreeSpace.Size = new System.Drawing.Size(433, 118);
             this.dataGridViewFreeSpace.TabIndex = 16;
+            // 
+            // columnDrive
+            // 
+            this.columnDrive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.columnDrive.FillWeight = 93.52285F;
+            this.columnDrive.HeaderText = "Drive letter";
+            this.columnDrive.Name = "columnDrive";
+            this.columnDrive.ReadOnly = true;
+            this.columnDrive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.columnDrive.Width = 98;
+            // 
+            // columnSize
+            // 
+            this.columnSize.FillWeight = 99.49239F;
+            this.columnSize.HeaderText = "Size (GB)";
+            this.columnSize.Name = "columnSize";
+            this.columnSize.ReadOnly = true;
+            this.columnSize.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // columnFreespace
+            // 
+            this.columnFreespace.FillWeight = 99.49239F;
+            this.columnFreespace.HeaderText = "Free space (GB)";
+            this.columnFreespace.Name = "columnFreespace";
+            this.columnFreespace.ReadOnly = true;
+            this.columnFreespace.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // columnFreePercentage
+            // 
+            this.columnFreePercentage.FillWeight = 99.49239F;
+            this.columnFreePercentage.HeaderText = "Free (%)";
+            this.columnFreePercentage.Name = "columnFreePercentage";
+            this.columnFreePercentage.ReadOnly = true;
+            this.columnFreePercentage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // Drive
             // 
@@ -247,7 +322,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(930, 526);
+            this.ClientSize = new System.Drawing.Size(957, 526);
             this.Controls.Add(this.dataGridViewFreeSpace);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -263,7 +338,7 @@
             this.Controls.Add(this.menu);
             this.MainMenuStrip = this.menu;
             this.Name = "MainForm";
-            this.Text = "F";
+            this.Text = "Aplicatie pentru monitorizare";
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFreeSpace)).EndInit();
@@ -300,6 +375,10 @@
         private System.Windows.Forms.DataGridView dataGridViewFreeSpace;
         private System.Windows.Forms.DataGridViewTextBoxColumn Drive;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnDrive;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnFreespace;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnFreePercentage;
     }
 }
 
