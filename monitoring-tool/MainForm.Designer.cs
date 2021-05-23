@@ -48,11 +48,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtVolume = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewFreeSpace = new System.Windows.Forms.DataGridView();
+            this.Drive = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFreeSpace)).BeginInit();
             this.SuspendLayout();
             // 
             // optionsMenu
@@ -125,10 +125,10 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(597, 319);
+            this.textBox1.Location = new System.Drawing.Point(588, 301);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(330, 201);
+            this.textBox1.Size = new System.Drawing.Size(316, 201);
             this.textBox1.TabIndex = 2;
             // 
             // btnConnect
@@ -171,7 +171,7 @@
             this.txtCPU.Location = new System.Drawing.Point(656, 77);
             this.txtCPU.Multiline = true;
             this.txtCPU.Name = "txtCPU";
-            this.txtCPU.Size = new System.Drawing.Size(75, 37);
+            this.txtCPU.Size = new System.Drawing.Size(75, 136);
             this.txtCPU.TabIndex = 8;
             // 
             // txtMem
@@ -179,7 +179,7 @@
             this.txtMem.Location = new System.Drawing.Point(522, 77);
             this.txtMem.Multiline = true;
             this.txtMem.Name = "txtMem";
-            this.txtMem.Size = new System.Drawing.Size(91, 37);
+            this.txtMem.Size = new System.Drawing.Size(91, 136);
             this.txtMem.TabIndex = 9;
             // 
             // label1
@@ -212,46 +212,43 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(597, 292);
+            this.label4.Location = new System.Drawing.Point(588, 283);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 15);
             this.label4.TabIndex = 13;
             this.label4.Text = "Output";
             // 
-            // label5
+            // dataGridViewFreeSpace
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(762, 55);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(86, 15);
-            this.label5.TabIndex = 15;
-            this.label5.Text = "Volume ussage";
+            this.dataGridViewFreeSpace.AllowUserToAddRows = false;
+            this.dataGridViewFreeSpace.AllowUserToDeleteRows = false;
+            this.dataGridViewFreeSpace.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFreeSpace.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewFreeSpace.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewFreeSpace.Location = new System.Drawing.Point(47, 356);
+            this.dataGridViewFreeSpace.Name = "dataGridViewFreeSpace";
+            this.dataGridViewFreeSpace.ReadOnly = true;
+            this.dataGridViewFreeSpace.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            this.dataGridViewFreeSpace.RowTemplate.Height = 25;
+            this.dataGridViewFreeSpace.Size = new System.Drawing.Size(229, 129);
+            this.dataGridViewFreeSpace.TabIndex = 16;
             // 
-            // txtVolume
+            // Drive
             // 
-            this.txtVolume.Location = new System.Drawing.Point(762, 77);
-            this.txtVolume.Multiline = true;
-            this.txtVolume.Name = "txtVolume";
-            this.txtVolume.Size = new System.Drawing.Size(86, 37);
-            this.txtVolume.TabIndex = 14;
+            this.Drive.HeaderText = "Drive";
+            this.Drive.Name = "Drive";
             // 
-            // dataGridView1
+            // dataGridViewTextBoxColumn1
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(47, 319);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(240, 150);
-            this.dataGridView1.TabIndex = 16;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Drive";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(930, 526);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.txtVolume);
+            this.Controls.Add(this.dataGridViewFreeSpace);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -269,7 +266,7 @@
             this.Text = "F";
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFreeSpace)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -297,11 +294,12 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox txtMem;
-        private System.Windows.Forms.TextBox txtVolume;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewFreeSpace;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Drive;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     }
 }
 

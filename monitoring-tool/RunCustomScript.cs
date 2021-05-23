@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Text;
@@ -11,25 +12,34 @@ namespace monitoring_tool
         {
             Runspace runspace = RunspaceFactory.CreateRunspace();
             runspace.Open();   //open the runspace
-            PowerShell ps1 = PowerShell.Create();
+            Pipeline pipeline = runspace.CreatePipeline();
 
-            ps1.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  //Script for remotely
+            pipeline.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  //Script for remotely
             + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine                 //running PS commands
-            + "Remove-PSSession -Session $sessions");                                                                  //on servers from same domain;
-            ps1.Commands.AddCommand("Out-String");
+            + "Remove-PSSession -Session $sessions" + Environment.NewLine);
 
-            IAsyncResult async = ps1.BeginInvoke();
+            pipeline.Commands.Add("Out-String");
 
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (PSObject result in ps1.EndInvoke(async))
+            Collection<PSObject> results = new Collection<PSObject>();
+            try
             {
-                stringBuilder.AppendLine(result.ToString());
+                results = pipeline.Invoke(); //Invoke command
             }
 
-            return stringBuilder.ToString();
+            catch (Exception ex)
+            {
+                results.Add(new PSObject((object)ex.Message));
+            }
+            runspace.Close(); //close the runspace
 
-           // runspace.Close();
+            StringBuilder stringBuilder = new StringBuilder();
 
+            foreach (PSObject obj in results)
+            {
+                stringBuilder.AppendLine(obj.ToString());
+            }
+
+            return stringBuilder.ToString(); //return output
         }
     }
 }

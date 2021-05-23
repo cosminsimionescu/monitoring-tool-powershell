@@ -16,8 +16,8 @@ namespace monitoring_tool
 
             pipeline.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  //Script for remotely
             + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine                 //running PS commands
-            + "Remove-PSSession -Session $sessions");                                                                  //on servers from same domain;
-
+            + "Remove-PSSession -Session $sessions" + Environment.NewLine);
+           
             pipeline.Commands.Add("Out-String");
 
             Collection<PSObject> results = new Collection<PSObject>();
