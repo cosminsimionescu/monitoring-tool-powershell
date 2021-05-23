@@ -5,14 +5,11 @@ namespace monitoring_tool
 {
     public partial class MainForm : Form
     {
-        string memoryUsage;
-        string outputMem;
+        string memoryUsage, outputMem;
 
-        string cpuUsage;
-        string outputCpu;
-        
-        string volumeUsage;
-        string outputVol;
+        string cpuUsage, outputCpu;
+
+        string volumeUsage, outputVol;
 
         public MainForm()
         {

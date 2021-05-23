@@ -9,13 +9,16 @@ namespace monitoring_tool
         {
             InitializeComponent();
         }
-
         private void btnRun_Click(object sender, EventArgs e)
         {
             txtOutput.Clear();
-            RunCustomScript psOutput = new RunCustomScript();
-
-            txtOutput.Text = psOutput.Run(txtInput.Text);
+            CustomScript();
+        }
+        private void CustomScript()
+        {
+            RunCustomScript session = new RunCustomScript();
+            string outScript = session.Run(serverName.Text, txtInput.Text);
+            txtOutput.Text = outScript;
         }
     }
 }
