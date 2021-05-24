@@ -17,14 +17,11 @@
 
         public string volumeScript()//volume usage
         {
-            //string volS = @"Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name='Free(%)';
-            //Expression ={'{0,1:P0}' -f(($_.freespace / 1gb) / ($_.size / 1gb))}},  DeviceID | Format-List";
-
             string volS = @"Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name='Size(GB)';
-            Expression={'{0:n2} GB' -f ($_.size/1gb)}},
-            @{Name='Free Space(GB)';Expression={'{0:n2} GB' -f($_.freespace/1gb)}},
+            Expression={'{0:n2} GB' -f ($_.size/1gb)}},@{Name='Free Space(GB)';Expression={'{0:n2} GB' -f($_.freespace/1gb)}},
             @{Name='Free (%)';Expression={'{0,1:P2}' -f(($_.freespace/1gb) / ($_.size/1gb))}}, DeviceID | Format-List";
-            return volS;        //maybe to chose from the main form wich drive/s to be monitored             //to be improved for multiple drives
+
+            return volS;
         }
 
         public string procByCPU()//processes sorted by CPU usage

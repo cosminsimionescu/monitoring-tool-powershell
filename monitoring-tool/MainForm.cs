@@ -8,10 +8,9 @@ namespace monitoring_tool
     public partial class MainForm : Form
     {
         string memoryUsage, outputMem;
-
         string cpuUsage, outputCpu;
-
         string volumeUsage, outputVol;
+        string driveId, driveSize, driveSpace, driveSpacePercentage;
 
         public MainForm()
         {
@@ -59,36 +58,34 @@ namespace monitoring_tool
 
             txtCPU.Text = outputCpu; //CPU usage
         }
-        public void GetVolume() 
+        public void GetVolume()
         {
-            //dataGridViewFreeSpace.Columns.Add("columnDrive","Drive");
-            //dataGridViewFreeSpace.Columns.Add("columnFreespace", "Free space");
-            
+            dataGridViewFreeSpace.Rows.Clear();
+
             RemoteSession newSession = new RemoteSession();
             Scripts volumeS = new Scripts();
 
-            Dictionary<string, string> driveInformations = new Dictionary<string, string>();
+           Dictionary<string, string > driveInformations = new Dictionary<string, string>();
 
             volumeUsage = volumeS.volumeScript();
             outputVol = newSession.NewPsSession(targetServer.Text, volumeUsage);
 
             var corectLines = outputVol.Split('\n')
-                             .Where(l=>l!="\r").ToList();
+                             .Where(l => l != "\r").ToList();
+
             corectLines.Remove("");
 
-            for(int i=0;i<corectLines.Count();i+=4)
+            for (int i = 0; i < corectLines.Count(); i += 4)
             {
-                string driveId = corectLines[i+3].Split(':')[1].Trim();
-                string driveSize = corectLines[i].Split(':')[1].Trim();
-                string driveSpace = corectLines[i + 1].Split(':')[1].Trim();
-                string driveSpacePercentage = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
-                
-                dataGridViewFreeSpace.Rows.Add(driveId, driveSize, driveSpace, driveSpacePercentage);
+                driveId = corectLines[i + 3].Split(':')[1].Trim();
+                driveSize = corectLines[i].Split(':')[1].Trim();
+                driveSpace = corectLines[i + 1].Split(':')[1].Trim();
+                driveSpacePercentage = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
+
+                dataGridViewFreeSpace.Rows.Add (driveId, driveSize, driveSpace, driveSpacePercentage);
                 driveInformations.Add(driveId, driveSpacePercentage);
             }
-            
+            dataGridViewFreeSpace.ClearSelection();
         }
     }
-
-    
 }
