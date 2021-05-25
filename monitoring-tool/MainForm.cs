@@ -7,9 +7,13 @@ namespace monitoring_tool
 {
     public partial class MainForm : Form
     {
-        string memoryUsage, outputMem;
-        string cpuUsage, outputCpu;
-        string volumeUsage, outputVol;
+        string memoryUsage_script, outputMem;
+        string cpuUsage_script, outputCpu;
+        string volumeUsage_script, outputVol;
+        string processCPU_script, outputProcCPU;
+        string processName, processCPU_load, processDescription;
+        string processMem_script, outputProcMem;
+        string processName_mem, processMem_load, processDescription_mem;
         string driveId, driveSize, driveSpace, driveSpacePercentage;
 
         public MainForm()
@@ -31,6 +35,8 @@ namespace monitoring_tool
                 GetMemory();
                 GetCPU();
                 GetVolume();
+                //GetProcessCPU();
+                GetProcessMemory();
             }
             else
             {
@@ -43,8 +49,8 @@ namespace monitoring_tool
             RemoteSession newSession = new RemoteSession();
             Scripts memS = new Scripts();
 
-            memoryUsage = memS.MemoryScript();
-            outputMem = newSession.NewPsSession(targetServer.Text, memoryUsage);
+            memoryUsage_script = memS.memory_Script();
+            outputMem = newSession.NewPsSession(targetServer.Text, memoryUsage_script);
 
             textBox1.Text = outputMem; //memory usage
         }
@@ -53,8 +59,8 @@ namespace monitoring_tool
             RemoteSession newSession = new RemoteSession();
             Scripts cpuS = new Scripts();
 
-            cpuUsage = cpuS.cpuScript();
-            outputCpu = newSession.NewPsSession(targetServer.Text, cpuUsage);
+            cpuUsage_script = cpuS.cpu_Script();
+            outputCpu = newSession.NewPsSession(targetServer.Text, cpuUsage_script);
 
             txtCPU.Text = outputCpu; //CPU usage
         }
@@ -65,10 +71,10 @@ namespace monitoring_tool
             RemoteSession newSession = new RemoteSession();
             Scripts volumeS = new Scripts();
 
-           Dictionary<string, string > driveInformations = new Dictionary<string, string>();
+          Dictionary<string, string > driveInformations = new Dictionary<string, string>();
 
-            volumeUsage = volumeS.volumeScript();
-            outputVol = newSession.NewPsSession(targetServer.Text, volumeUsage);
+            volumeUsage_script = volumeS.volume_Script();
+            outputVol = newSession.NewPsSession(targetServer.Text, volumeUsage_script);
 
             var corectLines = outputVol.Split('\n')
                              .Where(l => l != "\r").ToList();
@@ -82,10 +88,71 @@ namespace monitoring_tool
                 driveSpace = corectLines[i + 1].Split(':')[1].Trim();
                 driveSpacePercentage = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
 
-                dataGridViewFreeSpace.Rows.Add (driveId, driveSize, driveSpace, driveSpacePercentage);
+                dataGridViewFreeSpace.Rows.Add (driveId, driveSize+" GB", driveSpace+ " GB", driveSpacePercentage);
                 driveInformations.Add(driveId, driveSpacePercentage);
             }
             dataGridViewFreeSpace.ClearSelection();
+        }
+
+        public void GetProcessCPU()
+        {
+            dataGridViewProcessByCPU.Rows.Clear();
+            RemoteSession newSession = new RemoteSession();
+            Scripts procCPU = new Scripts();
+
+           // Dictionary<string, string> processInformations = new Dictionary<string, string>();
+
+            processCPU_script = procCPU.processByCPU_Script();
+            outputProcCPU = newSession.NewPsSession(targetServer.Text, processCPU_script);
+
+            var corectLines = outputProcCPU.Split('\n')
+                             .Where(l => l != "\r").ToList();
+
+            corectLines.Remove("");
+
+            for (int i = 0; i < corectLines.Count(); i += 3)
+            {
+                processName = corectLines[i].Split(':')[1].Trim();
+                processCPU_load = corectLines[i+1].Split(':')[1].Trim();
+                processDescription = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
+
+                dataGridViewProcessByCPU.Rows.Add(processName, processCPU_load, processDescription);
+              //  processInformations.Add(processName, processCPU_load);
+            }
+            dataGridViewProcessByCPU.ClearSelection();
+
+            //txtCPU.Text = outputCpu; 
+        }
+
+        public void GetProcessMemory()
+        {
+            dataGridViewProcessByMem.Rows.Clear();
+            RemoteSession newSession = new RemoteSession();
+            Scripts procMem = new Scripts();
+
+            // Dictionary<string, string> processInformations = new Dictionary<string, string>();
+
+            processMem_script = procMem.processByMem_Script();
+            outputProcMem = newSession.NewPsSession(targetServer.Text, processMem_script);
+            
+            var corectLines = outputProcMem.Split('\n')
+                             .Where(l => l != "\r").ToList();
+
+            corectLines.Remove("");
+
+            for (int i = 0; i < corectLines.Count(); i += 3)
+            {
+                processName_mem = corectLines[i].Split(':')[1].Trim();
+                processMem_load = corectLines[i + 1].Split(':')[1].Trim();
+                processDescription_mem = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
+
+                double processMem_load_value = Convert.ToDouble(processMem_load);
+                dataGridViewProcessByMem.Rows.Add(processName_mem, processMem_load_value + " MB", processDescription_mem);
+                //  processInformations.Add(processName, processCPU_load);
+            }
+            dataGridViewProcessByMem.ClearSelection();
+
+            //txtCPU.Text = outputCpu; 
         }
     }
 }
