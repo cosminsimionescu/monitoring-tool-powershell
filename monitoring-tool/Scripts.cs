@@ -15,6 +15,17 @@
             return cpuS;
         }
 
+        public string processByCPU_Script()//processes sorted by CPU usage
+        {
+            string volS = @""; //top 10 processes by CPU usage
+            return volS;
+        }
+        public string processByMem_Script()//processes sorted by Memory usage
+        {
+            string volS = @"Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -first 10 Name,
+            @{Name='WorkingSet';Expression={'{0:n2}' -f($_.WorkingSet64/1MB)}}, Id | Format-List"; //top 10 processes by Memory usage
+            return volS;
+        }
         public string volume_Script()//volume usage
         {
             string volS = @"Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name='Size(GB)';
@@ -23,24 +34,6 @@
 
             return volS;
         }
-
-        public string processByCPU_Script()//processes sorted by CPU usage
-        {
-            string volS = @"$CPUPercent = @{Name = 'CPUPercent'
-            Expression = {$TotalSec = (New-TimeSpan -Start $_.StartTime).TotalSeconds
-            [Math]::Round( ($_.CPU * 20 / $TotalSec), 2)}}
-            Get-Process | 
-            Select-Object -Property Name, $CPUPercent, Description |
-            Sort-Object -Property CPUPercent -Descending |
-            Select-Object -First 10 | Format-List"; //top 10 processes by CPU usage
-            return volS;
-        }
-
-        public string processByMem_Script()//processes sorted by Memory usage
-        {
-            string volS = @"Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -first 10 Name,
-            @{Name='WorkingSet';Expression={'{0:n2}' -f($_.WorkingSet64/1MB)}}, Id | Format-List"; //top 10 processes by Memory usage
-            return volS;
-        }
+    
     }
 }
