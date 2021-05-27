@@ -9,22 +9,13 @@ namespace monitoring_tool
     {
         string memoryUsage_script, outputMem;
         string cpuUsage_script, outputCpu;
-        string volumeUsage_script, outputVol;
-        string processCPU_script, outputProcCPU;
-        string processName, processCPU_load, processDescription;
-        string processMem_script, outputProcMem;
-        string processName_mem, processMem_load, processPID_mem;
-        string driveId, driveSize, driveSpace, driveSpacePercentage;
+        string processName_cpu, processCPU_load, processPID_cpu, processCPU_script, outputProcCPU;
+        string processName_mem, processMem_load, processPID_mem, processMem_script, outputProcMem;
+        string driveId, driveSize, driveSpace, driveSpacePercentage, volumeUsage_script, outputVol;
 
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        private void runCustomScript_Click(object sender, EventArgs e)
-        {
-            FormCustomScript f2 = new FormCustomScript();
-            f2.Show();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -35,7 +26,7 @@ namespace monitoring_tool
                 GetMemory();
                 GetCPU();
                 GetVolume();
-                //GetProcessCPU();
+                GetProcessCPU();
                 GetProcessMemory();
             }
             else
@@ -81,11 +72,11 @@ namespace monitoring_tool
 
             for (int i = 0; i < corectLines.Count(); i += 3)
             {
-                processName = corectLines[i].Split(':')[1].Trim();
+                processName_cpu = corectLines[i].Split(':')[1].Trim().Split('#')[0];
                 processCPU_load = corectLines[i + 1].Split(':')[1].Trim();
-                processDescription = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
-
-                dataGridViewProcessByCPU.Rows.Add(processName, processCPU_load, processDescription);
+                processPID_cpu = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
+                var processCPU_load_val = Convert.ToDouble(processCPU_load); //cpuload per process
+                dataGridViewProcessByCPU.Rows.Add(processName_cpu, processCPU_load_val, processPID_cpu);
             }
             dataGridViewProcessByCPU.ClearSelection();
         }
@@ -95,10 +86,8 @@ namespace monitoring_tool
             dataGridViewProcessByMem.Rows.Clear();
             RemoteSession newSession = new RemoteSession();
             Scripts procMem = new Scripts();
-
             processMem_script = procMem.processByMem_Script();
             outputProcMem = newSession.NewPsSession(targetServer.Text, processMem_script);
-
             var corectLines = outputProcMem.Split('\n')
                              .Where(l => l != "\r").ToList();
 
@@ -109,9 +98,8 @@ namespace monitoring_tool
                 processName_mem = corectLines[i].Split(':')[1].Trim();
                 processMem_load = corectLines[i + 1].Split(':')[1].Trim();
                 processPID_mem = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
-
-                var processMem_load_value = Convert.ToDouble(processMem_load);
-                dataGridViewProcessByMem.Rows.Add(processName_mem, processMem_load_value + " MB", processPID_mem);
+                var processMem_load_val = Convert.ToDouble(processMem_load);//mem per process
+                dataGridViewProcessByMem.Rows.Add(processName_mem, processMem_load_val + " MB", processPID_mem);
 
             }
             dataGridViewProcessByMem.ClearSelection();
