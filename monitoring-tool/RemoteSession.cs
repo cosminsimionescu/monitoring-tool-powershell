@@ -11,11 +11,11 @@ namespace monitoring_tool
         public string NewPsSession(string ServerName, string command)
         {
             Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();   //open the runspace
+            runspace.Open();
             PowerShell psSession = PowerShell.Create();
 
-            psSession.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  //Script for remotely
-            + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine                 //running PS commands
+            psSession.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  
+            + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine                 
             + "Remove-PSSession -Session $sessions" + Environment.NewLine);
 
             psSession.Commands.AddCommand("Out-String");
@@ -23,14 +23,14 @@ namespace monitoring_tool
             Collection<PSObject> results = new Collection<PSObject>();
             try
             {
-                results = psSession.Invoke(); //Invoke command
+                results = psSession.Invoke(); 
             }
 
             catch (Exception ex)
             {
                 results.Add(new PSObject((object)ex.Message));
             }
-            runspace.Close(); //close the runspace
+            runspace.Close(); 
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -39,7 +39,7 @@ namespace monitoring_tool
                 stringBuilder.AppendLine(obj.ToString());
             }
 
-            return stringBuilder.ToString(); //return output
+            return stringBuilder.ToString(); 
         }
     }
 }

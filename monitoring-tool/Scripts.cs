@@ -17,10 +17,12 @@ namespace monitoring_tool
 
         public string cpu_Script()
         {
-            string cpuS = @"$CPU = (Get-Counter '\Processor(_total)\% Processor Time' -Sample 1).CounterSamples[0].CookedValue
+            string sampleTime = "60";
+            string cpuS = @"$CPU = (Get-Counter '\Processor(_total)\% Processor Time' -Sample 60).CounterSamples[0].CookedValue
             $RoundCPU = [math]::Round($CPU, 2)
             $RoundCPU";
-            return cpuS;
+            var cpu_script = cpuS.Replace("#number_of_processes#", sampleTime);
+            return cpu_script;
         }
 
         public string processByCPU_Script()

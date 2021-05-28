@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace monitoring_tool
 {
     public partial class MainForm : Form
     {
-        string memoryUsage_script, outputMem;
-        string cpuUsage_script, outputCpu;
+        string memoryUsage_script;
+        string cpuUsage_script;
         string processName_cpu, processCPU_load, processPID_cpu, processCPU_script, outputProcCPU;
         string processName_mem, processMem_load, processPID_mem, processMem_script, outputProcMem;
         string driveId, driveSize, driveSpace, driveSpacePercentage, volumeUsage_script, outputVol;
@@ -19,21 +19,32 @@ namespace monitoring_tool
             InitializeComponent();
         }
 
-        private async void btnConnect_Click(object sender, EventArgs e)
+        private void btnConnect_Click(object sender, EventArgs e)
         {
-
+            btnConnect.Enabled = false;
+            targetServer.Enabled = false;
             if (targetServer.Text.Trim() != "")
             {
-                GetMemory();
-                GetVolume();
-                GetProcessCPU();
-                GetProcessMemory();
-                GetCPU();
+                Thread CPUThread = new Thread(new ThreadStart(GetCPU));
+                Thread MemThread = new Thread(new ThreadStart(GetMemory));
+                Thread VolThread = new Thread(new ThreadStart(GetVolume));
+                Thread ProcCPUThread = new Thread(new ThreadStart(GetProcessCPU));
+                Thread ProcMemThread = new Thread(new ThreadStart(GetProcessMemory));
+
+                CPUThread.Start();
+                MemThread.Start();
+                VolThread.Start();
+                ProcCPUThread.Start();
+                ProcMemThread.Start();
+
             }
             else
             {
                 MessageBox.Show(@"Enter the server name or IP address");
             }
+
+            btnConnect.Enabled = true;
+            targetServer.Enabled = true;
         }
 
         public void GetMemory()
@@ -42,9 +53,8 @@ namespace monitoring_tool
             Scripts memS = new Scripts();
 
             memoryUsage_script = memS.memory_Script();
-            outputMem = newSession.NewPsSession(targetServer.Text, memoryUsage_script);
+            txtMem.Text = newSession.NewPsSession(targetServer.Text, memoryUsage_script);
 
-            txtMem.Text = outputMem; //memory usage
         }
 
         public void GetCPU()
@@ -53,9 +63,7 @@ namespace monitoring_tool
             Scripts cpuS = new Scripts();
 
             cpuUsage_script = cpuS.cpu_Script();
-            outputCpu = newSession.NewPsSession(targetServer.Text, cpuUsage_script);
-
-            txtCPU.Text = outputCpu;   //CPU usage
+            txtCPU.Text = newSession.NewPsSession(targetServer.Text, cpuUsage_script);
         }
 
         public void GetProcessCPU()
@@ -78,7 +86,7 @@ namespace monitoring_tool
                 processCPU_load = corectLines[i + 1].Split(':')[1].Trim();
                 processPID_cpu = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
                 var processCPU_load_val = Convert.ToDouble(processCPU_load); //cpuload per process
-                dataGridViewProcessByCPU.Rows.Add(processName_cpu, processCPU_load_val, processPID_cpu);
+                dataGridViewProcessByCPU.Rows.Add(processPID_cpu,  processName_cpu, processCPU_load_val);
             }
             dataGridViewProcessByCPU.ClearSelection();
         }
@@ -101,7 +109,7 @@ namespace monitoring_tool
                 processMem_load = corectLines[i + 1].Split(':')[1].Trim();
                 processPID_mem = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
                 var processMem_load_val = Convert.ToDouble(processMem_load);//mem per process
-                dataGridViewProcessByMem.Rows.Add(processName_mem, processMem_load_val + " MB", processPID_mem);
+                dataGridViewProcessByMem.Rows.Add(processPID_mem, processName_mem , processMem_load_val + " MB");
 
             }
             dataGridViewProcessByMem.ClearSelection();
