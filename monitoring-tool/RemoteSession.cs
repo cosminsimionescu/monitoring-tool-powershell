@@ -12,18 +12,18 @@ namespace monitoring_tool
         {
             Runspace runspace = RunspaceFactory.CreateRunspace();
             runspace.Open();   //open the runspace
-            Pipeline pipeline = runspace.CreatePipeline();
+            PowerShell psSession = PowerShell.Create();
 
-            pipeline.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  //Script for remotely
+            psSession.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine  //Script for remotely
             + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine                 //running PS commands
             + "Remove-PSSession -Session $sessions" + Environment.NewLine);
-           
-            pipeline.Commands.Add("Out-String");
+
+            psSession.Commands.AddCommand("Out-String");
 
             Collection<PSObject> results = new Collection<PSObject>();
             try
             {
-                results = pipeline.Invoke(); //Invoke command
+                results = psSession.Invoke(); //Invoke command
             }
 
             catch (Exception ex)

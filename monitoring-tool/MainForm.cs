@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace monitoring_tool
@@ -18,16 +19,16 @@ namespace monitoring_tool
             InitializeComponent();
         }
 
-        private void btnConnect_Click(object sender, EventArgs e)
+        private async void btnConnect_Click(object sender, EventArgs e)
         {
 
             if (targetServer.Text.Trim() != "")
             {
                 GetMemory();
-                GetCPU();
                 GetVolume();
                 GetProcessCPU();
                 GetProcessMemory();
+                GetCPU();
             }
             else
             {
@@ -43,8 +44,9 @@ namespace monitoring_tool
             memoryUsage_script = memS.memory_Script();
             outputMem = newSession.NewPsSession(targetServer.Text, memoryUsage_script);
 
-            textBox1.Text = outputMem; //memory usage
+            txtMem.Text = outputMem; //memory usage
         }
+
         public void GetCPU()
         {
             RemoteSession newSession = new RemoteSession();
@@ -53,7 +55,7 @@ namespace monitoring_tool
             cpuUsage_script = cpuS.cpu_Script();
             outputCpu = newSession.NewPsSession(targetServer.Text, cpuUsage_script);
 
-            txtCPU.Text = outputCpu; //CPU usage
+            txtCPU.Text = outputCpu;   //CPU usage
         }
 
         public void GetProcessCPU()
