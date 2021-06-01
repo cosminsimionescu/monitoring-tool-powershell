@@ -4,6 +4,7 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace monitoring_tool
 {
@@ -27,13 +28,12 @@ namespace monitoring_tool
                 Collection<PSObject> results = new Collection<PSObject>();
                 try
                 {
-                    //psSession.Runspace = runspace;
                     results = psSession.Invoke();
                 }
 
                 catch (Exception ex)
                 {
-                    results.Add(new PSObject(ex.Message));
+                    results.Add(new PSObject((object)ex.Message));
                 }
                 runspace.Close();
                 StringBuilder stringBuilder = new StringBuilder();

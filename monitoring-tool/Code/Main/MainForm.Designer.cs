@@ -36,14 +36,11 @@
             this.txtCPU = new System.Windows.Forms.TextBox();
             this.txtMem = new System.Windows.Forms.TextBox();
             this.optionsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectToNewSv = new System.Windows.Forms.ToolStripMenuItem();
             this.alerts_menu = new System.Windows.Forms.ToolStripMenuItem();
             this.exit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runCustomScript = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.server = new System.Windows.Forms.Label();
             this.targetServer = new System.Windows.Forms.TextBox();
@@ -51,7 +48,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Drive = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewFreeSpaceTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.label5 = new System.Windows.Forms.Label();
             this.dataGridViewProcessByCPU = new System.Windows.Forms.DataGridView();
             this.columnProcessID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -68,15 +64,14 @@
             this.columnSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnFreespace = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnFreePercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.email_alert = new System.Windows.Forms.CheckBox();
-            this.vol_alert = new System.Windows.Forms.CheckBox();
-            this.cpu_alert = new System.Windows.Forms.CheckBox();
-            this.mem_alert = new System.Windows.Forms.CheckBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewAlerts = new System.Windows.Forms.DataGridView();
+            this.dateTimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textAlert = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valueAlert = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
             this.btn_Server = new System.Windows.Forms.Button();
@@ -84,12 +79,13 @@
             this.triggerThreadsCPU = new System.Windows.Forms.Timer(this.components);
             this.triggerThreadVol = new System.Windows.Forms.Timer(this.components);
             this.triggerThreadsProcCheck = new System.Windows.Forms.Timer(this.components);
+            this.timerAlerts = new System.Windows.Forms.Timer(this.components);
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByCPU)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByMem)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFreeSpace)).BeginInit();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAlerts)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -102,42 +98,52 @@
             // 
             this.txtCPU.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtCPU.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtCPU.Location = new System.Drawing.Point(235, 67);
+            this.txtCPU.Location = new System.Drawing.Point(192, 53);
             this.txtCPU.Name = "txtCPU";
             this.txtCPU.ReadOnly = true;
-            this.txtCPU.Size = new System.Drawing.Size(55, 33);
+            this.txtCPU.Size = new System.Drawing.Size(77, 33);
             this.txtCPU.TabIndex = 8;
             // 
             // txtMem
             // 
             this.txtMem.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtMem.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtMem.Location = new System.Drawing.Point(235, 12);
+            this.txtMem.Location = new System.Drawing.Point(39, 53);
             this.txtMem.Name = "txtMem";
             this.txtMem.ReadOnly = true;
-            this.txtMem.Size = new System.Drawing.Size(55, 33);
+            this.txtMem.Size = new System.Drawing.Size(77, 33);
             this.txtMem.TabIndex = 9;
             // 
             // optionsMenu
             // 
             this.optionsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectToNewSv,
             this.alerts_menu,
             this.exit});
             this.optionsMenu.Name = "optionsMenu";
             this.optionsMenu.Size = new System.Drawing.Size(61, 20);
             this.optionsMenu.Text = "&Options";
             // 
+            // connectToNewSv
+            // 
+            this.connectToNewSv.Name = "connectToNewSv";
+            this.connectToNewSv.Size = new System.Drawing.Size(211, 22);
+            this.connectToNewSv.Text = "Connect to another server";
+            this.connectToNewSv.Click += new System.EventHandler(this.connectToNewSv_Click);
+            // 
             // alerts_menu
             // 
             this.alerts_menu.Name = "alerts_menu";
-            this.alerts_menu.Size = new System.Drawing.Size(158, 22);
+            this.alerts_menu.Size = new System.Drawing.Size(211, 22);
             this.alerts_menu.Text = "Configure alerts";
+            this.alerts_menu.Click += new System.EventHandler(this.alerts_menu_Click);
             // 
             // exit
             // 
             this.exit.Name = "exit";
-            this.exit.Size = new System.Drawing.Size(158, 22);
+            this.exit.Size = new System.Drawing.Size(211, 22);
             this.exit.Text = "&Exit application";
+            this.exit.Click += new System.EventHandler(this.exit_Click);
             // 
             // toolsMenu
             // 
@@ -152,39 +158,11 @@
             this.runCustomScript.Name = "runCustomScript";
             this.runCustomScript.Size = new System.Drawing.Size(67, 22);
             // 
-            // helpMenu
-            // 
-            this.helpMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contentsToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.aboutToolStripMenuItem});
-            this.helpMenu.Name = "helpMenu";
-            this.helpMenu.Size = new System.Drawing.Size(44, 20);
-            this.helpMenu.Text = "&Help";
-            // 
-            // contentsToolStripMenuItem
-            // 
-            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.contentsToolStripMenuItem.Text = "&Contents";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(119, 6);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.aboutToolStripMenuItem.Text = "&About...";
-            // 
             // menu
             // 
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsMenu,
-            this.toolsMenu,
-            this.helpMenu});
+            this.toolsMenu});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(1108, 24);
@@ -210,7 +188,6 @@
             this.targetServer.Name = "targetServer";
             this.targetServer.Size = new System.Drawing.Size(127, 29);
             this.targetServer.TabIndex = 5;
-            this.targetServer.Text = "172.24.1.154";
             // 
             // label1
             // 
@@ -218,7 +195,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(92, 70);
+            this.label1.Location = new System.Drawing.Point(180, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 25);
             this.label1.TabIndex = 10;
@@ -230,7 +207,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label2.Location = new System.Drawing.Point(92, 15);
+            this.label2.Location = new System.Drawing.Point(12, 13);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(137, 25);
             this.label2.TabIndex = 11;
@@ -252,7 +229,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label5.Location = new System.Drawing.Point(106, 9);
+            this.label5.Location = new System.Drawing.Point(11, 9);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 25);
             this.label5.TabIndex = 17;
@@ -280,13 +257,13 @@
             this.columnProcess,
             this.columnProcessCPU});
             this.dataGridViewProcessByCPU.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.dataGridViewProcessByCPU.Location = new System.Drawing.Point(13, 28);
+            this.dataGridViewProcessByCPU.Location = new System.Drawing.Point(33, 28);
             this.dataGridViewProcessByCPU.Name = "dataGridViewProcessByCPU";
             this.dataGridViewProcessByCPU.ReadOnly = true;
             this.dataGridViewProcessByCPU.RowHeadersVisible = false;
             this.dataGridViewProcessByCPU.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewProcessByCPU.RowTemplate.Height = 25;
-            this.dataGridViewProcessByCPU.Size = new System.Drawing.Size(305, 278);
+            this.dataGridViewProcessByCPU.Size = new System.Drawing.Size(305, 281);
             this.dataGridViewProcessByCPU.TabIndex = 18;
             // 
             // columnProcessID
@@ -313,6 +290,8 @@
             this.columnProcessCPU.Name = "columnProcessCPU";
             this.columnProcessCPU.ReadOnly = true;
             this.columnProcessCPU.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnProcessCPU.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.columnProcessCPU.Width = 94;
             // 
             // dataGridViewProcessByMem
             // 
@@ -336,13 +315,13 @@
             this.columnProcessName_mem,
             this.columnProcess_mem});
             this.dataGridViewProcessByMem.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.dataGridViewProcessByMem.Location = new System.Drawing.Point(13, 346);
+            this.dataGridViewProcessByMem.Location = new System.Drawing.Point(33, 350);
             this.dataGridViewProcessByMem.Name = "dataGridViewProcessByMem";
             this.dataGridViewProcessByMem.ReadOnly = true;
             this.dataGridViewProcessByMem.RowHeadersVisible = false;
             this.dataGridViewProcessByMem.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewProcessByMem.RowTemplate.Height = 25;
-            this.dataGridViewProcessByMem.Size = new System.Drawing.Size(305, 277);
+            this.dataGridViewProcessByMem.Size = new System.Drawing.Size(305, 279);
             this.dataGridViewProcessByMem.TabIndex = 19;
             // 
             // columnPID_mem
@@ -356,18 +335,19 @@
             // 
             // columnProcessName_mem
             // 
-            this.columnProcessName_mem.HeaderText = "      Process name";
+            this.columnProcessName_mem.HeaderText = "  Process name";
             this.columnProcessName_mem.Name = "columnProcessName_mem";
             this.columnProcessName_mem.ReadOnly = true;
             this.columnProcessName_mem.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnProcessName_mem.Width = 130;
+            this.columnProcessName_mem.Width = 110;
             // 
             // columnProcess_mem
             // 
-            this.columnProcess_mem.HeaderText = "Memory usage (MB)";
+            this.columnProcess_mem.HeaderText = "Memory (MB)";
             this.columnProcess_mem.Name = "columnProcess_mem";
             this.columnProcess_mem.ReadOnly = true;
             this.columnProcess_mem.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnProcess_mem.Width = 115;
             // 
             // label6
             // 
@@ -375,7 +355,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label6.Location = new System.Drawing.Point(46, 0);
+            this.label6.Location = new System.Drawing.Point(33, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(250, 25);
             this.label6.TabIndex = 20;
@@ -387,7 +367,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label7.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label7.Location = new System.Drawing.Point(26, 318);
+            this.label7.Location = new System.Drawing.Point(33, 318);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(283, 25);
             this.label7.TabIndex = 21;
@@ -416,7 +396,7 @@
             this.columnFreespace,
             this.columnFreePercentage});
             this.dataGridViewFreeSpace.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.dataGridViewFreeSpace.Location = new System.Drawing.Point(11, 37);
+            this.dataGridViewFreeSpace.Location = new System.Drawing.Point(11, 41);
             this.dataGridViewFreeSpace.Name = "dataGridViewFreeSpace";
             this.dataGridViewFreeSpace.ReadOnly = true;
             this.dataGridViewFreeSpace.RowHeadersVisible = false;
@@ -460,81 +440,70 @@
             this.columnFreePercentage.HeaderText = "Free (%)";
             this.columnFreePercentage.Name = "columnFreePercentage";
             this.columnFreePercentage.ReadOnly = true;
-            this.columnFreePercentage.Width = 75;
+            this.columnFreePercentage.Width = 72;
             // 
-            // panel1
+            // dataGridViewAlerts
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
-            this.panel1.Controls.Add(this.email_alert);
-            this.panel1.Controls.Add(this.vol_alert);
-            this.panel1.Controls.Add(this.cpu_alert);
-            this.panel1.Controls.Add(this.mem_alert);
-            this.panel1.Location = new System.Drawing.Point(12, 516);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(292, 149);
-            this.panel1.TabIndex = 23;
+            this.dataGridViewAlerts.AllowUserToAddRows = false;
+            this.dataGridViewAlerts.AllowUserToDeleteRows = false;
+            this.dataGridViewAlerts.AllowUserToResizeRows = false;
+            this.dataGridViewAlerts.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dataGridViewAlerts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewAlerts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dateTimeCol,
+            this.textAlert,
+            this.valueAlert});
+            this.dataGridViewAlerts.Location = new System.Drawing.Point(11, 32);
+            this.dataGridViewAlerts.MultiSelect = false;
+            this.dataGridViewAlerts.Name = "dataGridViewAlerts";
+            this.dataGridViewAlerts.ReadOnly = true;
+            this.dataGridViewAlerts.RowHeadersVisible = false;
+            this.dataGridViewAlerts.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewAlerts.RowTemplate.Height = 25;
+            this.dataGridViewAlerts.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewAlerts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewAlerts.Size = new System.Drawing.Size(382, 279);
+            this.dataGridViewAlerts.TabIndex = 24;
+            this.dataGridViewAlerts.TabStop = false;
             // 
-            // email_alert
+            // dateTimeCol
             // 
-            this.email_alert.AutoSize = true;
-            this.email_alert.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.email_alert.Location = new System.Drawing.Point(148, 93);
-            this.email_alert.Name = "email_alert";
-            this.email_alert.Size = new System.Drawing.Size(106, 19);
-            this.email_alert.TabIndex = 3;
-            this.email_alert.Text = "Alert via e-mail";
-            this.email_alert.UseVisualStyleBackColor = true;
+            this.dateTimeCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dateTimeCol.HeaderText = "Date&Time";
+            this.dateTimeCol.Name = "dateTimeCol";
+            this.dateTimeCol.ReadOnly = true;
+            this.dateTimeCol.Width = 121;
             // 
-            // vol_alert
+            // textAlert
             // 
-            this.vol_alert.AutoSize = true;
-            this.vol_alert.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.vol_alert.Location = new System.Drawing.Point(12, 93);
-            this.vol_alert.Name = "vol_alert";
-            this.vol_alert.Size = new System.Drawing.Size(66, 19);
-            this.vol_alert.TabIndex = 2;
-            this.vol_alert.Text = "Volume";
-            this.vol_alert.UseVisualStyleBackColor = true;
+            this.textAlert.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.textAlert.FillWeight = 194.9239F;
+            this.textAlert.HeaderText = "                           Alert";
+            this.textAlert.Name = "textAlert";
+            this.textAlert.ReadOnly = true;
+            this.textAlert.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.textAlert.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.textAlert.Width = 211;
             // 
-            // cpu_alert
+            // valueAlert
             // 
-            this.cpu_alert.AutoSize = true;
-            this.cpu_alert.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cpu_alert.Location = new System.Drawing.Point(12, 12);
-            this.cpu_alert.Name = "cpu_alert";
-            this.cpu_alert.Size = new System.Drawing.Size(49, 19);
-            this.cpu_alert.TabIndex = 1;
-            this.cpu_alert.Text = "CPU";
-            this.cpu_alert.UseVisualStyleBackColor = true;
-            // 
-            // mem_alert
-            // 
-            this.mem_alert.AutoSize = true;
-            this.mem_alert.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.mem_alert.Location = new System.Drawing.Point(12, 52);
-            this.mem_alert.Name = "mem_alert";
-            this.mem_alert.Size = new System.Drawing.Size(71, 19);
-            this.mem_alert.TabIndex = 0;
-            this.mem_alert.Text = "Memory";
-            this.mem_alert.UseVisualStyleBackColor = true;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 14);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(266, 130);
-            this.dataGridView1.TabIndex = 24;
+            this.valueAlert.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.valueAlert.FillWeight = 5.076141F;
+            this.valueAlert.HeaderText = "Value";
+            this.valueAlert.Name = "valueAlert";
+            this.valueAlert.ReadOnly = true;
+            this.valueAlert.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.valueAlert.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.valueAlert.Width = 65;
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
             this.panel3.Controls.Add(this.dataGridViewFreeSpace);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(437, 540);
+            this.panel3.Location = new System.Drawing.Point(423, 538);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(313, 118);
+            this.panel3.Size = new System.Drawing.Size(313, 128);
             this.panel3.TabIndex = 26;
             // 
             // panel4
@@ -544,19 +513,31 @@
             this.panel4.Controls.Add(this.dataGridViewProcessByCPU);
             this.panel4.Controls.Add(this.dataGridViewProcessByMem);
             this.panel4.Controls.Add(this.label7);
-            this.panel4.Location = new System.Drawing.Point(765, 29);
+            this.panel4.Location = new System.Drawing.Point(752, 27);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(332, 629);
+            this.panel4.Size = new System.Drawing.Size(356, 629);
             this.panel4.TabIndex = 27;
             // 
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
-            this.panel5.Controls.Add(this.dataGridView1);
-            this.panel5.Location = new System.Drawing.Point(12, 354);
+            this.panel5.Controls.Add(this.label3);
+            this.panel5.Controls.Add(this.dataGridViewAlerts);
+            this.panel5.Location = new System.Drawing.Point(12, 345);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(292, 149);
+            this.panel5.Size = new System.Drawing.Size(405, 321);
             this.panel5.TabIndex = 28;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label3.Location = new System.Drawing.Point(11, 4);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 25);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "Alerts";
             // 
             // panel2
             // 
@@ -565,9 +546,9 @@
             this.panel2.Controls.Add(this.txtCPU);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.txtMem);
-            this.panel2.Location = new System.Drawing.Point(448, 46);
+            this.panel2.Location = new System.Drawing.Point(423, 55);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(302, 107);
+            this.panel2.Size = new System.Drawing.Size(292, 100);
             this.panel2.TabIndex = 25;
             // 
             // panel6
@@ -576,7 +557,7 @@
             this.panel6.Controls.Add(this.pictureBox1);
             this.panel6.Controls.Add(this.targetServer);
             this.panel6.Controls.Add(this.server);
-            this.panel6.Location = new System.Drawing.Point(24, 53);
+            this.panel6.Location = new System.Drawing.Point(32, 55);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(292, 100);
             this.panel6.TabIndex = 29;
@@ -620,13 +601,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
-            this.ClientSize = new System.Drawing.Size(1108, 672);
+            this.ClientSize = new System.Drawing.Size(1108, 666);
             this.Controls.Add(this.panel6);
             this.Controls.Add(this.panel5);
-            this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.menu);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.MainMenuStrip = this.menu;
@@ -638,14 +618,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByCPU)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByMem)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFreeSpace)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAlerts)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel6.ResumeLayout(false);
@@ -662,41 +641,18 @@
         private System.Windows.Forms.ToolStripMenuItem exit;
         private System.Windows.Forms.ToolStripMenuItem toolsMenu;
         private System.Windows.Forms.ToolStripMenuItem runCustomScript;
-        private System.Windows.Forms.ToolStripMenuItem helpMenu;
-        private System.Windows.Forms.ToolStripMenuItem contentsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.Label server;
-        private System.Windows.Forms.TextBox txtCPU;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtMem;
         private System.Windows.Forms.DataGridViewTextBoxColumn Drive;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewFreeSpaceTextBoxColumn1;
-        private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView dataGridViewProcessByCPU;
         private System.Windows.Forms.DataGridView dataGridViewProcessByMem;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnPID_mem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessName_mem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcess_mem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcess;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessCPU;
-        private System.Windows.Forms.DataGridView dataGridViewFreeSpace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnDrive;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnSize;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnFreespace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnFreePercentage;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.CheckBox email_alert;
-        private System.Windows.Forms.CheckBox vol_alert;
-        private System.Windows.Forms.CheckBox cpu_alert;
-        private System.Windows.Forms.CheckBox mem_alert;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewAlerts;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
@@ -709,6 +665,26 @@
         private System.Windows.Forms.Timer triggerThreadsCPU;
         private System.Windows.Forms.Timer triggerThreadVol;
         private System.Windows.Forms.Timer triggerThreadsProcCheck;
+        public System.Windows.Forms.DataGridView dataGridViewFreeSpace;
+        private System.Windows.Forms.TextBox txtCPU;
+        private System.Windows.Forms.TextBox txtMem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcess;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessCPU;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnDrive;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnFreespace;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnFreePercentage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnPID_mem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessName_mem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcess_mem;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem connectToNewSv;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dateTimeCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn textAlert;
+        private System.Windows.Forms.DataGridViewTextBoxColumn valueAlert;
+        private System.Windows.Forms.Timer timerAlerts;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

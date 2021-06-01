@@ -58,7 +58,7 @@ namespace monitoring_tool
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 36);
+            this.label1.Location = new System.Drawing.Point(12, 39);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(165, 15);
             this.label1.TabIndex = 2;
@@ -68,7 +68,7 @@ namespace monitoring_tool
             // 
             this.targetServer_name.AutoSize = true;
             this.targetServer_name.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.targetServer_name.Location = new System.Drawing.Point(194, 36);
+            this.targetServer_name.Location = new System.Drawing.Point(180, 39);
             this.targetServer_name.Name = "targetServer_name";
             this.targetServer_name.Size = new System.Drawing.Size(89, 15);
             this.targetServer_name.TabIndex = 3;
@@ -79,7 +79,7 @@ namespace monitoring_tool
             this.AcceptButton = this.buttonConfirmServ;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.CancelButton = this.buttonRefuseServ;
             this.ClientSize = new System.Drawing.Size(290, 129);
             this.ControlBox = false;
@@ -88,6 +88,8 @@ namespace monitoring_tool
             this.Controls.Add(this.buttonRefuseServ);
             this.Controls.Add(this.buttonConfirmServ);
             this.Name = "ConfirmBox";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Confirm";
             this.Load += new System.EventHandler(this.ConfirmBox_Load);
             this.ResumeLayout(false);

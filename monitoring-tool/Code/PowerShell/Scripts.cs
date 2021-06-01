@@ -19,7 +19,6 @@ namespace monitoring_tool
 
         public string cpu_Script()
         {
-            Thread.Sleep(500);
             string sampleTime = "30";
             string cpuS = @"$CPU = (Get-Counter '\Processor(_total)\% Processor Time' -Sample #sampletime#).CounterSamples[0].CookedValue
             $RoundCPU = [math]::Round($CPU, 2)
@@ -31,7 +30,6 @@ namespace monitoring_tool
 
         public string processByCPU_Script(string processesToDisplay_CPU)
         {
-            Thread.Sleep(400);
             processesToDisplay_CPU = "10";
             var processbyCPU = @"$cores = (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors
             $CPU = Get-CimInstance Win32_PerfFormattedData_PerfProc_Process | 
@@ -39,8 +37,9 @@ namespace monitoring_tool
             @{Name = 'PID'; Expression = {$_.IDProcess}} |
             Where-Object {$_.Name -notlike '*conhost*' -and $_.Name -notlike '*svchost*' -and $_.Name -notlike '*Idle*' -and $_.Name -notlike '*_Total*'} |
             Sort-Object -Property CPU -Descending |
-            Select-Object -First #number_of_processes#
-            $CPU | Format-List";
+            Select-Object -First 10 
+            $CPU | Format-List
+            Start-Sleep 1.532";
             var result_processbyCPU = processbyCPU.Replace("#number_of_processes#", processesToDisplay_CPU);
 
             return result_processbyCPU;
@@ -48,7 +47,6 @@ namespace monitoring_tool
 
         public string processByMem_Script(string processesToDisplay_Mem)
         {
-            Thread.Sleep(300);
             processesToDisplay_Mem = "10";
             string processbyMem = @"Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First #number_of_processes# Name,
             @{Name='WorkingSet';Expression={'{0:n2}' -f($_.WorkingSet64/1MB)}}, Id | Format-List
