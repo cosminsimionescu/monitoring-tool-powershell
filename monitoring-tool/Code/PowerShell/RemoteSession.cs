@@ -10,7 +10,19 @@ namespace monitoring_tool
 {
     class RemoteSession
     {
-        public async Task<string> NewPsSession(string ServerName, string command)
+        private static RemoteSession InstanceRemoteSession;
+        public static RemoteSession GetInstanceRemoteSession()
+        {
+            if (InstanceRemoteSession == null) InstanceRemoteSession = new RemoteSession();
+            return InstanceRemoteSession;
+        }
+
+        public RemoteSession()
+        {
+            InstanceRemoteSession = this;
+        }
+
+        public async Task<string> NewPowerShell(string ServerName, string command)
         {
             var result = await Task.Run(() =>
             {

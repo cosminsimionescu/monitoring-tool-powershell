@@ -31,7 +31,7 @@ namespace monitoring_tool
         public string processByCPU_Script(string processesToDisplay_CPU)
         {
             processesToDisplay_CPU = "10";
-            var processbyCPU = @"$cores = (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors
+            var processbyCPU = @"$cores = (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors/2
             $CPU = Get-CimInstance Win32_PerfFormattedData_PerfProc_Process | 
             Select-Object -Property Name, @{Name = 'CPU'; Expression = {'{0:n2}' -f($_.PercentProcessorTime/$cores)}},
             @{Name = 'PID'; Expression = {$_.IDProcess}} |

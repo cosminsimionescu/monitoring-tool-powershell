@@ -50,9 +50,6 @@
             this.dataGridViewFreeSpaceTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label5 = new System.Windows.Forms.Label();
             this.dataGridViewProcessByCPU = new System.Windows.Forms.DataGridView();
-            this.columnProcessID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnProcess = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnProcessCPU = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewProcessByMem = new System.Windows.Forms.DataGridView();
             this.columnPID_mem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnProcessName_mem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,6 +78,9 @@
             this.triggerThreadsProcCheck = new System.Windows.Forms.Timer(this.components);
             this.timerAlerts = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.columnProcessID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnProcess = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnProcessCPU = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByCPU)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByMem)).BeginInit();
@@ -265,33 +265,6 @@
             this.dataGridViewProcessByCPU.RowTemplate.Height = 25;
             this.dataGridViewProcessByCPU.Size = new System.Drawing.Size(305, 281);
             this.dataGridViewProcessByCPU.TabIndex = 18;
-            // 
-            // columnProcessID
-            // 
-            this.columnProcessID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.columnProcessID.HeaderText = "Process ID";
-            this.columnProcessID.Name = "columnProcessID";
-            this.columnProcessID.ReadOnly = true;
-            this.columnProcessID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnProcessID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // columnProcess
-            // 
-            this.columnProcess.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.columnProcess.HeaderText = "       Process name";
-            this.columnProcess.Name = "columnProcess";
-            this.columnProcess.ReadOnly = true;
-            this.columnProcess.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnProcess.Width = 130;
-            // 
-            // columnProcessCPU
-            // 
-            this.columnProcessCPU.HeaderText = "CPU usage (%)";
-            this.columnProcessCPU.Name = "columnProcessCPU";
-            this.columnProcessCPU.ReadOnly = true;
-            this.columnProcessCPU.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnProcessCPU.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.columnProcessCPU.Width = 94;
             // 
             // dataGridViewProcessByMem
             // 
@@ -596,6 +569,34 @@
             // 
             this.triggerThreadsProcCheck.Tick += new System.EventHandler(this.triggerThreadsProcCheck_Tick);
             // 
+            // columnProcessID
+            // 
+            this.columnProcessID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.columnProcessID.HeaderText = "Process ID";
+            this.columnProcessID.Name = "columnProcessID";
+            this.columnProcessID.ReadOnly = true;
+            this.columnProcessID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnProcessID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.columnProcessID.Width = 78;
+            // 
+            // columnProcess
+            // 
+            this.columnProcess.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.columnProcess.HeaderText = "       Process name";
+            this.columnProcess.Name = "columnProcess";
+            this.columnProcess.ReadOnly = true;
+            this.columnProcess.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnProcess.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.columnProcess.Width = 130;
+            // 
+            // columnProcessCPU
+            // 
+            this.columnProcessCPU.HeaderText = "CPU usage (%)";
+            this.columnProcessCPU.Name = "columnProcessCPU";
+            this.columnProcessCPU.ReadOnly = true;
+            this.columnProcessCPU.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnProcessCPU.Width = 94;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -668,9 +669,6 @@
         public System.Windows.Forms.DataGridView dataGridViewFreeSpace;
         private System.Windows.Forms.TextBox txtCPU;
         private System.Windows.Forms.TextBox txtMem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcess;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessCPU;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnDrive;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnSize;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnFreespace;
@@ -685,6 +683,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn valueAlert;
         private System.Windows.Forms.Timer timerAlerts;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcess;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessCPU;
     }
 }
 

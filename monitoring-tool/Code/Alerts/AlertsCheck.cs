@@ -15,9 +15,13 @@ namespace monitoring_tool
             return InstanceCheck;
         }
 
-        public void Alerts()
+        public AlertsCheck()
         {
             InstanceCheck = this;
+        }
+
+        public void Alerts()
+        {
 
             DateTime Time = DateTime.Now;
             string date = Time.ToString("F");
@@ -44,7 +48,7 @@ namespace monitoring_tool
                 InstanceMainForm.UpdateCPUAlert(messageCPUHit);
             }
 
-            foreach (KeyValuePair<string, double> pair in InstanceMainForm.driveInformations)
+            foreach (KeyValuePair<string, double> pair in InstanceResults.driveInformations)
             {
                 if (pair.Value < volumeTreshold)
                 {
