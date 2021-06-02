@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.txtCPU = new System.Windows.Forms.TextBox();
             this.txtMem = new System.Windows.Forms.TextBox();
@@ -42,8 +42,6 @@
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runCustomScript = new System.Windows.Forms.ToolStripMenuItem();
             this.menu = new System.Windows.Forms.MenuStrip();
-            this.server = new System.Windows.Forms.Label();
-            this.targetServer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.Drive = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -60,6 +58,10 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.dataGridViewFreeSpace = new System.Windows.Forms.DataGridView();
+            this.columnDrive = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnFreespace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnFreePercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewAlerts = new System.Windows.Forms.DataGridView();
             this.dateTimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textAlert = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,19 +69,27 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.clearAlertsDataGrid = new System.Windows.Forms.Button();
+            this.checkEmailAlerts = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.checkMemoryAlert = new System.Windows.Forms.CheckBox();
+            this.checkFreeSpaceAlert = new System.Windows.Forms.CheckBox();
+            this.checkCpuAlert = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.btn_Server = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.triggerThreadsCPU = new System.Windows.Forms.Timer(this.components);
             this.triggerThreadVol = new System.Windows.Forms.Timer(this.components);
             this.triggerThreadsProcCheck = new System.Windows.Forms.Timer(this.components);
-            this.timerAlerts = new System.Windows.Forms.Timer(this.components);
-            this.columnDrive = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnFreespace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnFreePercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.server = new System.Windows.Forms.Label();
+            this.targetServer = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btn_Server = new System.Windows.Forms.Button();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.timerCpuAlerts = new System.Windows.Forms.Timer(this.components);
+            this.timerMemoryAlerts = new System.Windows.Forms.Timer(this.components);
+            this.timerVolumeAlerts = new System.Windows.Forms.Timer(this.components);
+            this.timerEmailCpuAlerts = new System.Windows.Forms.Timer(this.components);
+            this.timerEmailMemoryAlerts = new System.Windows.Forms.Timer(this.components);
+            this.timerEmailFreeSpaceAlerts = new System.Windows.Forms.Timer(this.components);
             this.menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByCPU)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProcessByMem)).BeginInit();
@@ -89,29 +99,33 @@
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtCPU
             // 
             this.txtCPU.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtCPU.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtCPU.Location = new System.Drawing.Point(189, 53);
+            this.txtCPU.Location = new System.Drawing.Point(175, 55);
             this.txtCPU.Name = "txtCPU";
             this.txtCPU.ReadOnly = true;
-            this.txtCPU.Size = new System.Drawing.Size(77, 33);
+            this.txtCPU.Size = new System.Drawing.Size(93, 33);
             this.txtCPU.TabIndex = 8;
+            this.txtCPU.TabStop = false;
+            this.txtCPU.Text = "      ---";
             // 
             // txtMem
             // 
             this.txtMem.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtMem.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtMem.Location = new System.Drawing.Point(21, 53);
+            this.txtMem.Location = new System.Drawing.Point(34, 55);
             this.txtMem.Name = "txtMem";
             this.txtMem.ReadOnly = true;
-            this.txtMem.Size = new System.Drawing.Size(77, 33);
+            this.txtMem.Size = new System.Drawing.Size(95, 33);
             this.txtMem.TabIndex = 9;
+            this.txtMem.TabStop = false;
+            this.txtMem.Text = "      ---";
             // 
             // optionsMenu
             // 
@@ -168,33 +182,13 @@
             this.menu.TabIndex = 1;
             this.menu.Text = "menuitem1";
             // 
-            // server
-            // 
-            this.server.AutoSize = true;
-            this.server.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.server.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.server.Location = new System.Drawing.Point(12, 17);
-            this.server.Name = "server";
-            this.server.Size = new System.Drawing.Size(192, 21);
-            this.server.TabIndex = 4;
-            this.server.Text = "&Server name or IP address";
-            // 
-            // targetServer
-            // 
-            this.targetServer.BackColor = System.Drawing.Color.White;
-            this.targetServer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.targetServer.Location = new System.Drawing.Point(58, 59);
-            this.targetServer.Name = "targetServer";
-            this.targetServer.Size = new System.Drawing.Size(127, 29);
-            this.targetServer.TabIndex = 5;
-            // 
             // label1
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(180, 13);
+            this.label1.Location = new System.Drawing.Point(165, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 25);
             this.label1.TabIndex = 10;
@@ -228,7 +222,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label5.Location = new System.Drawing.Point(11, 9);
+            this.label5.Location = new System.Drawing.Point(12, 14);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 25);
             this.label5.TabIndex = 17;
@@ -242,14 +236,14 @@
             this.dataGridViewProcessByCPU.AllowUserToResizeRows = false;
             this.dataGridViewProcessByCPU.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridViewProcessByCPU.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProcessByCPU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProcessByCPU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewProcessByCPU.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewProcessByCPU.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnProcessID,
@@ -301,14 +295,14 @@
             this.dataGridViewProcessByMem.AllowUserToResizeRows = false;
             this.dataGridViewProcessByMem.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridViewProcessByMem.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProcessByMem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProcessByMem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewProcessByMem.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewProcessByMem.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnPID_mem,
@@ -381,14 +375,14 @@
             this.dataGridViewFreeSpace.AllowUserToResizeRows = false;
             this.dataGridViewFreeSpace.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.dataGridViewFreeSpace.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewFreeSpace.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewFreeSpace.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewFreeSpace.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewFreeSpace.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnDrive,
@@ -396,7 +390,7 @@
             this.columnFreespace,
             this.columnFreePercentage});
             this.dataGridViewFreeSpace.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.dataGridViewFreeSpace.Location = new System.Drawing.Point(11, 43);
+            this.dataGridViewFreeSpace.Location = new System.Drawing.Point(12, 48);
             this.dataGridViewFreeSpace.Name = "dataGridViewFreeSpace";
             this.dataGridViewFreeSpace.ReadOnly = true;
             this.dataGridViewFreeSpace.RowHeadersVisible = false;
@@ -405,6 +399,45 @@
             this.dataGridViewFreeSpace.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridViewFreeSpace.Size = new System.Drawing.Size(293, 75);
             this.dataGridViewFreeSpace.TabIndex = 22;
+            // 
+            // columnDrive
+            // 
+            this.columnDrive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.columnDrive.HeaderText = "Drive letter";
+            this.columnDrive.Name = "columnDrive";
+            this.columnDrive.ReadOnly = true;
+            this.columnDrive.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnDrive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.columnDrive.Width = 71;
+            // 
+            // columnSize
+            // 
+            this.columnSize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.columnSize.HeaderText = "Size (GB)";
+            this.columnSize.Name = "columnSize";
+            this.columnSize.ReadOnly = true;
+            this.columnSize.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnSize.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.columnSize.Width = 62;
+            // 
+            // columnFreespace
+            // 
+            this.columnFreespace.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.columnFreespace.HeaderText = "Free space (GB)";
+            this.columnFreespace.Name = "columnFreespace";
+            this.columnFreespace.ReadOnly = true;
+            this.columnFreespace.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnFreespace.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.columnFreespace.Width = 95;
+            // 
+            // columnFreePercentage
+            // 
+            this.columnFreePercentage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.columnFreePercentage.HeaderText = "Free (%)";
+            this.columnFreePercentage.Name = "columnFreePercentage";
+            this.columnFreePercentage.ReadOnly = true;
+            this.columnFreePercentage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnFreePercentage.Width = 85;
             // 
             // dataGridViewAlerts
             // 
@@ -417,7 +450,7 @@
             this.dateTimeCol,
             this.textAlert,
             this.valueAlert});
-            this.dataGridViewAlerts.Location = new System.Drawing.Point(11, 32);
+            this.dataGridViewAlerts.Location = new System.Drawing.Point(5, 71);
             this.dataGridViewAlerts.MultiSelect = false;
             this.dataGridViewAlerts.Name = "dataGridViewAlerts";
             this.dataGridViewAlerts.ReadOnly = true;
@@ -465,7 +498,7 @@
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
             this.panel3.Controls.Add(this.dataGridViewFreeSpace);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(423, 538);
+            this.panel3.Location = new System.Drawing.Point(423, 528);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(313, 128);
             this.panel3.TabIndex = 26;
@@ -485,23 +518,87 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
+            this.panel5.Controls.Add(this.clearAlertsDataGrid);
+            this.panel5.Controls.Add(this.checkEmailAlerts);
             this.panel5.Controls.Add(this.label3);
+            this.panel5.Controls.Add(this.checkMemoryAlert);
             this.panel5.Controls.Add(this.dataGridViewAlerts);
-            this.panel5.Location = new System.Drawing.Point(12, 345);
+            this.panel5.Controls.Add(this.checkFreeSpaceAlert);
+            this.panel5.Controls.Add(this.checkCpuAlert);
+            this.panel5.Location = new System.Drawing.Point(12, 302);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(405, 321);
+            this.panel5.Size = new System.Drawing.Size(405, 364);
             this.panel5.TabIndex = 28;
+            // 
+            // clearAlertsDataGrid
+            // 
+            this.clearAlertsDataGrid.Location = new System.Drawing.Point(312, 20);
+            this.clearAlertsDataGrid.Name = "clearAlertsDataGrid";
+            this.clearAlertsDataGrid.Size = new System.Drawing.Size(75, 23);
+            this.clearAlertsDataGrid.TabIndex = 34;
+            this.clearAlertsDataGrid.Text = "Clear view";
+            this.clearAlertsDataGrid.UseVisualStyleBackColor = true;
+            this.clearAlertsDataGrid.Click += new System.EventHandler(this.clearAlertsDataGrid_Click);
+            // 
+            // checkEmailAlerts
+            // 
+            this.checkEmailAlerts.AutoSize = true;
+            this.checkEmailAlerts.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.checkEmailAlerts.Location = new System.Drawing.Point(296, 49);
+            this.checkEmailAlerts.Name = "checkEmailAlerts";
+            this.checkEmailAlerts.Size = new System.Drawing.Size(91, 19);
+            this.checkEmailAlerts.TabIndex = 33;
+            this.checkEmailAlerts.Text = "E-mail alerts";
+            this.checkEmailAlerts.UseVisualStyleBackColor = true;
+            this.checkEmailAlerts.CheckStateChanged += new System.EventHandler(this.checkEmailAlerts_CheckStateChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(11, 4);
+            this.label3.Location = new System.Drawing.Point(5, 15);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 25);
             this.label3.TabIndex = 30;
             this.label3.Text = "Alerts";
+            // 
+            // checkMemoryAlert
+            // 
+            this.checkMemoryAlert.AutoSize = true;
+            this.checkMemoryAlert.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.checkMemoryAlert.Location = new System.Drawing.Point(69, 46);
+            this.checkMemoryAlert.Name = "checkMemoryAlert";
+            this.checkMemoryAlert.Size = new System.Drawing.Size(71, 19);
+            this.checkMemoryAlert.TabIndex = 32;
+            this.checkMemoryAlert.Text = "Memory";
+            this.checkMemoryAlert.UseVisualStyleBackColor = true;
+            this.checkMemoryAlert.CheckStateChanged += new System.EventHandler(this.checkMemoryAlert_CheckStateChanged);
+            // 
+            // checkFreeSpaceAlert
+            // 
+            this.checkFreeSpaceAlert.AutoSize = true;
+            this.checkFreeSpaceAlert.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkFreeSpaceAlert.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.checkFreeSpaceAlert.Location = new System.Drawing.Point(146, 46);
+            this.checkFreeSpaceAlert.Name = "checkFreeSpaceAlert";
+            this.checkFreeSpaceAlert.Size = new System.Drawing.Size(81, 19);
+            this.checkFreeSpaceAlert.TabIndex = 31;
+            this.checkFreeSpaceAlert.Text = "Free space";
+            this.checkFreeSpaceAlert.UseVisualStyleBackColor = true;
+            this.checkFreeSpaceAlert.CheckStateChanged += new System.EventHandler(this.checkFreeSpaceAlert_CheckStateChanged);
+            // 
+            // checkCpuAlert
+            // 
+            this.checkCpuAlert.AutoSize = true;
+            this.checkCpuAlert.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.checkCpuAlert.Location = new System.Drawing.Point(5, 46);
+            this.checkCpuAlert.Name = "checkCpuAlert";
+            this.checkCpuAlert.Size = new System.Drawing.Size(49, 19);
+            this.checkCpuAlert.TabIndex = 30;
+            this.checkCpuAlert.Text = "CPU";
+            this.checkCpuAlert.UseVisualStyleBackColor = true;
+            this.checkCpuAlert.CheckStateChanged += new System.EventHandler(this.checkCpuAlert_CheckStateChanged);
             // 
             // panel2
             // 
@@ -514,37 +611,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(292, 100);
             this.panel2.TabIndex = 25;
-            // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.btn_Server);
-            this.panel6.Controls.Add(this.pictureBox1);
-            this.panel6.Controls.Add(this.targetServer);
-            this.panel6.Controls.Add(this.server);
-            this.panel6.Location = new System.Drawing.Point(32, 55);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(292, 100);
-            this.panel6.TabIndex = 29;
-            // 
-            // btn_Server
-            // 
-            this.btn_Server.Location = new System.Drawing.Point(202, 59);
-            this.btn_Server.Name = "btn_Server";
-            this.btn_Server.Size = new System.Drawing.Size(59, 29);
-            this.btn_Server.TabIndex = 31;
-            this.btn_Server.Text = "Confirm";
-            this.btn_Server.UseVisualStyleBackColor = true;
-            this.btn_Server.Click += new System.EventHandler(this.btn_Server_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 59);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(33, 29);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
             // 
             // triggerThreadsCPU
             // 
@@ -560,44 +626,80 @@
             // 
             this.triggerThreadsProcCheck.Tick += new System.EventHandler(this.triggerThreadsProcCheck_Tick);
             // 
-            // columnDrive
+            // server
             // 
-            this.columnDrive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.columnDrive.HeaderText = "Drive letter";
-            this.columnDrive.Name = "columnDrive";
-            this.columnDrive.ReadOnly = true;
-            this.columnDrive.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnDrive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnDrive.Width = 71;
+            this.server.AutoSize = true;
+            this.server.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.server.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.server.Location = new System.Drawing.Point(12, 17);
+            this.server.Name = "server";
+            this.server.Size = new System.Drawing.Size(192, 21);
+            this.server.TabIndex = 4;
+            this.server.Text = "&Server name or IP address";
             // 
-            // columnSize
+            // targetServer
             // 
-            this.columnSize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.columnSize.HeaderText = "Size (GB)";
-            this.columnSize.Name = "columnSize";
-            this.columnSize.ReadOnly = true;
-            this.columnSize.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnSize.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnSize.Width = 62;
+            this.targetServer.BackColor = System.Drawing.Color.White;
+            this.targetServer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.targetServer.Location = new System.Drawing.Point(58, 59);
+            this.targetServer.Name = "targetServer";
+            this.targetServer.Size = new System.Drawing.Size(127, 29);
+            this.targetServer.TabIndex = 5;
             // 
-            // columnFreespace
+            // pictureBox1
             // 
-            this.columnFreespace.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.columnFreespace.HeaderText = "Free space (GB)";
-            this.columnFreespace.Name = "columnFreespace";
-            this.columnFreespace.ReadOnly = true;
-            this.columnFreespace.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnFreespace.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnFreespace.Width = 95;
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(12, 59);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(33, 29);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
             // 
-            // columnFreePercentage
+            // btn_Server
             // 
-            this.columnFreePercentage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.columnFreePercentage.HeaderText = "Free (%)";
-            this.columnFreePercentage.Name = "columnFreePercentage";
-            this.columnFreePercentage.ReadOnly = true;
-            this.columnFreePercentage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnFreePercentage.Width = 85;
+            this.btn_Server.Location = new System.Drawing.Point(202, 59);
+            this.btn_Server.Name = "btn_Server";
+            this.btn_Server.Size = new System.Drawing.Size(59, 29);
+            this.btn_Server.TabIndex = 31;
+            this.btn_Server.Text = "Confirm";
+            this.btn_Server.UseVisualStyleBackColor = true;
+            this.btn_Server.Click += new System.EventHandler(this.btn_Server_Click);
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.btn_Server);
+            this.panel6.Controls.Add(this.pictureBox1);
+            this.panel6.Controls.Add(this.targetServer);
+            this.panel6.Controls.Add(this.server);
+            this.panel6.Location = new System.Drawing.Point(32, 55);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(292, 100);
+            this.panel6.TabIndex = 29;
+            // 
+            // timerCpuAlerts
+            // 
+            this.timerCpuAlerts.Tick += new System.EventHandler(this.timerCpuAlerts_Tick);
+            // 
+            // timerMemoryAlerts
+            // 
+            this.timerMemoryAlerts.Tick += new System.EventHandler(this.timerMemoryAlerts_Tick);
+            // 
+            // timerVolumeAlerts
+            // 
+            this.timerVolumeAlerts.Tick += new System.EventHandler(this.timerVolumeAlerts_Tick);
+            // 
+            // timerEmailCpuAlerts
+            // 
+            this.timerEmailCpuAlerts.Tick += new System.EventHandler(this.timerEmailCpuAlerts_Tick);
+            // 
+            // timerEmailMemoryAlerts
+            // 
+            this.timerEmailMemoryAlerts.Tick += new System.EventHandler(this.timerEmailMemoryAlerts_Tick);
+            // 
+            // timerEmailFreeSpaceAlerts
+            // 
+            this.timerEmailFreeSpaceAlerts.Tick += new System.EventHandler(this.timerEmailFreeSpaceAlerts_Tick);
             // 
             // MainForm
             // 
@@ -630,9 +732,9 @@
             this.panel5.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -645,7 +747,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolsMenu;
         private System.Windows.Forms.ToolStripMenuItem runCustomScript;
         private System.Windows.Forms.MenuStrip menu;
-        private System.Windows.Forms.Label server;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Drive;
@@ -660,10 +761,6 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        public System.Windows.Forms.TextBox targetServer;
-        public System.Windows.Forms.Button btn_Server;
         private System.Windows.Forms.ToolStripMenuItem alerts_menu;
         private System.Windows.Forms.Timer triggerThreadsCPU;
         private System.Windows.Forms.Timer triggerThreadVol;
@@ -679,7 +776,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dateTimeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn textAlert;
         private System.Windows.Forms.DataGridViewTextBoxColumn valueAlert;
-        private System.Windows.Forms.Timer timerAlerts;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessID;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnProcess;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnProcessCPU;
@@ -687,6 +783,22 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnSize;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnFreespace;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnFreePercentage;
+        private System.Windows.Forms.Label server;
+        public System.Windows.Forms.TextBox targetServer;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        public System.Windows.Forms.Button btn_Server;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Timer timerCpuAlerts;
+        private System.Windows.Forms.Timer timerMemoryAlerts;
+        private System.Windows.Forms.Timer timerVolumeAlerts;
+        private System.Windows.Forms.Timer timerEmailCpuAlerts;
+        private System.Windows.Forms.Timer timerEmailMemoryAlerts;
+        private System.Windows.Forms.Timer timerEmailFreeSpaceAlerts;
+        public System.Windows.Forms.CheckBox checkCpuAlert;
+        public System.Windows.Forms.CheckBox checkFreeSpaceAlert;
+        public System.Windows.Forms.CheckBox checkMemoryAlert;
+        public System.Windows.Forms.CheckBox checkEmailAlerts;
+        private System.Windows.Forms.Button clearAlertsDataGrid;
     }
 }
 

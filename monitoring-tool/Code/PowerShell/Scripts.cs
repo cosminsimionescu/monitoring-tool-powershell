@@ -30,9 +30,9 @@ namespace monitoring_tool
             return memS;
         }
 
-        public string cpu_Script() //show CPU usage time(%)
+        public string cpu_Script(string sampleTime) //show CPU usage time(%)
         {
-            string sampleTime = "30";
+            //string sampleTime = "30";
             string cpuS = @"$CPU = (Get-Counter '\Processor(_total)\% Processor Time' -Sample #sampletime#).CounterSamples[0].CookedValue
             $RoundCPU = [math]::Round($CPU, 2)
             $RoundCPU";
@@ -44,7 +44,7 @@ namespace monitoring_tool
         public string processByCPU_Script(string processesToDisplay_CPU) //display top processes by CPU
         {
             processesToDisplay_CPU = "10";
-            var processbyCPU = @"$cores = (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors/2
+            var processbyCPU = @"$cores = (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors
             $CPU = Get-CimInstance Win32_PerfFormattedData_PerfProc_Process | 
             Select-Object -Property Name, @{Name = 'CPU'; Expression = {'{0:n2}' -f($_.PercentProcessorTime/$cores)}},
             @{Name = 'PID'; Expression = {$_.IDProcess}} |

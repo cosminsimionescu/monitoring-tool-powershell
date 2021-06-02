@@ -25,24 +25,26 @@ namespace monitoring_tool
         public double memoryPercentage { get; set; }
         public double cpuPercentage { get; set; }
         public Dictionary<string, double> driveInformations { get; set; } //dictionary for Drive name and freespace(%)
+        string cpuUsage_script;
 
         public void GetMemory()
         {
             MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
             RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
             Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
-
+ 
             string memoryUsage_script = InstanceScripts.memory_Script(); //Memory usage script 
             string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
 
             Task<string> task_Mem = InstanceRemoteSession.NewPowerShell(targetServ, memoryUsage_script); //task running the PS session
 
             string memoryUsage = " " + task_Mem.Result + "%";
-
+            Thread.Sleep(50);
             InstanceMainForm.UpdateMemoryLoad(memoryUsage); //call method for updating the DataGrid on MainForm
 
             try
             {
+                Thread.Sleep(35);
                 memoryPercentage = Convert.ToDouble(task_Mem.Result); //Convert to double for later using the value for Alerting
             }
             catch { }
@@ -54,17 +56,19 @@ namespace monitoring_tool
             RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
             Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
 
-            string cpuUsage_script = InstanceScripts.cpu_Script(); //CPU usage script
+            cpuUsage_script = InstanceScripts.cpu_Script("30");
+ 
             string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
 
             Task<string> task_CPU = InstanceRemoteSession.NewPowerShell(targetServ, cpuUsage_script); //task running the PS session
 
             string cpuUsage = " " + task_CPU.Result + "%"; //forwarding the PowerShell output to the method for updating on the MainForm the CPU usage
-            Thread.Sleep(3);
+            Thread.Sleep(45);
             InstanceMainForm.UpdateCpuLoad(cpuUsage); //call method for updating the DataGrid on MainForm
 
             try
             {
+                Thread.Sleep(35);
                 cpuPercentage = Convert.ToDouble(task_CPU.Result); //Convert to double for later using the value for Alerting
             }
             catch { }
@@ -94,14 +98,15 @@ namespace monitoring_tool
                 string cpuLoad = corectLines[i + 1].Split(':')[1].Trim();
                 string pid_cpu = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
 
-                processCpuLoadValue = Convert.ToDouble(cpuLoad);//Convert to double for later using the value for Alerting
-                Thread.Sleep(3);
+                Thread.Sleep(40);
                 if (i == 0)
                 {
                     InstanceMainForm.ClearGridProcessCpuLoad(); //call for clearing the DataGrid on MainForm before writing again
                 }
                 try
                 {
+                    Thread.Sleep(15);
+                    processCpuLoadValue = Convert.ToDouble(cpuLoad);//Convert to double for later using the value for Alerting
                     InstanceMainForm.UpdateProcessCpuLoad(pid_cpu, processNameCPU, processCpuLoadValue); //call method for updating the DataGrid on MainForm
                 }
                 catch { }
@@ -130,13 +135,14 @@ namespace monitoring_tool
                 string processName_mem = corectLines[i].Split(':')[1].Trim();
                 string processMem_load = corectLines[i + 1].Split(':')[1].Trim();
                 string processPidMem = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
-                Thread.Sleep(3);
+                Thread.Sleep(10);
                 if (i == 0)
                 {
                     InstanceMainForm.ClearGridProcessMemLoad(); //call for clearing the DataGrid on MainForm before writing again
                 }
                 try
                 {
+                    Thread.Sleep(35);
                     double processMemLoadValue = Convert.ToDouble(processMem_load);//Convert to double for later using the value for Alerting
                     InstanceMainForm.UpdateProcessMemLoad(processPidMem, processName_mem, processMemLoadValue); //call method for updating the DataGrid on MainForm
                 }
@@ -168,6 +174,7 @@ namespace monitoring_tool
                 string driveSize = corectLines[i].Split(':')[1].Trim();
                 string driveSpace = corectLines[i + 1].Split(':')[1].Trim();
                 string driveSpacePercentage = corectLines[i + 2].Split(':')[1].Trim().Split('\r', '%')[0];
+                Thread.Sleep(75);
                 if (i == 0)
                 {
                     InstanceMainForm.ClearGridUpdateFreeSpace(); //call for clearing the DataGrid on MainForm before writing again

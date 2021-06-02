@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,8 +7,7 @@ namespace monitoring_tool
 {
     public partial class MainForm : Form
     {
-        DateTime Time = DateTime.Now; //time
-        string date; //used for alerts/e-mail
+        readonly DateTime Time = DateTime.Now; //time
 
         private static MainForm Instance; //MainForm instance
         public static MainForm GetInstance()
@@ -19,15 +16,15 @@ namespace monitoring_tool
             return Instance;
         }
 
-        ConfirmBox InstanceConfirmBox = ConfirmBox.GetInstanceConfirmBox();// Instanta forma confirmare server
+        readonly ConfirmBox InstanceConfirmBox = ConfirmBox.GetInstanceConfirmBox();// Instanta forma confirmare server
 
         public MainForm()
         {
             Control.CheckForIllegalCrossThreadCalls = false; //disable unsafe cross thread calls exception checks for debuging
 
-            InitializeComponent(); 
+            InitializeComponent();
             Instance = this; // Instance = curent MainForm
-      
+
             AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert(); // Instanta forma setari alerte
             MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings(); // Instanta forma setari SMTP settings(mail)
             InstanceServerSettings.LoadConfigurationSMPTFile(); //Load saved e-mail configurations for sending e-mails
@@ -41,7 +38,6 @@ namespace monitoring_tool
                 targetServer.Enabled = false;
                 btn_Server.Enabled = false;
                 btn_Server.Visible = false;
-
                 InstanceConfirmBox.ShowDialog();
             }
             else
@@ -70,10 +66,11 @@ namespace monitoring_tool
             triggerThreadsCPU.Enabled = true;
 
             triggerThreadsProcCheck.Enabled = true;
-            triggerThreadsProcCheck.Interval = 5000;
+            triggerThreadsProcCheck.Interval = 8000;
 
             triggerThreadVol.Enabled = true;
             triggerThreadVol.Interval = 120000;
+
         }
 
         private void triggerThreadCPU_Tick(object sender, EventArgs e)//Timer for triggering the threads where the PowerShell sessions 
@@ -97,9 +94,7 @@ namespace monitoring_tool
 
         private void triggerThreadsProcCheck_Tick(object sender, EventArgs e) //Timer for triggering the threads where the PowerShell sessions 
         {                                                                     //and results will process
-            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
-            InstanceCheck.Alerts();
 
             Thread ProcCPUThread = new(InstanceResults.GetProcessCPU);
             Thread ProcMemThread = new(InstanceResults.GetProcessMemory);
@@ -141,26 +136,6 @@ namespace monitoring_tool
             MessageBox.Show("Application is closing");
             Environment.Exit(0);
         }
-
-        public void UpdateMemoryAlert(string memoryAlert) //Update alerts for memory load on MainForm(Datagrid view)
-        {
-            ParseResults InstanceResults = ParseResults.GetInstanceResults();
-            date = Time.ToString("F");
-            dataGridViewAlerts.Rows.Add(date, memoryAlert, InstanceResults.memoryPercentage + "%");
-        }
-
-        public void UpdateCPUAlert(string cpuAlert) //Update alerts for cpu load on MainForm(Datagrid view)
-        {
-            ParseResults InstanceResults = ParseResults.GetInstanceResults();
-            date = Time.ToString("F");
-            dataGridViewAlerts.Rows.Add(date, cpuAlert, InstanceResults.cpuPercentage + "%");
-        }
-
-        public void UpdateVolumeAlert(string volumeAlert, string driveName, double volumePercentage) //Update alerts for Free Space on MainForm(Datagrid view)
-        {
-            dataGridViewAlerts.Rows.Add(date, volumeAlert + driveName, volumePercentage + "%");
-        }
-
 
         public void UpdateMemoryLoad(string memUsage) //Update mem load(%) on MainForm(TextBox)
         {
@@ -207,12 +182,254 @@ namespace monitoring_tool
                 dataGridViewFreeSpace.Rows.Add(driveId, driveSize + " GB", driveSpace + " GB", driveSpacePercentageValue + " %");
             }
             catch { }
-            dataGridViewFreeSpace.ClearSelection(); 
+            dataGridViewFreeSpace.ClearSelection();
         }
+
         public void ClearGridUpdateFreeSpace() //Clear free space (Datagrid view)
         {
             dataGridViewFreeSpace.Rows.Clear();
-        } 
-    }
+        }
 
+        public void UpdateMemoryAlert(string memoryAlert) //Update alerts for memory load on MainForm(Datagrid view)
+        {
+            ParseResults InstanceResults = ParseResults.GetInstanceResults();
+            DateTime Time = DateTime.Now; //time
+            string date = Time.ToString("F");
+            dataGridViewAlerts.Rows.Add(date, memoryAlert, InstanceResults.memoryPercentage + "%");
+        }
+
+        public void UpdateCPUAlert(string cpuAlert) //Update alerts for cpu load on MainForm(Datagrid view)
+        {
+            ParseResults InstanceResults = ParseResults.GetInstanceResults();
+            string date = Time.ToString("F");
+            dataGridViewAlerts.Rows.Add(date, cpuAlert, InstanceResults.cpuPercentage + "%");
+        }
+
+        public void UpdateVolumeAlert(string volumeAlert, string driveName, double volumePercentage) //Update alerts for Free Space on MainForm(Datagrid view)
+        {
+            DateTime Time = DateTime.Now; //time
+            string date = Time.ToString("F");
+            dataGridViewAlerts.Rows.Add(date, volumeAlert + driveName, volumePercentage + "%");
+        }
+
+
+        private void checkCpuAlert_CheckStateChanged(object sender, EventArgs e)
+        {
+            AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
+            int time = Convert.ToInt32(InstanceAlert.triggerTime.Text.Trim());
+
+            string format = InstanceAlert.timeFormatInternalAlerts.Text.Trim();
+
+            if (format == "minutes")
+            {
+                int intervalAlertInApp = time * 60000;
+                if (checkCpuAlert.CheckState == CheckState.Checked)
+                {
+                    timerCpuAlerts.Interval = intervalAlertInApp;
+                    timerCpuAlerts.Enabled = true;
+                }
+                else
+                {
+                    timerCpuAlerts.Enabled = false;
+                }
+
+            }
+            else
+            {
+                int intervalAlertInApp = time * 1000;
+                if (checkCpuAlert.CheckState == CheckState.Checked)
+                {
+                    timerCpuAlerts.Interval = intervalAlertInApp;
+                    timerCpuAlerts.Enabled = true;
+                }
+                else
+                {
+                    timerCpuAlerts.Enabled = false;
+                }
+
+            }
+        }
+
+        private void checkMemoryAlert_CheckStateChanged(object sender, EventArgs e)
+        {
+            AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
+            int time = Convert.ToInt32(InstanceAlert.triggerTime.Text.Trim());
+
+
+            string format = InstanceAlert.timeFormatInternalAlerts.Text.Trim();
+
+            if (format == "minutes")
+            {
+                int intervalAlertInApp = time * 60000;
+                if (checkMemoryAlert.CheckState == CheckState.Checked)
+                {
+                    timerMemoryAlerts.Interval = intervalAlertInApp;
+                    timerMemoryAlerts.Enabled = true;
+                }
+                else
+                {
+                    timerMemoryAlerts.Enabled = false;
+                }
+            }
+            else
+            {
+                int intervalAlertInApp = time * 1000;
+                if (checkMemoryAlert.CheckState == CheckState.Checked)
+                {
+                    timerMemoryAlerts.Interval = intervalAlertInApp;
+                    timerMemoryAlerts.Enabled = true;
+                }
+                else
+                {
+                    timerMemoryAlerts.Enabled = false;
+                }
+            }
+
+        }
+
+        private void checkFreeSpaceAlert_CheckStateChanged(object sender, EventArgs e)
+        {
+
+            AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
+            int time = Convert.ToInt32(InstanceAlert.triggerTime.Text.Trim());
+
+            string format = InstanceAlert.timeFormatInternalAlerts.Text.Trim();
+
+            if (format == "minutes")
+            {
+                int intervalAlertInApp = time * 60000;
+                if (checkFreeSpaceAlert.CheckState == CheckState.Checked)
+                {
+                    timerVolumeAlerts.Interval = intervalAlertInApp;
+                    timerVolumeAlerts.Enabled = true;
+                }
+                else
+                {
+                    timerVolumeAlerts.Enabled = false;
+                }
+            }
+            else
+            {
+                int intervalAlertInApp = time * 1000;
+                if (checkFreeSpaceAlert.CheckState == CheckState.Checked)
+                {
+                    timerVolumeAlerts.Interval = intervalAlertInApp;
+                    timerVolumeAlerts.Enabled = true;
+                }
+                else
+                {
+                    timerVolumeAlerts.Enabled = false;
+                }
+            }
+        }
+
+        private void checkEmailAlerts_CheckStateChanged(object sender, EventArgs e)
+        {
+            AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
+            MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
+
+            if (checkEmailAlerts.CheckState == CheckState.Checked &&
+                InstanceAlert.checkBoxEmail.CheckState == CheckState.Checked &&
+                InstanceServerSettings.txtUser.Text.Trim() != "" && InstanceAlert.timeFormat.Text.Trim() != "")
+            {
+                int intervalEmails;
+
+                string format = InstanceAlert.timeFormat.Text.Trim();
+
+                int time = Convert.ToInt32(InstanceAlert.intervalAlertEmail.Text.Trim());
+
+                if (format == "minutes")
+                {
+                    intervalEmails = time * 60000;
+                    timerEmailCpuAlerts.Interval = intervalEmails;
+                    timerEmailCpuAlerts.Enabled = true;
+
+                    timerEmailMemoryAlerts.Interval = intervalEmails;
+                    timerEmailMemoryAlerts.Enabled = true;
+
+                    timerEmailFreeSpaceAlerts.Interval = intervalEmails;
+                    timerEmailFreeSpaceAlerts.Enabled = true;
+                }
+                else
+                {
+                    intervalEmails = time * 3600000;
+                    timerEmailCpuAlerts.Interval = intervalEmails;
+                    timerEmailCpuAlerts.Enabled = true;
+
+                    timerEmailMemoryAlerts.Interval = intervalEmails;
+                    timerEmailMemoryAlerts.Enabled = true;
+
+                    timerEmailFreeSpaceAlerts.Interval = intervalEmails;
+                    timerEmailFreeSpaceAlerts.Enabled = true;
+                }
+            }
+            else
+            {
+                timerEmailCpuAlerts.Enabled = false;
+                timerEmailMemoryAlerts.Enabled = false;
+                timerEmailFreeSpaceAlerts.Enabled = false;
+            }
+        }
+
+        private void timerCpuAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = false;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+
+            InstanceCheck.AlertCpu(sendEmail);
+
+        }
+
+        private void timerMemoryAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = false;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+
+            InstanceCheck.AlertMemory(sendEmail);
+
+        }
+
+        private void timerVolumeAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = false;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+            InstanceCheck.AlertFreeSpace(sendEmail);
+
+        }
+
+        private void timerEmailCpuAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = true;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+            if (checkEmailAlerts.CheckState == CheckState.Checked)
+            {
+                InstanceCheck.AlertCpu(sendEmail);
+            }
+        }
+
+        private void timerEmailMemoryAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = true;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+            if (checkEmailAlerts.CheckState == CheckState.Checked)
+            {
+                InstanceCheck.AlertMemory(sendEmail);
+            }
+        }
+
+        private void timerEmailFreeSpaceAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = true;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+            if (checkEmailAlerts.CheckState == CheckState.Checked)
+            {
+                InstanceCheck.AlertFreeSpace(sendEmail);
+            }
+        }
+
+        private void clearAlertsDataGrid_Click(object sender, EventArgs e)
+        {
+            dataGridViewAlerts.Rows.Clear();
+        }
+    }
 }

@@ -30,7 +30,7 @@ namespace monitoring_tool
         {
             MainForm InstanceMain = MainForm.GetInstance();
             InstanceMain.Monitor_loop();
-
+            
             if (!InstanceMain.Visible)  //Bring to front MainForm
             {
                 InstanceMain.Show();

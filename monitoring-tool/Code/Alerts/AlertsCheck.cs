@@ -8,6 +8,9 @@ namespace monitoring_tool
 {
     class AlertsCheck
     {
+
+        DateTime Time = DateTime.Now; //curent date/time for alerts
+
         private static AlertsCheck InstanceCheck;
         public static AlertsCheck GetInstanceCheck()
         {
@@ -20,10 +23,9 @@ namespace monitoring_tool
             InstanceCheck = this;
         }
 
-        public void Alerts()
+        public void AlertMemory(bool sendEmail)
         {
-
-            DateTime Time = DateTime.Now; //curent date/time for alerts
+   
             string date = Time.ToString("F"); 
 
             AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();//Alert settings class instance
@@ -31,37 +33,67 @@ namespace monitoring_tool
             ParseResults InstanceResults = ParseResults.GetInstanceResults();//Output processing class instance
             SendEmail InstanceSendEmail = SendEmail.GetInstanceEmail();//Send email class instance
 
-            double memoryTreshold = Convert.ToDouble(InstanceAlert.memoryTrshld.Text);
-            double cpuTreshold = Convert.ToDouble(InstanceAlert.cpuTrshld.Text);
-            double volumeTreshold = Convert.ToDouble(InstanceAlert.volumeTrshld.Text);
-
             string messageMemoryHit = "Memory usage is over the set treshold";
-            string messageCPUHit = "CPU usage is over the set treshold";
-            string messageVolumeHit = "Free space is low on drive ";
-
             string messageMemoryEmail = "High memory load";
+
+            double memoryTreshold = Convert.ToDouble(InstanceAlert.memoryTrshld.Text);
+            if (InstanceResults.memoryPercentage > memoryTreshold && sendEmail == false)  //check for memory treshold
+            {
+                InstanceMainForm.UpdateMemoryAlert(messageMemoryHit);
+            }
+            if (InstanceResults.memoryPercentage > memoryTreshold && sendEmail == true)
+            {
+                InstanceSendEmail.SendAlertEmail(messageMemoryEmail, messageMemoryHit, InstanceResults.memoryPercentage);
+            }
+        }
+        public void AlertCpu(bool sendEmail)
+        {
+            AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();//Alert settings class instance
+            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
+            ParseResults InstanceResults = ParseResults.GetInstanceResults();//Output processing class instance
+            SendEmail InstanceSendEmail = SendEmail.GetInstanceEmail();//Send email class instance
+
+            string date = Time.ToString("F");
+
+            string messageCPUHit = "CPU usage is over the set treshold";
             string messageCpuEmail = "High CPU load";
+           
+            double cpuTreshold = Convert.ToDouble(InstanceAlert.cpuTrshld.Text);
+
+            if (InstanceResults.cpuPercentage > cpuTreshold && sendEmail == false) //check for cpu treshold
+            {
+                InstanceMainForm.UpdateCPUAlert(messageCPUHit);
+            }
+            if (InstanceResults.cpuPercentage > cpuTreshold && sendEmail == true)
+            {
+                InstanceSendEmail.SendAlertEmail(messageCpuEmail, messageCPUHit, InstanceResults.memoryPercentage);
+            }
+        }
+
+        public void AlertFreeSpace(bool sendEmail)
+        {
+            AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();//Alert settings class instance
+            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
+            ParseResults InstanceResults = ParseResults.GetInstanceResults();//Output processing class instance
+            SendEmail InstanceSendEmail = SendEmail.GetInstanceEmail();//Send email class instance
+
+            string date = Time.ToString("F");
+
+            string messageVolumeHit = "Free space is low on drive ";
             string messageVolumeEmail = "Low free space on";
 
 
-            if (InstanceResults.memoryPercentage > memoryTreshold)  //check for memory treshold
-            {
-                InstanceMainForm.UpdateMemoryAlert(messageMemoryHit);
-                InstanceSendEmail.SendAlertEmail(messageMemoryEmail, messageMemoryHit, InstanceResults.memoryPercentage);
-            }
-
-            if (InstanceResults.cpuPercentage > cpuTreshold) //check for cpu treshold
-            {
-                InstanceMainForm.UpdateCPUAlert(messageCPUHit);
-                InstanceSendEmail.SendAlertEmail(messageCpuEmail, messageCPUHit, InstanceResults.cpuPercentage);
-            }
+            double volumeTreshold = Convert.ToDouble(InstanceAlert.volumeTrshld.Text);
 
             foreach (KeyValuePair<string, double> pair in InstanceResults.driveInformations) //check for free space
             {
-                if (pair.Value < volumeTreshold)
+                if (pair.Value < volumeTreshold && sendEmail == false)
                 {
                     InstanceMainForm.UpdateVolumeAlert(messageVolumeHit, pair.Key, pair.Value);
-                    InstanceSendEmail.SendAlertEmail(messageVolumeEmail + " "+ pair.Key, messageVolumeHit + " " + pair.Key, pair.Value);
+                }
+                if (pair.Value < volumeTreshold && sendEmail == true)
+                {
+                    InstanceSendEmail.SendAlertEmail(messageVolumeEmail + " " + pair.Key, messageVolumeHit + " " + pair.Key, pair.Value);
                 }
             }
         }
