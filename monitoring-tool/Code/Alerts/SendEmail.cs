@@ -6,37 +6,49 @@ namespace monitoring_tool
 {
     public class SendEmail
     {
-        public void Email(string alertMessage)
+        private static SendEmail InstanceSendEmail;
+        public static SendEmail GetInstanceEmail()
         {
-            DateTime Time = DateTime.Now;
+            if (InstanceSendEmail == null) InstanceSendEmail = new SendEmail();
+            return InstanceSendEmail;
+        }
+
+        public SendEmail()
+        {
+            InstanceSendEmail = this;
+        }
+
+        public void SendAlertEmail(string alertMessage, string bodyMessage, double value)
+        {
+            DateTime Time = DateTime.Now; //used for time in the e-mail
 
             AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
-
-            string emailTO = InstanceAlert.txtEmail.Text;
-
             MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
-            
-            string userName = InstanceServerSettings.txtUser.Text;
-            string SMTP = InstanceServerSettings.txtSMTP.Text;
-            string password = InstanceServerSettings.txtPassword.Text;
+
+            string emailTO = InstanceAlert.txtEmail.Text; //get e-mail for receiving alerts from the Alert settings window
+
+            string userName = InstanceServerSettings.txtUser.Text; //get username for the e-mail configuration from Mail Configuration window
+            string SMTP = InstanceServerSettings.txtSMTP.Text; //get SMTP server for the e-mail configuration from Mail Configuration window
+            string password = InstanceServerSettings.txtPassword.Text; //get password for the e-mail configuration from Mail Configuration window
 
             try
             {
                 string date = Time.ToString();
-
+                string valueMetric = value.ToString();
                 MainForm InstanceMainForm = MainForm.GetInstance();
-                string serverHit = InstanceMainForm.targetServer.Text;
+
+                string serverHit = InstanceMainForm.targetServer.Text; //take name of the server for e-mail from the MainForm TextBox
 
                 MailMessage mail = new MailMessage();
                 SmtpClient SmtpServer = new SmtpClient(SMTP);
-                mail.From = new MailAddress(userName);
+                mail.From = new MailAddress(userName, "Monitoring tool");
                 mail.To.Add(emailTO);
-                mail.Subject = "[ALERT]" + "[" + date + "] " + alertMessage +" "+"triggered on "+" "+ serverHit;
-                mail.Body = " ";
-
+                mail.Subject = "[ALERT]" + "[" + date + "] " + alertMessage +"!!!! "+"   Triggered on "+" "+ serverHit;
+                mail.Body = "SERVER: " + serverHit + Environment.NewLine + "Alert messsage: " + bodyMessage + Environment.NewLine + "Curent status: " + value + "%" + " at " + date;              
+   
                 SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential(userName, password);
-                SmtpServer.EnableSsl = true;
+                SmtpServer.Credentials = new System.Net.NetworkCredential(userName, password); // credentials
+                SmtpServer.EnableSsl = true; //enable SSL
 
                 SmtpServer.Send(mail);
             }

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace monitoring_tool
 {
-    public class ValidateInput
+    public class ValidateInput //Necessary for input validation on diferent forms
     {
 
         [Range(0, 100)]

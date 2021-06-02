@@ -19,90 +19,90 @@ namespace monitoring_tool
 
         public ParseResults()
         {
-            InstanceResults = this;
+            InstanceResults = this; 
         }
 
         public double memoryPercentage { get; set; }
         public double cpuPercentage { get; set; }
-        public Dictionary<string, double> driveInformations { get; set; }
+        public Dictionary<string, double> driveInformations { get; set; } //dictionary for Drive name and freespace(%)
 
         public void GetMemory()
         {
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
-            MainForm InstanceMainForm = MainForm.GetInstance();
+            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
 
-            Scripts memS = new Scripts();
-            string memoryUsage_script = memS.memory_Script(); //Memory usage script 
-            string targetServ = InstanceMainForm.targetServer.Text.Trim();
+            string memoryUsage_script = InstanceScripts.memory_Script(); //Memory usage script 
+            string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
 
-            Task<string> task_Mem = InstanceRemoteSession.NewPowerShell(targetServ, memoryUsage_script);
+            Task<string> task_Mem = InstanceRemoteSession.NewPowerShell(targetServ, memoryUsage_script); //task running the PS session
 
             string memoryUsage = " " + task_Mem.Result + "%";
 
-            InstanceMainForm.UpdateMemoryLoad(memoryUsage);
+            InstanceMainForm.UpdateMemoryLoad(memoryUsage); //call method for updating the DataGrid on MainForm
 
             try
             {
-                memoryPercentage = Convert.ToDouble(task_Mem.Result);
+                memoryPercentage = Convert.ToDouble(task_Mem.Result); //Convert to double for later using the value for Alerting
             }
             catch { }
-
         }
 
         public void GetCPU()
         {
+            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
 
-            MainForm InstanceMainForm = MainForm.GetInstance();
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
+            string cpuUsage_script = InstanceScripts.cpu_Script(); //CPU usage script
+            string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
 
-            Scripts cpuS = new Scripts();
-            string cpuUsage_script = cpuS.cpu_Script(); //CPU usage script
-            string targetServ = InstanceMainForm.targetServer.Text.Trim();
+            Task<string> task_CPU = InstanceRemoteSession.NewPowerShell(targetServ, cpuUsage_script); //task running the PS session
 
-            Task<string> task_CPU = InstanceRemoteSession.NewPowerShell(targetServ, cpuUsage_script);
-
-            string cpuUsage = " " + task_CPU.Result + "%";
+            string cpuUsage = " " + task_CPU.Result + "%"; //forwarding the PowerShell output to the method for updating on the MainForm the CPU usage
             Thread.Sleep(3);
-            InstanceMainForm.UpdateCpuLoad(cpuUsage);
-            
+            InstanceMainForm.UpdateCpuLoad(cpuUsage); //call method for updating the DataGrid on MainForm
+
             try
             {
-                cpuPercentage = Convert.ToDouble(task_CPU.Result);
+                cpuPercentage = Convert.ToDouble(task_CPU.Result); //Convert to double for later using the value for Alerting
             }
             catch { }
         }
 
         public void GetProcessCPU()
         {
-            MainForm InstanceMainForm = MainForm.GetInstance();
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
+            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
 
             double processCpuLoadValue;
-            Scripts procCPU = new Scripts();
-            string processCPU_script = procCPU.processByCPU_Script("10"); //Procesess by CPU script
-            string TargetServ = InstanceMainForm.targetServer.Text.Trim();
+            string processCPU_script = InstanceScripts.processByCPU_Script("10"); //Procesess by CPU script
+            string TargetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
 
-            Task<string> task_ProcByCPU = InstanceRemoteSession.NewPowerShell(TargetServ, processCPU_script);
-            string outputProcCPU = task_ProcByCPU.Result;
-            List<string> corectLines = outputProcCPU.Split('\n')
+            Task<string> task_ProcByCPU = InstanceRemoteSession.NewPowerShell(TargetServ, processCPU_script); //task running the PS session
+
+            string outputProcCPU = task_ProcByCPU.Result;//forwarding the PowerShell output to the list
+
+            List<string> corectLines = outputProcCPU.Split('\n') //creating a list with the PowerShell output for formating
                          .Where(l => l != "\r").ToList();
             corectLines.Remove("");
 
-            for (int i = 0; i < corectLines.Count(); i += 3)
+            for (int i = 0; i < corectLines.Count(); i += 3) //formating the PowerShell output
             {
                 string processNameCPU = corectLines[i].Split(':')[1].Trim().Split('#')[0];
                 string cpuLoad = corectLines[i + 1].Split(':')[1].Trim();
                 string pid_cpu = corectLines[i + 2].Split(':')[1].Trim().Split('\r')[0];
 
-                processCpuLoadValue = Convert.ToDouble(cpuLoad);
+                processCpuLoadValue = Convert.ToDouble(cpuLoad);//Convert to double for later using the value for Alerting
                 Thread.Sleep(3);
                 if (i == 0)
                 {
-                    InstanceMainForm.ClearGridProcessCpuLoad();
+                    InstanceMainForm.ClearGridProcessCpuLoad(); //call for clearing the DataGrid on MainForm before writing again
                 }
                 try
                 {
-                    InstanceMainForm.UpdateProcessCpuLoad(pid_cpu, processNameCPU, processCpuLoadValue);
+                    InstanceMainForm.UpdateProcessCpuLoad(pid_cpu, processNameCPU, processCpuLoadValue); //call method for updating the DataGrid on MainForm
                 }
                 catch { }
             }
@@ -110,21 +110,22 @@ namespace monitoring_tool
 
         public void GetProcessMemory()
         {
-            MainForm InstanceMainForm = MainForm.GetInstance();
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
+            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
 
-            Scripts procMem = new Scripts();
-            string processMem_script = procMem.processByMem_Script("10"); //Process by memory script
-            string targetServ = InstanceMainForm.targetServer.Text.Trim();
+            string processMem_script = InstanceScripts.processByMem_Script("10"); //Process by memory script
+            string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
 
-            Task<string> task_ProcByMem = InstanceRemoteSession.NewPowerShell(targetServ, processMem_script);
+            Task<string> task_ProcByMem = InstanceRemoteSession.NewPowerShell(targetServ, processMem_script); //task running the PS session
 
-            string outputProcMem = task_ProcByMem.Result;
-            List<string> corectLines = outputProcMem.Split('\n')
+            string outputProcMem = task_ProcByMem.Result; //forwarding the PowerShell output to the list
+
+            List<string> corectLines = outputProcMem.Split('\n')//creating a list with the PowerShell output for formating
                          .Where(l => l != "\r").ToList();
             corectLines.Remove("");
 
-            for (int i = 0; i < corectLines.Count(); i += 3)
+            for (int i = 0; i < corectLines.Count(); i += 3) //formating the PowerShell output
             {
                 string processName_mem = corectLines[i].Split(':')[1].Trim();
                 string processMem_load = corectLines[i + 1].Split(':')[1].Trim();
@@ -132,12 +133,12 @@ namespace monitoring_tool
                 Thread.Sleep(3);
                 if (i == 0)
                 {
-                    InstanceMainForm.ClearGridProcessMemLoad();
+                    InstanceMainForm.ClearGridProcessMemLoad(); //call for clearing the DataGrid on MainForm before writing again
                 }
                 try
                 {
-                    double processMemLoadValue = Convert.ToDouble(processMem_load);
-                    InstanceMainForm.UpdateProcessMemLoad(processPidMem, processName_mem, processMemLoadValue);
+                    double processMemLoadValue = Convert.ToDouble(processMem_load);//Convert to double for later using the value for Alerting
+                    InstanceMainForm.UpdateProcessMemLoad(processPidMem, processName_mem, processMemLoadValue); //call method for updating the DataGrid on MainForm
                 }
                 catch { }
             }
@@ -145,23 +146,23 @@ namespace monitoring_tool
 
         public void GetVolume()
         {
-            MainForm InstanceMainForm = MainForm.GetInstance();
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
+            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
 
-            Scripts volumeS = new Scripts();
-            string volumeUsage_script = volumeS.volume_Script();//volume script
-            string targetServ = InstanceMainForm.targetServer.Text.Trim();
+            string volumeUsage_script = InstanceScripts.volume_Script();//volume script
+            string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
 
             driveInformations = new Dictionary<string, double>();
-            Task<string> task_Vol = InstanceRemoteSession.NewPowerShell(targetServ, volumeUsage_script);
+            Task<string> task_Vol = InstanceRemoteSession.NewPowerShell(targetServ, volumeUsage_script); //task running the PS session
 
             string outputVol = task_Vol.Result;
 
-            List<string> corectLines = outputVol.Split('\n')
+            List<string> corectLines = outputVol.Split('\n')  //creating a list with the PowerShell output for formating
                          .Where(l => l != "\r").ToList();
             corectLines.Remove("");
 
-            for (int i = 0; i < corectLines.Count(); i += 4)
+            for (int i = 0; i < corectLines.Count(); i += 4) //formating the PowerShell output
             {
                 string driveId = corectLines[i + 3].Split(':')[1].Trim();
                 string driveSize = corectLines[i].Split(':')[1].Trim();
@@ -169,12 +170,12 @@ namespace monitoring_tool
                 string driveSpacePercentage = corectLines[i + 2].Split(':')[1].Trim().Split('\r', '%')[0];
                 if (i == 0)
                 {
-                    InstanceMainForm.ClearGridUpdateFreeSpace();
+                    InstanceMainForm.ClearGridUpdateFreeSpace(); //call for clearing the DataGrid on MainForm before writing again
                 }
                 try
                 {
-                    double driveSpacePercentageValue = Convert.ToDouble(driveSpacePercentage);
-                    InstanceMainForm.UpdateFreeSpace(driveId, driveSize, driveSpace, driveSpacePercentageValue);
+                    double driveSpacePercentageValue = Convert.ToDouble(driveSpacePercentage); //Convert to double for later using the value for Alerting
+                    InstanceMainForm.UpdateFreeSpace(driveId, driveSize, driveSpace, driveSpacePercentageValue); //call method for updating the DataGrid on MainForm
                     driveInformations.Add(driveId, driveSpacePercentageValue);
                 }
                 catch { }

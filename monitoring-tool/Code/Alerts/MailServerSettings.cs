@@ -15,6 +15,7 @@ namespace monitoring_tool
         }
 
         SendEmail sendeml = new SendEmail();
+
         string userName, SMTP, password;
         string configurationSavedPrev;
 
@@ -24,22 +25,25 @@ namespace monitoring_tool
             InstanceConfigSMTP = this;
         }
 
-
-        private void btnConfirm_Click(object sender, EventArgs e)
+        private void btnConfirm_Click(object sender, EventArgs e) // Button for saving the config
         {
             SaveFile();
-            this.Hide();
+            Hide();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e) // Button for canceling the config
         {
-            this.Hide();
-            txtSMTP.Text = "";
-            txtUser.Text = "";
-            txtPassword.Text = "";
+            Hide();
+            if (File.Exists(Directory.GetCurrentDirectory() + @"\configSMTP.txt")) { LoadConfigurationSMPTFile(); } 
+            else
+            {
+                txtUser.Text = "";
+                txtPassword.Text = "";
+                txtSMTP.Text = "";
+            }
         }
 
-        public void SaveFile()
+        public void SaveFile() //saving user configuration on the settings window
         {
             using (StreamWriter sw = new StreamWriter(saveConfigSMTP.FileName))
             {
@@ -66,7 +70,7 @@ namespace monitoring_tool
             }
         }
 
-        public void LoadConfigurationSMPTFile()
+        public void LoadConfigurationSMPTFile() //loading user configuration on the settings window
         {
             if (File.Exists(Directory.GetCurrentDirectory() + @"\configSMTP.txt"))
             {
@@ -85,7 +89,6 @@ namespace monitoring_tool
                     }
                     else
                     {
-
                         txtUser.Text = "";
                         txtPassword.Text = "";
                         txtSMTP.Text = "";

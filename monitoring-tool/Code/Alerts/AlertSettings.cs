@@ -22,7 +22,7 @@ namespace monitoring_tool
             InstanceAlert = this;
         }
 
-        public void ValidateConfiguration()
+        public void ValidateConfiguration() // validation for alert settings
         {
             ValidateInput checkInput = new ValidateInput();
  
@@ -71,7 +71,7 @@ namespace monitoring_tool
 
         }
 
-        public void SaveFile()
+        public void SaveFile() //save config file for alerts prefferences
         {
             using (StreamWriter sw = new StreamWriter(saveFile.FileName))
             {
@@ -87,7 +87,7 @@ namespace monitoring_tool
                 }
                 else
                 {
-                    //MessageBox.Show("Complete all the fields");
+                    MessageBox.Show("Complete all the fields");
                 }
                 if (checkBoxEmail.CheckState == CheckState.Unchecked)
                 {
@@ -118,7 +118,7 @@ namespace monitoring_tool
             volumeTrshld.Text = "10";
         }
 
-        public void LoadConfigurationFile()
+        public void LoadConfigurationFile() // load config file for alerts prefferences
         {
             if (File.Exists(Directory.GetCurrentDirectory() + @"\AlertsConfigFile.txt"))
             {
@@ -146,6 +146,20 @@ namespace monitoring_tool
             else
             {
                 DefaultConfiguration();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
+
+            if (!InstanceServerSettings.Visible)
+            {
+                InstanceServerSettings.Show();
+            }
+            else
+            {
+                InstanceServerSettings.BringToFront();
             }
         }
 
@@ -205,18 +219,6 @@ namespace monitoring_tool
             e.Handled = !char.IsDigit(e.KeyChar) & e.KeyChar != (char)Keys.Back;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
-
-            if (!InstanceServerSettings.Visible)
-            {
-                InstanceServerSettings.Show();
-            }
-            else
-            {
-                InstanceServerSettings.BringToFront();
-            }
-        }
+    
     }
 }

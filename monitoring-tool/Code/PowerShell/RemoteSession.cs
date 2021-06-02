@@ -4,7 +4,6 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace monitoring_tool
 {
@@ -24,7 +23,7 @@ namespace monitoring_tool
 
         public async Task<string> NewPowerShell(string ServerName, string command)
         {
-            var result = await Task.Run(() =>
+            string result = await Task.Run(() =>
             {
                 Runspace runspace = RunspaceFactory.CreateRunspace();
                 PowerShell psSession = PowerShell.Create();

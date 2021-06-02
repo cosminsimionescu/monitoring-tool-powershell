@@ -7,7 +7,20 @@ namespace monitoring_tool
 {
     public class Scripts
     {
-        public string memory_Script()
+
+        private static Scripts InstanceScripts;
+        public static Scripts GetInstanceScripts()
+        {
+            if (InstanceScripts == null) InstanceScripts = new Scripts();
+            return InstanceScripts;
+        }
+
+        public Scripts()
+        {
+            InstanceScripts = this;
+        }
+
+        public string memory_Script() //show memory usage in MB
         {
             string memS = @"$ComputerMemory = Get-CimInstance -Class win32_operatingsystem -ErrorAction Stop
             $Memory = ((($ComputerMemory.TotalVisibleMemorySize - $ComputerMemory.FreePhysicalMemory)*100)/ $ComputerMemory.TotalVisibleMemorySize)
@@ -17,7 +30,7 @@ namespace monitoring_tool
             return memS;
         }
 
-        public string cpu_Script()
+        public string cpu_Script() //show CPU usage time(%)
         {
             string sampleTime = "30";
             string cpuS = @"$CPU = (Get-Counter '\Processor(_total)\% Processor Time' -Sample #sampletime#).CounterSamples[0].CookedValue
@@ -28,7 +41,7 @@ namespace monitoring_tool
             return cpu_script;
         }
 
-        public string processByCPU_Script(string processesToDisplay_CPU)
+        public string processByCPU_Script(string processesToDisplay_CPU) //display top processes by CPU
         {
             processesToDisplay_CPU = "10";
             var processbyCPU = @"$cores = (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors/2
@@ -45,7 +58,7 @@ namespace monitoring_tool
             return result_processbyCPU;
         }
 
-        public string processByMem_Script(string processesToDisplay_Mem)
+        public string processByMem_Script(string processesToDisplay_Mem) //display top processes by memory
         {
             processesToDisplay_Mem = "10";
             string processbyMem = @"Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First #number_of_processes# Name,
@@ -56,7 +69,7 @@ namespace monitoring_tool
             return result_processbyMem;
         }
 
-        public string volume_Script()
+        public string volume_Script() // display drives from the checked system (Free space %, Free space in GB, Capacity in GB )
         {
             Thread.Sleep(200);
             string volume = @"Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name='Size(GB)';

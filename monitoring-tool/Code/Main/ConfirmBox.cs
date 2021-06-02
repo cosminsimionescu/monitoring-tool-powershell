@@ -23,15 +23,15 @@ namespace monitoring_tool
         private void ConfirmBox_Load(object sender, EventArgs e)
         {
             MainForm InstanceMain = MainForm.GetInstance();
-            targetServer_name.Text = InstanceMain.targetServer.Text;
+            targetServer_name.Text = InstanceMain.targetServer.Text; // display on the ConfirmBox the name of the server chosen for connecting
         }
 
-        public void buttonConfirmServ_Click(object sender, EventArgs e)
+        public void buttonConfirmServ_Click(object sender, EventArgs e) //after confirming bring to front the MainForm and close curent window
         {
             MainForm InstanceMain = MainForm.GetInstance();
             InstanceMain.Monitor_loop();
 
-            if (!InstanceMain.Visible)
+            if (!InstanceMain.Visible)  //Bring to front MainForm
             {
                 InstanceMain.Show();
             }
@@ -42,20 +42,20 @@ namespace monitoring_tool
             Close();
         }
 
-        private void buttonRefuseServ_Click(object sender, EventArgs e)
+        private void buttonRefuseServ_Click(object sender, EventArgs e) //Button cancel
         {
-            MainForm main = MainForm.GetInstance();
-            main.targetServer.Enabled = true;
-            main.btn_Server.Enabled = true;
-            main.btn_Server.Visible = true;
+            MainForm InstanceMain = MainForm.GetInstance();  
+            InstanceMain.targetServer.Enabled = true; //enable back text box for server input
+            InstanceMain.btn_Server.Enabled = true; // enable conect button
+            InstanceMain.btn_Server.Visible = true; // show connect button
 
-            if (!main.Visible)
+            if (!InstanceMain.Visible)   //Bring to front MainForm
             {
-                main.Show();
+                InstanceMain.Show();
             }
             else
             {
-                main.BringToFront();
+                InstanceMain.BringToFront();
             }
         }
     }
