@@ -51,8 +51,7 @@ namespace monitoring_tool
             Where-Object {$_.Name -notlike '*conhost*' -and $_.Name -notlike '*svchost*' -and $_.Name -notlike '*Idle*' -and $_.Name -notlike '*_Total*'} |
             Sort-Object -Property CPU -Descending |
             Select-Object -First 10 
-            $CPU | Format-List
-            Start-Sleep 1.532";
+            $CPU | Format-List";
             var result_processbyCPU = processbyCPU.Replace("#number_of_processes#", processesToDisplay_CPU);
 
             return result_processbyCPU;
@@ -62,8 +61,7 @@ namespace monitoring_tool
         {
             processesToDisplay_Mem = "10";
             string processbyMem = @"Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First #number_of_processes# Name,
-            @{Name='WorkingSet';Expression={'{0:n2}' -f($_.WorkingSet64/1MB)}}, Id | Format-List
-            Start-Sleep 1.532";
+            @{Name='WorkingSet';Expression={'{0:n2}' -f($_.WorkingSet64/1MB)}}, Id | Format-List";
             var result_processbyMem = processbyMem.Replace("#number_of_processes#", processesToDisplay_Mem);
 
             return result_processbyMem;
@@ -74,8 +72,7 @@ namespace monitoring_tool
             Thread.Sleep(200);
             string volume = @"Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name='Size(GB)';
             Expression={'{0:n2}' -f ($_.size/1gb)}},@{Name='Free Space(GB)';Expression={'{0:n2}' -f($_.freespace/1gb)}},
-            @{Name='Free (%)';Expression={'{0,1:P2}' -f(($_.freespace/1gb) / ($_.size/1gb))}}, DeviceID | Format-List
-            Start-Sleep 1.532";
+            @{Name='Free (%)';Expression={'{0,1:P2}' -f(($_.freespace/1gb) / ($_.size/1gb))}}, DeviceID | Format-List";
 
             return volume;
         }
