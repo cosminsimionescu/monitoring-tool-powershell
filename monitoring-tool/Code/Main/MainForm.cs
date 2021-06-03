@@ -58,15 +58,18 @@ namespace monitoring_tool
 
             CPUThread.Start();
             MemThread.Start();
+            Thread.Sleep(100);
             ProcMemThread.Start();
+            Thread.Sleep(100);
             ProcCPUThread.Start();
+            Thread.Sleep(100);
             VolThread.Start();
 
-            triggerThreadsCPU.Interval = 15000;
+            triggerThreadsCPU.Interval = 9000;
             triggerThreadsCPU.Enabled = true;
 
             triggerThreadsProcCheck.Enabled = true;
-            triggerThreadsProcCheck.Interval = 8000;
+            triggerThreadsProcCheck.Interval = 10000;
 
             triggerThreadVol.Enabled = true;
             triggerThreadVol.Interval = 120000;
@@ -149,12 +152,11 @@ namespace monitoring_tool
 
         public async void UpdateProcessCpuLoad(string pidCpu, string processNameCpu, double processCpuLoadValue) //Update processes by cpu on MainForm(Datagrid view)
         {
-            try
-            {
-                await Task.Run(() => dataGridViewProcessByCPU.Rows.Add(pidCpu, processNameCpu, processCpuLoadValue + "%"));
-            }
-            catch { }
+
+            await Task.Run(() => dataGridViewProcessByCPU.Rows.Add(pidCpu, processNameCpu, processCpuLoadValue + "%"));
+
             dataGridViewProcessByCPU.ClearSelection();
+
         }
         public void ClearGridProcessCpuLoad()
         {
@@ -163,13 +165,13 @@ namespace monitoring_tool
 
         public async void UpdateProcessMemLoad(string pidMem, string processNameMem, double processMemLoadValue) //Update processes by mem on MainForm(Datagrid view)
         {
-            try
-            {
-                await Task.Run(() => dataGridViewProcessByMem.Rows.Add(pidMem, processNameMem, processMemLoadValue + " MB"));
-            }
-            catch { }
+
+            await Task.Run(() => dataGridViewProcessByMem.Rows.Add(pidMem, processNameMem, processMemLoadValue + " MB"));
+
             dataGridViewProcessByMem.ClearSelection();
         }
+
+
         public void ClearGridProcessMemLoad()
         {
             dataGridViewProcessByMem.Rows.Clear();
@@ -177,11 +179,9 @@ namespace monitoring_tool
 
         public void UpdateFreeSpace(string driveId, string driveSize, string driveSpace, double driveSpacePercentageValue) //Update free space on MainForm(Datagrid view)
         {
-            try
-            {
-                dataGridViewFreeSpace.Rows.Add(driveId, driveSize + " GB", driveSpace + " GB", driveSpacePercentageValue + " %");
-            }
-            catch { }
+
+            dataGridViewFreeSpace.Rows.Add(driveId, driveSize + " GB", driveSpace + " GB", driveSpacePercentageValue + " %");
+
             dataGridViewFreeSpace.ClearSelection();
         }
 
@@ -371,59 +371,81 @@ namespace monitoring_tool
             }
         }
 
-        private void timerCpuAlerts_Tick(object sender, EventArgs e)
+        private async void timerCpuAlerts_Tick(object sender, EventArgs e)
         {
             bool sendEmail = false;
             AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
 
             InstanceCheck.AlertCpu(sendEmail);
 
-        }
-
-        private void timerMemoryAlerts_Tick(object sender, EventArgs e)
-        {
-            bool sendEmail = false;
-            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
-
-            InstanceCheck.AlertMemory(sendEmail);
-
-        }
-
-        private void timerVolumeAlerts_Tick(object sender, EventArgs e)
-        {
-            bool sendEmail = false;
-            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
-            InstanceCheck.AlertFreeSpace(sendEmail);
-
-        }
-
-        private void timerEmailCpuAlerts_Tick(object sender, EventArgs e)
-        {
-            bool sendEmail = true;
-            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
-            if (checkEmailAlerts.CheckState == CheckState.Checked)
+            await  Task.Run(() =>
             {
                 InstanceCheck.AlertCpu(sendEmail);
-            }
+            });
         }
 
-        private void timerEmailMemoryAlerts_Tick(object sender, EventArgs e)
+        private async void timerMemoryAlerts_Tick(object sender, EventArgs e)
         {
-            bool sendEmail = true;
+            bool sendEmail = false;
             AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
-            if (checkEmailAlerts.CheckState == CheckState.Checked)
+
+            await Task.Run(() =>
             {
                 InstanceCheck.AlertMemory(sendEmail);
-            }
+            });
         }
 
-        private void timerEmailFreeSpaceAlerts_Tick(object sender, EventArgs e)
+        private async void timerVolumeAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = false;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+            await Task.Run(() =>
+            {
+                InstanceCheck.AlertFreeSpace(sendEmail);
+            });
+           
+
+        }
+
+        private async void timerEmailCpuAlerts_Tick(object sender, EventArgs e)
         {
             bool sendEmail = true;
             AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
             if (checkEmailAlerts.CheckState == CheckState.Checked)
             {
-                InstanceCheck.AlertFreeSpace(sendEmail);
+                await Task.Run(() =>
+                {
+                    InstanceCheck.AlertCpu(sendEmail);
+                });
+            }
+        }
+
+        private async void timerEmailMemoryAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = true;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+            if (checkEmailAlerts.CheckState == CheckState.Checked)
+            {
+                
+                await Task.Run(() =>
+                {
+                    InstanceCheck.AlertMemory(sendEmail);
+                });
+            }
+        }
+
+        private async void timerEmailFreeSpaceAlerts_Tick(object sender, EventArgs e)
+        {
+            bool sendEmail = true;
+            AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
+
+
+            if (checkEmailAlerts.CheckState == CheckState.Checked)
+            {
+                await Task.Run(() =>
+                {
+                    InstanceCheck.AlertFreeSpace(sendEmail);
+                });
             }
         }
 

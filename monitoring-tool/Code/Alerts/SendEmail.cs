@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace monitoring_tool
@@ -18,8 +19,10 @@ namespace monitoring_tool
             InstanceSendEmail = this;
         }
 
-        public void SendAlertEmail(string alertMessage, string bodyMessage, double value)
+        public async void SendAlertEmail(string alertMessage, string bodyMessage, double value)
         {
+            await Task.Run(() => { 
+
             DateTime Time = DateTime.Now; //used for time in the e-mail
 
             AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
@@ -41,10 +44,10 @@ namespace monitoring_tool
 
                 MailMessage mail = new MailMessage();
                 SmtpClient SmtpServer = new SmtpClient(SMTP);
-                mail.From = new MailAddress(userName, "Monitoring tool");
+                mail.From = new MailAddress(userName, "MONITORING TOOL - LICENTA");
                 mail.To.Add(emailTO);
-                mail.Subject = "[ALERT]" + "[" + date + "] " + alertMessage +"!!!! "+"   Triggered on "+" "+ serverHit;
-                mail.Body = "SERVER: " + serverHit + Environment.NewLine + "Alert messsage: " + bodyMessage + Environment.NewLine + "Curent status: " + value + "%" + " at " + date;              
+                mail.Subject = "[ALERT]" + "[" + date + "] " + alertMessage +"   TRIGGERED ON "+" "+ serverHit;
+                mail.Body = "SERVER: " + serverHit + Environment.NewLine + "ALERT MESSAGE: " + bodyMessage + Environment.NewLine + "CURENT STATUS: " + value + "%" + " AT " + date;              
    
                 SmtpServer.Port = 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential(userName, password); // credentials
@@ -56,6 +59,7 @@ namespace monitoring_tool
             {
                 MessageBox.Show(ex.ToString());
             }
+            });
         }
 
     }

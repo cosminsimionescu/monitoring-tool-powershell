@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewExtension dataGridViewExtension = new DataGridViewExtension();
+
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -47,22 +49,22 @@
             this.Drive = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewFreeSpaceTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label5 = new System.Windows.Forms.Label();
-            this.dataGridViewProcessByCPU = new System.Windows.Forms.DataGridView();
+            this.dataGridViewProcessByCPU = new DataGridViewExtension();
             this.columnProcessID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnProcess = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnProcessCPU = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewProcessByMem = new System.Windows.Forms.DataGridView();
+            this.dataGridViewProcessByMem = new DataGridViewExtension();
             this.columnPID_mem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnProcessName_mem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnProcess_mem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.dataGridViewFreeSpace = new System.Windows.Forms.DataGridView();
+            this.dataGridViewFreeSpace = new DataGridViewExtension();
             this.columnDrive = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnFreespace = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnFreePercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewAlerts = new System.Windows.Forms.DataGridView();
+            this.dataGridViewAlerts = new DataGridViewExtension();
             this.dateTimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textAlert = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valueAlert = new System.Windows.Forms.DataGridViewTextBoxColumn();
