@@ -93,22 +93,24 @@ namespace monitoring_tool
             // 
             // btnConfirm
             // 
+            this.btnConfirm.BackColor = System.Drawing.Color.White;
             this.btnConfirm.Location = new System.Drawing.Point(53, 176);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(75, 23);
             this.btnConfirm.TabIndex = 9;
             this.btnConfirm.Text = "Confirm";
-            this.btnConfirm.UseVisualStyleBackColor = true;
+            this.btnConfirm.UseVisualStyleBackColor = false;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
             // btnCancel
             // 
+            this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.Location = new System.Drawing.Point(144, 176);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // label4
@@ -135,6 +137,7 @@ namespace monitoring_tool
             this.AcceptButton = this.btnConfirm;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(275, 221);
             this.ControlBox = false;
@@ -147,6 +150,7 @@ namespace monitoring_tool
             this.Controls.Add(this.txtSMTP);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.btnCancel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "MailServerSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "SMTP Settings";

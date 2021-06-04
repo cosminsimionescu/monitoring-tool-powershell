@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace monitoring_tool
@@ -13,8 +14,6 @@ namespace monitoring_tool
             if (InstanceConfigSMTP == null) InstanceConfigSMTP = new MailServerSettings();
             return InstanceConfigSMTP;
         }
-
-        SendEmail sendeml = new SendEmail();
 
         string userName, SMTP, password;
         string configurationSavedPrev;
@@ -45,8 +44,10 @@ namespace monitoring_tool
 
         public void SaveFile() //saving user configuration on the settings window
         {
+
             using (StreamWriter sw = new StreamWriter(saveConfigSMTP.FileName))
             {
+
                 userName = txtUser.Text;
                 password = txtPassword.Text;
                 SMTP = txtSMTP.Text;

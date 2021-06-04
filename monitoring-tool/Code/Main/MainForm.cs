@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -153,7 +156,7 @@ namespace monitoring_tool
         public async void UpdateProcessCpuLoad(string pidCpu, string processNameCpu, double processCpuLoadValue) //Update processes by cpu on MainForm(Datagrid view)
         {
 
-            await Task.Run(() => dataGridViewProcessByCPU.Rows.Add(pidCpu, processNameCpu, processCpuLoadValue + "%"));
+            await Task.Run(() => dataGridViewProcessByCPU.Rows.Add(pidCpu, processNameCpu, processCpuLoadValue));
 
             dataGridViewProcessByCPU.ClearSelection();
 
@@ -163,10 +166,10 @@ namespace monitoring_tool
             dataGridViewProcessByCPU.Rows.Clear();
         } //Clear process by cpu (Datagrid view)
 
-        public async void UpdateProcessMemLoad(string pidMem, string processNameMem, double processMemLoadValue) //Update processes by mem on MainForm(Datagrid view)
+        public void UpdateProcessMemLoad(string pidMem, string processNameMem, double processMemLoadValue) //Update processes by mem on MainForm(Datagrid view)
         {
 
-            await Task.Run(() => dataGridViewProcessByMem.Rows.Add(pidMem, processNameMem, processMemLoadValue + " MB"));
+            dataGridViewProcessByMem.Rows.Add(pidMem, processNameMem, processMemLoadValue + " MB");
 
             dataGridViewProcessByMem.ClearSelection();
         }
@@ -192,24 +195,36 @@ namespace monitoring_tool
 
         public void UpdateMemoryAlert(string memoryAlert) //Update alerts for memory load on MainForm(Datagrid view)
         {
+
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
             DateTime Time = DateTime.Now; //time
-            string date = Time.ToString("F");
+            string date = Time.ToString();
+            dataGridViewAlerts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
+            dataGridViewAlerts.RowHeadersVisible = false;
             dataGridViewAlerts.Rows.Add(date, memoryAlert, InstanceResults.memoryPercentage + "%");
+
         }
 
         public void UpdateCPUAlert(string cpuAlert) //Update alerts for cpu load on MainForm(Datagrid view)
         {
+
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
-            string date = Time.ToString("F");
+            DateTime Time = DateTime.Now; //time
+            string date = Time.ToString();
+            dataGridViewAlerts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
+            dataGridViewAlerts.RowHeadersVisible = false;
             dataGridViewAlerts.Rows.Add(date, cpuAlert, InstanceResults.cpuPercentage + "%");
+
         }
 
         public void UpdateVolumeAlert(string volumeAlert, string driveName, double volumePercentage) //Update alerts for Free Space on MainForm(Datagrid view)
         {
             DateTime Time = DateTime.Now; //time
-            string date = Time.ToString("F");
+            string date = Time.ToString();
+            dataGridViewAlerts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
+            dataGridViewAlerts.RowHeadersVisible = false;
             dataGridViewAlerts.Rows.Add(date, volumeAlert + driveName, volumePercentage + "%");
+
         }
 
 
@@ -378,10 +393,10 @@ namespace monitoring_tool
 
             InstanceCheck.AlertCpu(sendEmail);
 
-            await  Task.Run(() =>
-            {
-                InstanceCheck.AlertCpu(sendEmail);
-            });
+            await Task.Run(() =>
+           {
+               InstanceCheck.AlertCpu(sendEmail);
+           });
         }
 
         private async void timerMemoryAlerts_Tick(object sender, EventArgs e)
@@ -403,8 +418,6 @@ namespace monitoring_tool
             {
                 InstanceCheck.AlertFreeSpace(sendEmail);
             });
-           
-
         }
 
         private async void timerEmailCpuAlerts_Tick(object sender, EventArgs e)
@@ -426,7 +439,7 @@ namespace monitoring_tool
             AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
             if (checkEmailAlerts.CheckState == CheckState.Checked)
             {
-                
+
                 await Task.Run(() =>
                 {
                     InstanceCheck.AlertMemory(sendEmail);
@@ -452,6 +465,55 @@ namespace monitoring_tool
         private void clearAlertsDataGrid_Click(object sender, EventArgs e)
         {
             dataGridViewAlerts.Rows.Clear();
+        }
+
+        private void psISE_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell_ise.exe";
+                p.StartInfo.UseShellExecute = true;
+                p.StartInfo.Verb = "runas";
+                p.Start();
+            }
+            catch { };
+        }
+
+        private void psConsole_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe";
+                p.StartInfo.UseShellExecute = true;
+                p.StartInfo.Verb = "runas";
+                p.Start();
+            }
+            catch { };
+        }
+
+        private void dataGridViewProcessByCPU_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+                if (e.RowIndex==0)
+                {
+                    double red = 60;
+                    double orange = 40;
+                    double green = 40;
+                    if (Convert.ToDouble(dataGridViewProcessByCPU.Rows[0].Cells[2].Value) > red)
+                    {
+                        e.CellStyle.ForeColor = Color.Red;
+                    }
+                    if (Convert.ToDouble(dataGridViewProcessByCPU.Rows[0].Cells[2].Value) < red &&
+                        Convert.ToDouble(dataGridViewProcessByCPU.Rows[0].Cells[2].Value) > orange)
+                    {
+                        e.CellStyle.ForeColor = Color.Orange;
+                    }
+                    if (Convert.ToDouble(dataGridViewProcessByCPU.Rows[0].Cells[2].Value) < green)
+                    {
+                        e.CellStyle.ForeColor = Color.Green;
+                    }
+                }
         }
     }
 }

@@ -8,9 +8,6 @@ namespace monitoring_tool
 {
     class AlertsCheck
     {
-
-        DateTime Time = DateTime.Now; //curent date/time for alerts
-
         private static AlertsCheck InstanceCheck;
         public static AlertsCheck GetInstanceCheck()
         {
@@ -25,8 +22,6 @@ namespace monitoring_tool
 
         public void AlertMemory(bool sendEmail)
         {
-   
-            string date = Time.ToString("F"); 
 
             AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();//Alert settings class instance
             MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
@@ -53,8 +48,6 @@ namespace monitoring_tool
             ParseResults InstanceResults = ParseResults.GetInstanceResults();//Output processing class instance
             SendEmail InstanceSendEmail = SendEmail.GetInstanceEmail();//Send email class instance
 
-            string date = Time.ToString("F");
-
             string messageCPUHit = "CPU USAGE IS OVER THE SET TRESHOLD";
             string messageCpuEmail = "HIGH CPU LOAD";
            
@@ -76,8 +69,6 @@ namespace monitoring_tool
             MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
             ParseResults InstanceResults = ParseResults.GetInstanceResults();//Output processing class instance
             SendEmail InstanceSendEmail = SendEmail.GetInstanceEmail();//Send email class instance
-
-            string date = Time.ToString("F");
 
             string messageVolumeHit = "FREE SPACE IS LOW ON DRIVE ";
             string messageVolumeEmail = "LOW FREE SPACE ON";

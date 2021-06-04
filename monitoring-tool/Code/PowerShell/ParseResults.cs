@@ -165,7 +165,7 @@ namespace monitoring_tool
                 string driveSize = corectLines[i].Split(':')[1].Trim();
                 string driveSpace = corectLines[i + 1].Split(':')[1].Trim();
                 string driveSpacePercentage = corectLines[i + 2].Split(':')[1].Trim().Split('\r', '%')[0];
-                Thread.Sleep(120);
+
                 if (i == 0)
                 {
                     InstanceMainForm.ClearGridUpdateFreeSpace(); //call for clearing the DataGrid on MainForm before writing again

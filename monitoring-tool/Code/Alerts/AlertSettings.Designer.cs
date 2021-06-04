@@ -88,12 +88,13 @@ namespace monitoring_tool
             // 
             // btnConfirmConf
             // 
+            this.btnConfirmConf.BackColor = System.Drawing.Color.White;
             this.btnConfirmConf.Location = new System.Drawing.Point(64, 323);
             this.btnConfirmConf.Name = "btnConfirmConf";
             this.btnConfirmConf.Size = new System.Drawing.Size(75, 23);
             this.btnConfirmConf.TabIndex = 6;
             this.btnConfirmConf.Text = "Confirm";
-            this.btnConfirmConf.UseVisualStyleBackColor = true;
+            this.btnConfirmConf.UseVisualStyleBackColor = false;
             this.btnConfirmConf.Click += new System.EventHandler(this.btnConfirmConf_Click);
             // 
             // checkBoxEmail
@@ -205,12 +206,13 @@ namespace monitoring_tool
             // 
             // btnCancelConf
             // 
+            this.btnCancelConf.BackColor = System.Drawing.Color.White;
             this.btnCancelConf.Location = new System.Drawing.Point(203, 323);
             this.btnCancelConf.Name = "btnCancelConf";
             this.btnCancelConf.Size = new System.Drawing.Size(75, 23);
             this.btnCancelConf.TabIndex = 18;
             this.btnCancelConf.Text = "Cancel";
-            this.btnCancelConf.UseVisualStyleBackColor = true;
+            this.btnCancelConf.UseVisualStyleBackColor = false;
             this.btnCancelConf.Click += new System.EventHandler(this.btnCancelConf_Click);
             // 
             // saveFile
@@ -287,6 +289,7 @@ namespace monitoring_tool
             this.AcceptButton = this.btnConfirmConf;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
             this.CancelButton = this.btnCancelConf;
             this.ClientSize = new System.Drawing.Size(356, 354);
             this.ControlBox = false;
@@ -312,6 +315,7 @@ namespace monitoring_tool
             this.Controls.Add(this.volumeTrshld);
             this.Controls.Add(this.cpuTrshld);
             this.Controls.Add(this.memoryTrshld);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "AlertSettings";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

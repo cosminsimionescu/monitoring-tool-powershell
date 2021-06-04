@@ -37,30 +37,33 @@ namespace monitoring_tool
             // 
             // buttonConfirmServ
             // 
-            this.buttonConfirmServ.Location = new System.Drawing.Point(77, 76);
+            this.buttonConfirmServ.BackColor = System.Drawing.Color.White;
+            this.buttonConfirmServ.Location = new System.Drawing.Point(79, 76);
             this.buttonConfirmServ.Name = "buttonConfirmServ";
             this.buttonConfirmServ.Size = new System.Drawing.Size(59, 23);
             this.buttonConfirmServ.TabIndex = 0;
             this.buttonConfirmServ.Text = "Yes";
-            this.buttonConfirmServ.UseVisualStyleBackColor = true;
+            this.buttonConfirmServ.UseVisualStyleBackColor = false;
             this.buttonConfirmServ.Click += new System.EventHandler(this.buttonConfirmServ_Click);
             // 
             // buttonRefuseServ
             // 
-            this.buttonRefuseServ.Location = new System.Drawing.Point(161, 76);
+            this.buttonRefuseServ.BackColor = System.Drawing.Color.White;
+            this.buttonRefuseServ.Location = new System.Drawing.Point(157, 76);
             this.buttonRefuseServ.Name = "buttonRefuseServ";
-            this.buttonRefuseServ.Size = new System.Drawing.Size(55, 23);
+            this.buttonRefuseServ.Size = new System.Drawing.Size(63, 23);
             this.buttonRefuseServ.TabIndex = 1;
             this.buttonRefuseServ.Text = "No";
-            this.buttonRefuseServ.UseVisualStyleBackColor = true;
+            this.buttonRefuseServ.UseVisualStyleBackColor = false;
             this.buttonRefuseServ.Click += new System.EventHandler(this.buttonRefuseServ_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(12, 39);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(165, 15);
+            this.label1.Size = new System.Drawing.Size(183, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Server you want to monitor is:";
             // 
@@ -68,7 +71,7 @@ namespace monitoring_tool
             // 
             this.targetServer_name.AutoSize = true;
             this.targetServer_name.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.targetServer_name.Location = new System.Drawing.Point(180, 39);
+            this.targetServer_name.Location = new System.Drawing.Point(191, 41);
             this.targetServer_name.Name = "targetServer_name";
             this.targetServer_name.Size = new System.Drawing.Size(89, 15);
             this.targetServer_name.TabIndex = 3;
@@ -79,14 +82,15 @@ namespace monitoring_tool
             this.AcceptButton = this.buttonConfirmServ;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
             this.CancelButton = this.buttonRefuseServ;
-            this.ClientSize = new System.Drawing.Size(290, 129);
+            this.ClientSize = new System.Drawing.Size(301, 129);
             this.ControlBox = false;
             this.Controls.Add(this.targetServer_name);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonRefuseServ);
             this.Controls.Add(this.buttonConfirmServ);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "ConfirmBox";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
