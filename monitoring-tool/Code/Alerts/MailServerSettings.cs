@@ -28,6 +28,7 @@ namespace monitoring_tool
         {
             SaveFile();
             Hide();
+            MessageBox.Show("Configuration was saved");
         }
 
         private void btnCancel_Click(object sender, EventArgs e) // Button for canceling the config

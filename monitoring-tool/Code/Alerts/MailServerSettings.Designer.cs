@@ -153,7 +153,7 @@ namespace monitoring_tool
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "MailServerSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "SMTP Settings";
+            this.Text = "SMTP Server";
             this.ResumeLayout(false);
             this.PerformLayout();
 

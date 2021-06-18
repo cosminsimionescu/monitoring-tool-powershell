@@ -40,6 +40,7 @@ namespace monitoring_tool
             ValidationContext context = new ValidationContext(checkInput, null, null);
             List<ValidationResult> validationRes = new List<ValidationResult>();
             bool valid = Validator.TryValidateObject(checkInput, context, validationRes, true);
+
             if (!valid)
             {
                 foreach (ValidationResult validationResult in validationRes)
@@ -52,7 +53,7 @@ namespace monitoring_tool
                 timeFormat.Text.Trim() == "minutes" || timeFormat.Text.Trim() == "hours" && valid != false)
             {
                 SaveFile();
-                MessageBox.Show("Configuration has been saved");
+                MessageBox.Show("Configuration was saved");
                 Hide();
             }
             else
@@ -61,7 +62,7 @@ namespace monitoring_tool
                 {
                     SaveFile();
 
-                    MessageBox.Show("Configuration has been saved");
+                    MessageBox.Show("Configuration was saved");
                     Hide();
                 }
                 else
@@ -234,7 +235,7 @@ namespace monitoring_tool
 
         private void memoryTrshld_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = !char.IsDigit(e.KeyChar) & !char.IsWhiteSpace(e.KeyChar) & e.KeyChar != (char)Keys.Back;
+            e.Handled = !char.IsDigit(e.KeyChar) &  !char.IsWhiteSpace(e.KeyChar) & e.KeyChar != (char)Keys.Back;
         }
 
         private void CPUTrshld_KeyPress(object sender, KeyPressEventArgs e)

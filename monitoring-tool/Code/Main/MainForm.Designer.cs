@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewExtension = new monitoring_tool.DataGridViewExtension();
             this.txtCPU = new System.Windows.Forms.TextBox();
             this.txtMem = new System.Windows.Forms.TextBox();
@@ -72,9 +72,9 @@
             this.checkFreeSpaceAlert = new System.Windows.Forms.CheckBox();
             this.checkCpuAlert = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.triggerThreadsCPU = new System.Windows.Forms.Timer(this.components);
-            this.triggerThreadVol = new System.Windows.Forms.Timer(this.components);
-            this.triggerThreadsProcCheck = new System.Windows.Forms.Timer(this.components);
+            this.triggerTimerThreadsCPU = new System.Windows.Forms.Timer(this.components);
+            this.triggerTimerThreadVol = new System.Windows.Forms.Timer(this.components);
+            this.triggerTimerThreadsProcCheck = new System.Windows.Forms.Timer(this.components);
             this.server = new System.Windows.Forms.Label();
             this.targetServer = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -154,28 +154,28 @@
             // connectToNewSv
             // 
             this.connectToNewSv.Name = "connectToNewSv";
-            this.connectToNewSv.Size = new System.Drawing.Size(211, 22);
-            this.connectToNewSv.Text = "Connect to another server";
+            this.connectToNewSv.Size = new System.Drawing.Size(195, 22);
+            this.connectToNewSv.Text = "Monitor another server";
             this.connectToNewSv.Click += new System.EventHandler(this.connectToNewSv_Click);
             // 
             // alerts_menu
             // 
             this.alerts_menu.Name = "alerts_menu";
-            this.alerts_menu.Size = new System.Drawing.Size(211, 22);
+            this.alerts_menu.Size = new System.Drawing.Size(195, 22);
             this.alerts_menu.Text = "Configure alerts";
             this.alerts_menu.Click += new System.EventHandler(this.alerts_menu_Click);
             // 
             // email_serverSettings
             // 
             this.email_serverSettings.Name = "email_serverSettings";
-            this.email_serverSettings.Size = new System.Drawing.Size(211, 22);
+            this.email_serverSettings.Size = new System.Drawing.Size(195, 22);
             this.email_serverSettings.Text = "SMTP Server";
             this.email_serverSettings.Click += new System.EventHandler(this.email_serverSettings_Click);
             // 
             // exit
             // 
             this.exit.Name = "exit";
-            this.exit.Size = new System.Drawing.Size(211, 22);
+            this.exit.Size = new System.Drawing.Size(195, 22);
             this.exit.Text = "&Exit application";
             this.exit.Click += new System.EventHandler(this.exit_Click);
             // 
@@ -255,14 +255,14 @@
             this.dataGridViewProcessByCPU.AllowUserToResizeRows = false;
             this.dataGridViewProcessByCPU.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridViewProcessByCPU.BackgroundColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProcessByCPU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProcessByCPU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewProcessByCPU.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewProcessByCPU.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnProcessID,
@@ -315,14 +315,14 @@
             this.dataGridViewProcessByMem.AllowUserToResizeRows = false;
             this.dataGridViewProcessByMem.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridViewProcessByMem.BackgroundColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProcessByMem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProcessByMem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewProcessByMem.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewProcessByMem.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnPID_mem,
@@ -556,19 +556,19 @@
             this.panel2.Size = new System.Drawing.Size(305, 109);
             this.panel2.TabIndex = 25;
             // 
-            // triggerThreadsCPU
+            // triggerTimerThreadsCPU
             // 
-            this.triggerThreadsCPU.Interval = 1300;
-            this.triggerThreadsCPU.Tick += new System.EventHandler(this.triggerThreadCPU_Tick);
+            this.triggerTimerThreadsCPU.Interval = 1300;
+            this.triggerTimerThreadsCPU.Tick += new System.EventHandler(this.triggerThreadMemCPU_Tick);
             // 
-            // triggerThreadVol
+            // triggerTimerThreadVol
             // 
-            this.triggerThreadVol.Interval = 1;
-            this.triggerThreadVol.Tick += new System.EventHandler(this.triggerThreadVol_Tick);
+            this.triggerTimerThreadVol.Interval = 1;
+            this.triggerTimerThreadVol.Tick += new System.EventHandler(this.triggerThreadVol_Tick);
             // 
-            // triggerThreadsProcCheck
+            // triggerTimerThreadsProcCheck
             // 
-            this.triggerThreadsProcCheck.Tick += new System.EventHandler(this.triggerThreadsProcCheck_Tick);
+            this.triggerTimerThreadsProcCheck.Tick += new System.EventHandler(this.triggerThreadsProcCheck_Tick);
             // 
             // server
             // 
@@ -698,14 +698,14 @@
             this.dataGridViewFreeSpace.AllowUserToResizeRows = false;
             this.dataGridViewFreeSpace.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.dataGridViewFreeSpace.BackgroundColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewFreeSpace.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewFreeSpace.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridViewFreeSpace.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewFreeSpace.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnDrive,
@@ -831,9 +831,8 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ToolStripMenuItem alerts_menu;
-        private System.Windows.Forms.Timer triggerThreadsCPU;
-        private System.Windows.Forms.Timer triggerThreadVol;
-        private System.Windows.Forms.Timer triggerThreadsProcCheck;
+        private System.Windows.Forms.Timer triggerTimerThreadsCPU;
+        private System.Windows.Forms.Timer triggerTimerThreadsProcCheck;
         private System.Windows.Forms.TextBox txtCPU;
         private System.Windows.Forms.TextBox txtMem;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnPID_mem;
@@ -881,6 +880,7 @@
         public System.Windows.Forms.Button btn_StartApp;
         public System.Windows.Forms.Button btn_StopApp;
         private System.Windows.Forms.ToolStripMenuItem email_serverSettings;
+        private System.Windows.Forms.Timer triggerTimerThreadVol;
     }
 }
 

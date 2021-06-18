@@ -4,6 +4,7 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace monitoring_tool
 {
@@ -25,14 +26,15 @@ namespace monitoring_tool
         {
             string result = await Task.Run(() =>
             {
+                MainForm InstanceMainForm = MainForm.GetInstance();
                 Runspace runspace = RunspaceFactory.CreateRunspace();
                 PowerShell psSession = PowerShell.Create();
                 runspace.Open();
                 psSession.Runspace = runspace;
 
                 psSession.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine
-            + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine
-            + "Remove-PSSession -Session $sessions");
+                 + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine
+                 + "Remove-PSSession -Session $sessions");
 
                 psSession.Commands.AddCommand("Out-String");
 
@@ -42,11 +44,13 @@ namespace monitoring_tool
                     results = psSession.Invoke();
                 }
 
-                catch (Exception ex)
+                catch
                 {
-                    results.Add(new PSObject((object)ex.Message));
+
                 }
+
                 runspace.Close();
+
                 StringBuilder stringBuilder = new StringBuilder();
 
                 foreach (PSObject obj in results)

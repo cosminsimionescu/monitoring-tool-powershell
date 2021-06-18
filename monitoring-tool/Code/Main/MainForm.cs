@@ -12,7 +12,7 @@ namespace monitoring_tool
     {
         readonly DateTime Time = DateTime.Now; //time
 
-        private static MainForm Instance; //MainForm instance
+        private static MainForm Instance; // MainForm instance
         public static MainForm GetInstance()
         {
             if (Instance == null) Instance = new MainForm();
@@ -26,7 +26,7 @@ namespace monitoring_tool
             Control.CheckForIllegalCrossThreadCalls = false; //disable unsafe cross thread calls exception checks for debuging
 
             InitializeComponent();
-            Instance = this; // Instance = curent MainForm
+            Instance = this;
 
             AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert(); // Instanta forma setari alerte
             MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings(); // Instanta forma setari SMTP settings(mail)
@@ -51,10 +51,12 @@ namespace monitoring_tool
 
         private void button_StartApp_Click(object sender, EventArgs e)
         {
-            Monitor_loop();
+            MessageBox.Show("Server monitoring was started");
+            Initial_run(); //first run
+            Monitor_loop(); //timer initialisation
             btn_StartApp.Visible = false;
             btn_StopApp.Visible = true;
-            MessageBox.Show("Server monitoring was started");
+            
         }
         private void btn_StopApp_Click(object sender, EventArgs e)
         {
@@ -67,71 +69,87 @@ namespace monitoring_tool
         }
         public void StopApp()
         {
-            triggerThreadsCPU.Enabled = false;
-            triggerThreadsProcCheck.Enabled = false;
-            triggerThreadVol.Enabled = false;
+            triggerTimerThreadsCPU.Enabled = false;
+            triggerTimerThreadsProcCheck.Enabled = false;
+            triggerTimerThreadVol.Enabled = false;
             txtCPU.Text = "";
             txtMem.Text = "";
             ClearGridProcessCpuLoad();
             ClearGridProcessMemLoad();
             ClearGridUpdateFreeSpace();  
-        }    
+        }
+
+        public void ResetApp()
+        {
+            StopApp();
+            targetServer.Enabled = true;
+            btn_Server.Enabled = true;
+            btn_Server.Visible = true;
+            btn_StartApp.Visible = false;
+            btn_StopApp.Visible = false;
+            targetServer.Text = "";
+        }
 
         public void Monitor_loop() //initialization of the threads 
-        {                          //settings the timer`s interval and enabling it
-            ParseResults InstanceResults = ParseResults.GetInstanceResults();
+        {                          //setting the timer`s interval and enabling it
+            triggerTimerThreadsCPU.Interval = 9000; //setare timp
+            triggerTimerThreadsCPU.Enabled = true; //activare
 
-            Thread CPUThread = new(InstanceResults.GetCPU);
-            Thread MemThread = new(InstanceResults.GetMemory);
-            Thread ProcCPUThread = new(InstanceResults.GetProcessCPU);
-            Thread ProcMemThread = new(InstanceResults.GetProcessMemory);
-            Thread VolThread = new(InstanceResults.GetVolume);
+            triggerTimerThreadsProcCheck.Interval = 10000;
+            triggerTimerThreadsProcCheck.Enabled = true;
+
+            triggerTimerThreadVol.Interval = 120000;
+            triggerTimerThreadVol.Enabled = true;
+        }
+
+        public void Initial_run()
+        {
+            Tasks Task = Tasks.GetInstanceTask();
+
+            Thread CPUThread = new(Task.GetCPU); //CPU usage
+            Thread MemThread = new(Task.GetMemory); //Memory usage
+            Thread ProcCPUThread = new(Task.GetProcessCPU); //Processes by CPU
+            Thread ProcMemThread = new(Task.GetProcessMemory); //Processes by Memory
+            Thread VolThread = new(Task.GetVolume); //Volume
 
             CPUThread.Start();
             MemThread.Start();
-            Thread.Sleep(100);
+            Thread.Sleep(150);
+
             ProcMemThread.Start();
             Thread.Sleep(100);
+
             ProcCPUThread.Start();
-            Thread.Sleep(100);
+            Thread.Sleep(50);
+
             VolThread.Start();
-
-            triggerThreadsCPU.Interval = 9000;
-            triggerThreadsCPU.Enabled = true;
-
-            triggerThreadsProcCheck.Enabled = true;
-            triggerThreadsProcCheck.Interval = 10000;
-
-            triggerThreadVol.Enabled = true;
-            triggerThreadVol.Interval = 120000;
-
         }
 
-        private void triggerThreadCPU_Tick(object sender, EventArgs e)//Timer for triggering the threads where the PowerShell sessions 
-        {                                                             //and results will process
-            ParseResults InstanceResults = ParseResults.GetInstanceResults();
+        private void triggerThreadMemCPU_Tick(object sender, EventArgs e)//Timer for triggering the threads where the PowerShell sessions 
+        {
+            Tasks Task = Tasks.GetInstanceTask();
 
-            Thread CPUThread = new(InstanceResults.GetCPU);
-            Thread MemThread = new(InstanceResults.GetMemory);
+            Thread CPUThread = new(Task.GetCPU);
+            Thread MemThread = new(Task.GetMemory);
 
             CPUThread.Start();
             MemThread.Start();
         }
 
         private void triggerThreadVol_Tick(object sender, EventArgs e) //Timer for triggering the threads where the PowerShell sessions 
-        {                                                              //and results will process
-            ParseResults InstanceResults = ParseResults.GetInstanceResults();
+        {
+            Tasks Task = Tasks.GetInstanceTask();
 
-            Thread VolThread = new(InstanceResults.GetVolume);
+            Thread VolThread = new(Task.GetVolume);
             VolThread.Start();
         }
 
-        private void triggerThreadsProcCheck_Tick(object sender, EventArgs e) //Timer for triggering the threads where the PowerShell sessions 
-        {                                                                     //and results will process
-            ParseResults InstanceResults = ParseResults.GetInstanceResults();
+        private void triggerThreadsProcCheck_Tick(object sender, EventArgs e) 
+        {
+            Tasks Task = Tasks.GetInstanceTask();
 
-            Thread ProcCPUThread = new(InstanceResults.GetProcessCPU);
-            Thread ProcMemThread = new(InstanceResults.GetProcessMemory);
+            Thread ProcCPUThread = new(Task.GetProcessCPU);
+            Thread ProcMemThread = new(Task.GetProcessMemory);
 
             ProcMemThread.Start();
             ProcCPUThread.Start();
@@ -152,13 +170,7 @@ namespace monitoring_tool
         }
         private void connectToNewSv_Click(object sender, EventArgs e) //Connect to a new server after the "Connect" btn was disabled
         {
-            StopApp();
-            targetServer.Enabled = true; //Enable text box to enter the server/ip address again
-            btn_Server.Enabled = true; //Enable the connect button
-            btn_Server.Visible = true; //Make the connect button visible
-            btn_StartApp.Visible = false;
-            btn_StopApp.Visible = false;
-            targetServer.Text = "";
+            ResetApp();
             MessageBox.Show("Enter the name or IP address");
         }
 

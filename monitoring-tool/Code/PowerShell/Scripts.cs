@@ -30,9 +30,9 @@ namespace monitoring_tool
             return memS;
         }
 
-        public string cpu_Script(string sampleTime) //show CPU usage time(%)
+        public string cpu_Script() //show CPU usage time(%)
         {
-            //string sampleTime = "30";
+            string sampleTime = "30";
             string cpuS = @"$CPU = (Get-Counter '\Processor(_total)\% Processor Time' -Sample #sampletime#).CounterSamples[0].CookedValue
             $RoundCPU = [math]::Round($CPU, 2)
             $RoundCPU";
@@ -41,9 +41,9 @@ namespace monitoring_tool
             return cpu_script;
         }
 
-        public string processByCPU_Script(string processesToDisplay_CPU) //display top processes by CPU
+        public string processByCPU_Script() //display top processes by CPU
         {
-            processesToDisplay_CPU = "10";
+            string processesToDisplay_CPU = "10";
             var processbyCPU = @"$cores = (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors
             $CPU = Get-CimInstance Win32_PerfFormattedData_PerfProc_Process | 
             Select-Object -Property Name, @{Name = 'CPU'; Expression = {'{0:n2}' -f($_.PercentProcessorTime/$cores)}},
@@ -57,9 +57,9 @@ namespace monitoring_tool
             return result_processbyCPU;
         }
 
-        public string processByMem_Script(string processesToDisplay_Mem) //display top processes by memory
+        public string processByMem_Script() //display top processes by memory
         {
-            processesToDisplay_Mem = "10";
+            string processesToDisplay_Mem = "10";
             string processbyMem = @"Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First #number_of_processes# Name,
             @{Name='WorkingSet';Expression={'{0:n2}' -f($_.WorkingSet64/1MB)}}, Id | Format-List";
             var result_processbyMem = processbyMem.Replace("#number_of_processes#", processesToDisplay_Mem);
