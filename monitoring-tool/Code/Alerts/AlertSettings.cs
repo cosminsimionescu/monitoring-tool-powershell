@@ -183,16 +183,7 @@ namespace monitoring_tool
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
 
-            if (!InstanceServerSettings.Visible)
-            {
-                InstanceServerSettings.Show();
-            }
-            else
-            {
-                InstanceServerSettings.BringToFront();
-            }
         }
 
 

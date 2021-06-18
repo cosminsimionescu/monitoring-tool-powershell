@@ -546,5 +546,19 @@ namespace monitoring_tool
                     }
                 }
         }
+
+        private void email_serverSettings_Click(object sender, EventArgs e)
+        {
+            MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
+
+            if (!InstanceServerSettings.Visible)
+            {
+                InstanceServerSettings.Show();
+            }
+            else
+            {
+                InstanceServerSettings.BringToFront();
+            }
+        }
     }
 }

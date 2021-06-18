@@ -39,6 +39,7 @@
             this.optionsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToNewSv = new System.Windows.Forms.ToolStripMenuItem();
             this.alerts_menu = new System.Windows.Forms.ToolStripMenuItem();
+            this.email_serverSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.exit = new System.Windows.Forms.ToolStripMenuItem();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.tools = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,6 +145,7 @@
             this.optionsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToNewSv,
             this.alerts_menu,
+            this.email_serverSettings,
             this.exit});
             this.optionsMenu.Name = "optionsMenu";
             this.optionsMenu.Size = new System.Drawing.Size(61, 20);
@@ -162,6 +164,13 @@
             this.alerts_menu.Size = new System.Drawing.Size(211, 22);
             this.alerts_menu.Text = "Configure alerts";
             this.alerts_menu.Click += new System.EventHandler(this.alerts_menu_Click);
+            // 
+            // email_serverSettings
+            // 
+            this.email_serverSettings.Name = "email_serverSettings";
+            this.email_serverSettings.Size = new System.Drawing.Size(211, 22);
+            this.email_serverSettings.Text = "SMTP Server";
+            this.email_serverSettings.Click += new System.EventHandler(this.email_serverSettings_Click);
             // 
             // exit
             // 
@@ -871,6 +880,7 @@
         public System.Windows.Forms.Button button_StartApp;
         public System.Windows.Forms.Button btn_StartApp;
         public System.Windows.Forms.Button btn_StopApp;
+        private System.Windows.Forms.ToolStripMenuItem email_serverSettings;
     }
 }
 
