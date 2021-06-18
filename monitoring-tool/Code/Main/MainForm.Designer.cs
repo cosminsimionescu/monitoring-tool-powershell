@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewExtension = new monitoring_tool.DataGridViewExtension();
             this.txtCPU = new System.Windows.Forms.TextBox();
             this.txtMem = new System.Windows.Forms.TextBox();
@@ -79,6 +79,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btn_Server = new System.Windows.Forms.Button();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.btn_StopApp = new System.Windows.Forms.Button();
+            this.btn_StartApp = new System.Windows.Forms.Button();
             this.timerCpuAlerts = new System.Windows.Forms.Timer(this.components);
             this.timerMemoryAlerts = new System.Windows.Forms.Timer(this.components);
             this.timerVolumeAlerts = new System.Windows.Forms.Timer(this.components);
@@ -175,7 +177,7 @@
             this.tools});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1126, 24);
+            this.menu.Size = new System.Drawing.Size(1122, 24);
             this.menu.TabIndex = 1;
             this.menu.Text = "menuitem1";
             // 
@@ -244,14 +246,14 @@
             this.dataGridViewProcessByCPU.AllowUserToResizeRows = false;
             this.dataGridViewProcessByCPU.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridViewProcessByCPU.BackgroundColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProcessByCPU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProcessByCPU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewProcessByCPU.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewProcessByCPU.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnProcessID,
@@ -304,14 +306,14 @@
             this.dataGridViewProcessByMem.AllowUserToResizeRows = false;
             this.dataGridViewProcessByMem.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataGridViewProcessByMem.BackgroundColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProcessByMem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProcessByMem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewProcessByMem.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewProcessByMem.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnPID_mem,
@@ -389,7 +391,7 @@
             this.textAlert,
             this.valueAlert});
             this.dataGridViewAlerts.GridColor = System.Drawing.SystemColors.HotTrack;
-            this.dataGridViewAlerts.Location = new System.Drawing.Point(5, 123);
+            this.dataGridViewAlerts.Location = new System.Drawing.Point(5, 118);
             this.dataGridViewAlerts.Name = "dataGridViewAlerts";
             this.dataGridViewAlerts.ReadOnly = true;
             this.dataGridViewAlerts.RowHeadersVisible = false;
@@ -431,7 +433,7 @@
             // 
             // panel4
             // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
+            this.panel4.BackColor = System.Drawing.Color.DarkGray;
             this.panel4.Controls.Add(this.label6);
             this.panel4.Controls.Add(this.dataGridViewProcessByCPU);
             this.panel4.Controls.Add(this.dataGridViewProcessByMem);
@@ -443,7 +445,7 @@
             // 
             // panel5
             // 
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
+            this.panel5.BackColor = System.Drawing.Color.DarkGray;
             this.panel5.Controls.Add(this.clearAlertsDataGrid);
             this.panel5.Controls.Add(this.checkEmailAlerts);
             this.panel5.Controls.Add(this.label3);
@@ -451,9 +453,9 @@
             this.panel5.Controls.Add(this.dataGridViewAlerts);
             this.panel5.Controls.Add(this.checkFreeSpaceAlert);
             this.panel5.Controls.Add(this.checkCpuAlert);
-            this.panel5.Location = new System.Drawing.Point(12, 170);
+            this.panel5.Location = new System.Drawing.Point(4, 171);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(413, 407);
+            this.panel5.Size = new System.Drawing.Size(413, 398);
             this.panel5.TabIndex = 28;
             // 
             // clearAlertsDataGrid
@@ -461,7 +463,7 @@
             this.clearAlertsDataGrid.BackColor = System.Drawing.Color.White;
             this.clearAlertsDataGrid.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.clearAlertsDataGrid.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(51)))), ((int)(((byte)(102)))));
-            this.clearAlertsDataGrid.Location = new System.Drawing.Point(5, 47);
+            this.clearAlertsDataGrid.Location = new System.Drawing.Point(5, 42);
             this.clearAlertsDataGrid.Name = "clearAlertsDataGrid";
             this.clearAlertsDataGrid.Size = new System.Drawing.Size(80, 27);
             this.clearAlertsDataGrid.TabIndex = 34;
@@ -474,7 +476,7 @@
             this.checkEmailAlerts.AutoSize = true;
             this.checkEmailAlerts.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.checkEmailAlerts.ForeColor = System.Drawing.Color.Black;
-            this.checkEmailAlerts.Location = new System.Drawing.Point(290, 93);
+            this.checkEmailAlerts.Location = new System.Drawing.Point(290, 88);
             this.checkEmailAlerts.Name = "checkEmailAlerts";
             this.checkEmailAlerts.Size = new System.Drawing.Size(115, 24);
             this.checkEmailAlerts.TabIndex = 33;
@@ -487,7 +489,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label3.ForeColor = System.Drawing.Color.Maroon;
-            this.label3.Location = new System.Drawing.Point(0, 14);
+            this.label3.Location = new System.Drawing.Point(0, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(88, 30);
             this.label3.TabIndex = 30;
@@ -498,7 +500,7 @@
             this.checkMemoryAlert.AutoSize = true;
             this.checkMemoryAlert.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.checkMemoryAlert.ForeColor = System.Drawing.Color.Black;
-            this.checkMemoryAlert.Location = new System.Drawing.Point(66, 93);
+            this.checkMemoryAlert.Location = new System.Drawing.Point(66, 88);
             this.checkMemoryAlert.Name = "checkMemoryAlert";
             this.checkMemoryAlert.Size = new System.Drawing.Size(88, 24);
             this.checkMemoryAlert.TabIndex = 32;
@@ -512,7 +514,7 @@
             this.checkFreeSpaceAlert.Cursor = System.Windows.Forms.Cursors.Default;
             this.checkFreeSpaceAlert.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.checkFreeSpaceAlert.ForeColor = System.Drawing.Color.Black;
-            this.checkFreeSpaceAlert.Location = new System.Drawing.Point(155, 93);
+            this.checkFreeSpaceAlert.Location = new System.Drawing.Point(155, 88);
             this.checkFreeSpaceAlert.Name = "checkFreeSpaceAlert";
             this.checkFreeSpaceAlert.Size = new System.Drawing.Size(101, 24);
             this.checkFreeSpaceAlert.TabIndex = 31;
@@ -525,7 +527,7 @@
             this.checkCpuAlert.AutoSize = true;
             this.checkCpuAlert.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.checkCpuAlert.ForeColor = System.Drawing.Color.Black;
-            this.checkCpuAlert.Location = new System.Drawing.Point(5, 93);
+            this.checkCpuAlert.Location = new System.Drawing.Point(5, 88);
             this.checkCpuAlert.Name = "checkCpuAlert";
             this.checkCpuAlert.Size = new System.Drawing.Size(57, 24);
             this.checkCpuAlert.TabIndex = 30;
@@ -535,7 +537,7 @@
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
+            this.panel2.BackColor = System.Drawing.Color.DarkGray;
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.txtCPU);
             this.panel2.Controls.Add(this.label2);
@@ -562,11 +564,11 @@
             // server
             // 
             this.server.AutoSize = true;
-            this.server.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.server.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.server.ForeColor = System.Drawing.Color.Black;
-            this.server.Location = new System.Drawing.Point(17, 11);
+            this.server.Location = new System.Drawing.Point(15, 15);
             this.server.Name = "server";
-            this.server.Size = new System.Drawing.Size(264, 30);
+            this.server.Size = new System.Drawing.Size(201, 21);
             this.server.TabIndex = 4;
             this.server.Text = "&Server name or IP address";
             // 
@@ -574,7 +576,7 @@
             // 
             this.targetServer.BackColor = System.Drawing.Color.White;
             this.targetServer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.targetServer.Location = new System.Drawing.Point(63, 53);
+            this.targetServer.Location = new System.Drawing.Point(61, 44);
             this.targetServer.Name = "targetServer";
             this.targetServer.Size = new System.Drawing.Size(127, 29);
             this.targetServer.TabIndex = 5;
@@ -583,7 +585,7 @@
             // 
             this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
             this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(17, 53);
+            this.pictureBox1.Location = new System.Drawing.Point(15, 44);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(33, 29);
             this.pictureBox1.TabIndex = 6;
@@ -594,7 +596,7 @@
             this.btn_Server.BackColor = System.Drawing.Color.White;
             this.btn_Server.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btn_Server.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(51)))), ((int)(((byte)(102)))));
-            this.btn_Server.Location = new System.Drawing.Point(207, 53);
+            this.btn_Server.Location = new System.Drawing.Point(205, 44);
             this.btn_Server.Name = "btn_Server";
             this.btn_Server.Size = new System.Drawing.Size(74, 29);
             this.btn_Server.TabIndex = 31;
@@ -604,14 +606,44 @@
             // 
             // panel6
             // 
+            this.panel6.Controls.Add(this.btn_StopApp);
+            this.panel6.Controls.Add(this.btn_StartApp);
             this.panel6.Controls.Add(this.btn_Server);
             this.panel6.Controls.Add(this.pictureBox1);
             this.panel6.Controls.Add(this.targetServer);
             this.panel6.Controls.Add(this.server);
-            this.panel6.Location = new System.Drawing.Point(51, 43);
+            this.panel6.Location = new System.Drawing.Point(12, 27);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(292, 95);
             this.panel6.TabIndex = 29;
+            // 
+            // btn_StopApp
+            // 
+            this.btn_StopApp.BackColor = System.Drawing.Color.White;
+            this.btn_StopApp.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btn_StopApp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(51)))), ((int)(((byte)(102)))));
+            this.btn_StopApp.Location = new System.Drawing.Point(205, 44);
+            this.btn_StopApp.Name = "btn_StopApp";
+            this.btn_StopApp.Size = new System.Drawing.Size(74, 29);
+            this.btn_StopApp.TabIndex = 33;
+            this.btn_StopApp.Text = "Stop";
+            this.btn_StopApp.UseVisualStyleBackColor = false;
+            this.btn_StopApp.Visible = false;
+            this.btn_StopApp.Click += new System.EventHandler(this.btn_StopApp_Click);
+            // 
+            // btn_StartApp
+            // 
+            this.btn_StartApp.BackColor = System.Drawing.Color.White;
+            this.btn_StartApp.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btn_StartApp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(51)))), ((int)(((byte)(102)))));
+            this.btn_StartApp.Location = new System.Drawing.Point(205, 44);
+            this.btn_StartApp.Name = "btn_StartApp";
+            this.btn_StartApp.Size = new System.Drawing.Size(74, 29);
+            this.btn_StartApp.TabIndex = 32;
+            this.btn_StartApp.Text = "Start";
+            this.btn_StartApp.UseVisualStyleBackColor = false;
+            this.btn_StartApp.Visible = false;
+            this.btn_StartApp.Click += new System.EventHandler(this.button_StartApp_Click);
             // 
             // timerCpuAlerts
             // 
@@ -657,14 +689,14 @@
             this.dataGridViewFreeSpace.AllowUserToResizeRows = false;
             this.dataGridViewFreeSpace.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.dataGridViewFreeSpace.BackgroundColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.MenuText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewFreeSpace.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.MenuText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewFreeSpace.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewFreeSpace.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridViewFreeSpace.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnDrive,
@@ -723,7 +755,7 @@
             // 
             // panel3
             // 
-            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
+            this.panel3.BackColor = System.Drawing.Color.DarkGray;
             this.panel3.Controls.Add(this.dataGridViewFreeSpace);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Location = new System.Drawing.Point(768, 370);
@@ -735,8 +767,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
-            this.ClientSize = new System.Drawing.Size(1126, 581);
+            this.BackColor = System.Drawing.Color.DarkGray;
+            this.ClientSize = new System.Drawing.Size(1122, 574);
             this.Controls.Add(this.panel6);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
@@ -836,6 +868,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnFreespace;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnFreePercentage;
         private System.Windows.Forms.Panel panel3;
+        public System.Windows.Forms.Button button_StartApp;
+        public System.Windows.Forms.Button btn_StartApp;
+        public System.Windows.Forms.Button btn_StopApp;
     }
 }
 

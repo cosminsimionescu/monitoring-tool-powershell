@@ -53,6 +53,9 @@ namespace monitoring_tool
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.timeFormatInternalAlerts = new System.Windows.Forms.ComboBox();
+            this.txtEmail2 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // memoryTrshld
@@ -89,9 +92,9 @@ namespace monitoring_tool
             // btnConfirmConf
             // 
             this.btnConfirmConf.BackColor = System.Drawing.Color.White;
-            this.btnConfirmConf.Location = new System.Drawing.Point(64, 323);
+            this.btnConfirmConf.Location = new System.Drawing.Point(128, 362);
             this.btnConfirmConf.Name = "btnConfirmConf";
-            this.btnConfirmConf.Size = new System.Drawing.Size(75, 23);
+            this.btnConfirmConf.Size = new System.Drawing.Size(75, 28);
             this.btnConfirmConf.TabIndex = 6;
             this.btnConfirmConf.Text = "Confirm";
             this.btnConfirmConf.UseVisualStyleBackColor = false;
@@ -111,11 +114,10 @@ namespace monitoring_tool
             // txtEmail
             // 
             this.txtEmail.Enabled = false;
-            this.txtEmail.Location = new System.Drawing.Point(34, 279);
+            this.txtEmail.Location = new System.Drawing.Point(76, 279);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(152, 23);
             this.txtEmail.TabIndex = 8;
-            this.txtEmail.Click += new System.EventHandler(this.txtEmail_Click);
             // 
             // label1
             // 
@@ -174,7 +176,7 @@ namespace monitoring_tool
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(175, 257);
+            this.label7.Location = new System.Drawing.Point(263, 258);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(151, 15);
             this.label7.TabIndex = 15;
@@ -188,7 +190,7 @@ namespace monitoring_tool
             this.timeFormat.Items.AddRange(new object[] {
             "minutes",
             "hours"});
-            this.timeFormat.Location = new System.Drawing.Point(254, 279);
+            this.timeFormat.Location = new System.Drawing.Point(340, 276);
             this.timeFormat.MaxDropDownItems = 2;
             this.timeFormat.Name = "timeFormat";
             this.timeFormat.Size = new System.Drawing.Size(62, 23);
@@ -207,9 +209,9 @@ namespace monitoring_tool
             // btnCancelConf
             // 
             this.btnCancelConf.BackColor = System.Drawing.Color.White;
-            this.btnCancelConf.Location = new System.Drawing.Point(203, 323);
+            this.btnCancelConf.Location = new System.Drawing.Point(236, 362);
             this.btnCancelConf.Name = "btnCancelConf";
-            this.btnCancelConf.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelConf.Size = new System.Drawing.Size(75, 28);
             this.btnCancelConf.TabIndex = 18;
             this.btnCancelConf.Text = "Cancel";
             this.btnCancelConf.UseVisualStyleBackColor = false;
@@ -228,7 +230,7 @@ namespace monitoring_tool
             // intervalAlertEmail
             // 
             this.intervalAlertEmail.Enabled = false;
-            this.intervalAlertEmail.Location = new System.Drawing.Point(192, 279);
+            this.intervalAlertEmail.Location = new System.Drawing.Point(282, 276);
             this.intervalAlertEmail.Name = "intervalAlertEmail";
             this.intervalAlertEmail.Size = new System.Drawing.Size(56, 23);
             this.intervalAlertEmail.TabIndex = 19;
@@ -284,6 +286,32 @@ namespace monitoring_tool
             this.timeFormatInternalAlerts.Size = new System.Drawing.Size(62, 23);
             this.timeFormatInternalAlerts.TabIndex = 24;
             // 
+            // txtEmail2
+            // 
+            this.txtEmail2.Enabled = false;
+            this.txtEmail2.Location = new System.Drawing.Point(76, 308);
+            this.txtEmail2.Name = "txtEmail2";
+            this.txtEmail2.Size = new System.Drawing.Size(152, 23);
+            this.txtEmail2.TabIndex = 25;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(12, 282);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(58, 15);
+            this.label11.TabIndex = 28;
+            this.label11.Text = "Address 1";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(12, 311);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(58, 15);
+            this.label12.TabIndex = 29;
+            this.label12.Text = "Address 2";
+            // 
             // AlertSettings
             // 
             this.AcceptButton = this.btnConfirmConf;
@@ -291,8 +319,11 @@ namespace monitoring_tool
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
             this.CancelButton = this.btnCancelConf;
-            this.ClientSize = new System.Drawing.Size(356, 354);
+            this.ClientSize = new System.Drawing.Size(420, 397);
             this.ControlBox = false;
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.txtEmail2);
             this.Controls.Add(this.timeFormatInternalAlerts);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
@@ -350,5 +381,9 @@ namespace monitoring_tool
         private System.Windows.Forms.Label label10;
         public System.Windows.Forms.TextBox triggerTime;
         public System.Windows.Forms.ComboBox timeFormatInternalAlerts;
+        public System.Windows.Forms.TextBox txtEmail2;
+        public System.Windows.Forms.TextBox textEmail4;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
     }
 }

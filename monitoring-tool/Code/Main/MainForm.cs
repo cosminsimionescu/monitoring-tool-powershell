@@ -49,6 +49,34 @@ namespace monitoring_tool
             }
         }
 
+        private void button_StartApp_Click(object sender, EventArgs e)
+        {
+            Monitor_loop();
+            btn_StartApp.Visible = false;
+            btn_StopApp.Visible = true;
+            MessageBox.Show("Server monitoring was started");
+        }
+        private void btn_StopApp_Click(object sender, EventArgs e)
+        {
+            StopApp();
+            btn_StopApp.Visible = false;
+            targetServer.Enabled = true; //Enable text box to enter the server/ip address again
+            btn_Server.Enabled = true; //Enable the connect button
+            btn_Server.Visible = true; //Make the connect button visible
+            MessageBox.Show("Server monitoring was stopped");
+        }
+        public void StopApp()
+        {
+            triggerThreadsCPU.Enabled = false;
+            triggerThreadsProcCheck.Enabled = false;
+            triggerThreadVol.Enabled = false;
+            txtCPU.Text = "";
+            txtMem.Text = "";
+            ClearGridProcessCpuLoad();
+            ClearGridProcessMemLoad();
+            ClearGridUpdateFreeSpace();  
+        }    
+
         public void Monitor_loop() //initialization of the threads 
         {                          //settings the timer`s interval and enabling it
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
@@ -122,12 +150,15 @@ namespace monitoring_tool
                 InstanceAlert.BringToFront();
             }
         }
-
         private void connectToNewSv_Click(object sender, EventArgs e) //Connect to a new server after the "Connect" btn was disabled
         {
+            StopApp();
             targetServer.Enabled = true; //Enable text box to enter the server/ip address again
             btn_Server.Enabled = true; //Enable the connect button
             btn_Server.Visible = true; //Make the connect button visible
+            btn_StartApp.Visible = false;
+            btn_StopApp.Visible = false;
+            targetServer.Text = "";
             MessageBox.Show("Enter the name or IP address");
         }
 

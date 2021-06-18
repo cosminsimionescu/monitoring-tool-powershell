@@ -35,6 +35,7 @@ namespace monitoring_tool
             checkInput.VolumeThreshold = valvolumeTrshld;
 
             if (checkBoxEmail.CheckState == CheckState.Checked) { checkInput.Email = txtEmail.Text.Trim(); } else { }
+            if (checkBoxEmail.CheckState == CheckState.Checked) { checkInput.Email = txtEmail2.Text.Trim(); } else { }
 
             ValidationContext context = new ValidationContext(checkInput, null, null);
             List<ValidationResult> validationRes = new List<ValidationResult>();
@@ -77,18 +78,36 @@ namespace monitoring_tool
             {
 
                 if (checkBoxEmail.CheckState == CheckState.Checked &&
-                    intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() != "")
+                    intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() != "" && txtEmail2.Text.Trim() != "")
                 {
                     sendEmailIsChecked = "true";
                     sw.WriteLine(sendEmailIsChecked);
                     sw.WriteLine(txtEmail.Text.Trim());
+                    sw.WriteLine(txtEmail2.Text.Trim());
                     sw.WriteLine(intervalAlertEmail.Text.Trim());
                     sw.WriteLine(timeFormat.Text.Trim());
                 }
-                else
+                if (checkBoxEmail.CheckState == CheckState.Checked &&
+                     intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() == "" && txtEmail2.Text.Trim() != "")
                 {
-                    MessageBox.Show("Complete all the fields");
+                    sendEmailIsChecked = "true";
+                    sw.WriteLine(sendEmailIsChecked);
+                    sw.WriteLine(txtEmail.Text.Trim());
+                    sw.WriteLine(txtEmail2.Text.Trim());
+                    sw.WriteLine(intervalAlertEmail.Text.Trim());
+                    sw.WriteLine(timeFormat.Text.Trim());
                 }
+                if (checkBoxEmail.CheckState == CheckState.Checked &&
+                    intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() != "" && txtEmail2.Text.Trim() == "")
+                {
+                    sendEmailIsChecked = "true";
+                    sw.WriteLine(sendEmailIsChecked);
+                    sw.WriteLine(txtEmail.Text.Trim());
+                    sw.WriteLine(txtEmail2.Text.Trim());
+                    sw.WriteLine(intervalAlertEmail.Text.Trim());
+                    sw.WriteLine(timeFormat.Text.Trim());
+                }
+
                 if (checkBoxEmail.CheckState == CheckState.Unchecked)
                 {
                     sendEmailIsChecked = "false";
@@ -112,6 +131,7 @@ namespace monitoring_tool
         {
             checkBoxEmail.CheckState = CheckState.Unchecked;
             txtEmail.Text = "";
+            txtEmail2.Text = "";
             intervalAlertEmail.Text = "";
             timeFormat.Text = "";
 
@@ -132,6 +152,7 @@ namespace monitoring_tool
                     {
                         checkBoxEmail.CheckState = CheckState.Checked;
                         txtEmail.Text = sr.ReadLine();
+                        txtEmail2.Text = sr.ReadLine();
                         intervalAlertEmail.Text = sr.ReadLine();
                         timeFormat.Text = sr.ReadLine();
                     }
@@ -139,6 +160,7 @@ namespace monitoring_tool
                     {
                         checkBoxEmail.CheckState = CheckState.Unchecked;
                         txtEmail.Text = "";
+                        txtEmail2.Text = "";
                         intervalAlertEmail.Text = "";
                         timeFormat.Text = "";
                     }
@@ -200,6 +222,7 @@ namespace monitoring_tool
             if (checkBoxEmail.CheckState == CheckState.Checked)
             {
                 txtEmail.Enabled = true;
+                txtEmail2.Enabled = true;
                 intervalAlertEmail.Enabled = true;
                 timeFormat.Enabled = true;
                 txtEmail.Text = "Enter e-mail address";
@@ -212,14 +235,10 @@ namespace monitoring_tool
                 intervalAlertEmail.Text = "";
                 txtEmail.Text = "";
                 txtEmail.Enabled = false;
+                txtEmail2.Enabled = false;
                 intervalAlertEmail.Enabled = false;
                 timeFormat.Enabled = false;
             }
-        }
-
-        private void txtEmail_Click(object sender, EventArgs e)
-        {
-            txtEmail.Text = "";
         }
 
         private void memoryTrshld_KeyPress(object sender, KeyPressEventArgs e)

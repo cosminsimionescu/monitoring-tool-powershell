@@ -31,8 +31,8 @@ namespace monitoring_tool
                     AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
                     MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
 
-                    string emailTO = InstanceAlert.txtEmail.Text; //get e-mail for receiving alerts from the Alert settings window
-
+                    string emailTO = InstanceAlert.txtEmail.Text +
+                    InstanceAlert.txtEmail2.Text;
                     string userName = InstanceServerSettings.txtUser.Text; //get username for the e-mail configuration from Mail Configuration window
                     string SMTP = InstanceServerSettings.txtSMTP.Text; //get SMTP server for the e-mail configuration from Mail Configuration window
                     string password = InstanceServerSettings.txtPassword.Text; //get password for the e-mail configuration from Mail Configuration window
