@@ -4,7 +4,6 @@ namespace monitoring_tool
 {
     public class ValidateInput //Necessary for input validation on diferent forms
     {
-
         [Range(0, 100)]
         public int MemoryThreshold { get; set; }
 

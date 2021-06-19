@@ -23,7 +23,8 @@ namespace monitoring_tool
         public string memory_Script() //show memory usage in MB
         {
             string memS = @"$ComputerMemory = Get-CimInstance -Class win32_operatingsystem -ErrorAction Stop
-            $Memory = ((($ComputerMemory.TotalVisibleMemorySize - $ComputerMemory.FreePhysicalMemory)*100)/ $ComputerMemory.TotalVisibleMemorySize)
+            $Memory = ((($ComputerMemory.TotalVisibleMemorySize -
+            $ComputerMemory.FreePhysicalMemory)*100)/ $ComputerMemory.TotalVisibleMemorySize)
             $RoundMemory = [math]::Round($Memory, 2)
             $RoundMemory";
 
@@ -48,7 +49,7 @@ namespace monitoring_tool
             $CPU = Get-CimInstance Win32_PerfFormattedData_PerfProc_Process | 
             Select-Object -Property Name, @{Name = 'CPU'; Expression = {'{0:n2}' -f($_.PercentProcessorTime/$cores)}},
             @{Name = 'PID'; Expression = {$_.IDProcess}} |
-            Where-Object {$_.Name -notlike '*conhost*' -and $_.Name -notlike '*svchost*' -and $_.Name -notlike '*Idle*' -and $_.Name -notlike '*_Total*'} |
+            Where-Object {$_.Name -notlike '*chrome*' -and $_.Name -notlike '*conhost*' -and $_.Name -notlike '*svchost*' -and $_.Name -notlike '*Idle*' -and $_.Name -notlike '*_Total*'} |
             Sort-Object -Property CPU -Descending |
             Select-Object -First 10 
             $CPU | Format-List";
@@ -77,5 +78,12 @@ namespace monitoring_tool
             return volume;
         }
 
+        internal Tasks Tasks
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }

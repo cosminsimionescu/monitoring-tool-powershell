@@ -52,16 +52,14 @@ namespace monitoring_tool
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.timeFormatInternalAlerts = new System.Windows.Forms.ComboBox();
-            this.txtEmail2 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // memoryTrshld
             // 
             this.memoryTrshld.AutoCompleteCustomSource.AddRange(new string[] {
             "85"});
-            this.memoryTrshld.Location = new System.Drawing.Point(214, 115);
+            this.memoryTrshld.Location = new System.Drawing.Point(205, 111);
             this.memoryTrshld.Name = "memoryTrshld";
             this.memoryTrshld.Size = new System.Drawing.Size(55, 23);
             this.memoryTrshld.TabIndex = 1;
@@ -72,7 +70,7 @@ namespace monitoring_tool
             // 
             this.cpuTrshld.AutoCompleteCustomSource.AddRange(new string[] {
             "85"});
-            this.cpuTrshld.Location = new System.Drawing.Point(214, 154);
+            this.cpuTrshld.Location = new System.Drawing.Point(205, 150);
             this.cpuTrshld.Name = "cpuTrshld";
             this.cpuTrshld.Size = new System.Drawing.Size(55, 23);
             this.cpuTrshld.TabIndex = 3;
@@ -82,7 +80,7 @@ namespace monitoring_tool
             // 
             this.volumeTrshld.AutoCompleteCustomSource.AddRange(new string[] {
             "10"});
-            this.volumeTrshld.Location = new System.Drawing.Point(214, 192);
+            this.volumeTrshld.Location = new System.Drawing.Point(205, 188);
             this.volumeTrshld.Name = "volumeTrshld";
             this.volumeTrshld.Size = new System.Drawing.Size(55, 23);
             this.volumeTrshld.TabIndex = 5;
@@ -91,7 +89,7 @@ namespace monitoring_tool
             // btnConfirmConf
             // 
             this.btnConfirmConf.BackColor = System.Drawing.Color.White;
-            this.btnConfirmConf.Location = new System.Drawing.Point(128, 362);
+            this.btnConfirmConf.Location = new System.Drawing.Point(119, 320);
             this.btnConfirmConf.Name = "btnConfirmConf";
             this.btnConfirmConf.Size = new System.Drawing.Size(75, 28);
             this.btnConfirmConf.TabIndex = 6;
@@ -102,7 +100,7 @@ namespace monitoring_tool
             // checkBoxEmail
             // 
             this.checkBoxEmail.AutoSize = true;
-            this.checkBoxEmail.Location = new System.Drawing.Point(34, 254);
+            this.checkBoxEmail.Location = new System.Drawing.Point(25, 250);
             this.checkBoxEmail.Name = "checkBoxEmail";
             this.checkBoxEmail.Size = new System.Drawing.Size(86, 19);
             this.checkBoxEmail.TabIndex = 7;
@@ -113,7 +111,7 @@ namespace monitoring_tool
             // txtEmail
             // 
             this.txtEmail.Enabled = false;
-            this.txtEmail.Location = new System.Drawing.Point(76, 279);
+            this.txtEmail.Location = new System.Drawing.Point(67, 275);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(152, 23);
             this.txtEmail.TabIndex = 8;
@@ -121,7 +119,7 @@ namespace monitoring_tool
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(99, 118);
+            this.label1.Location = new System.Drawing.Point(90, 114);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(104, 15);
             this.label1.TabIndex = 9;
@@ -130,7 +128,7 @@ namespace monitoring_tool
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(99, 157);
+            this.label2.Location = new System.Drawing.Point(90, 153);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(85, 15);
             this.label2.TabIndex = 10;
@@ -139,7 +137,7 @@ namespace monitoring_tool
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(100, 192);
+            this.label3.Location = new System.Drawing.Point(91, 188);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(90, 15);
             this.label3.TabIndex = 11;
@@ -148,7 +146,7 @@ namespace monitoring_tool
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(275, 118);
+            this.label4.Location = new System.Drawing.Point(266, 114);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 15);
             this.label4.TabIndex = 12;
@@ -157,7 +155,7 @@ namespace monitoring_tool
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(275, 157);
+            this.label5.Location = new System.Drawing.Point(266, 153);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(44, 15);
             this.label5.TabIndex = 13;
@@ -166,7 +164,7 @@ namespace monitoring_tool
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(275, 195);
+            this.label6.Location = new System.Drawing.Point(266, 191);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 15);
             this.label6.TabIndex = 14;
@@ -175,7 +173,7 @@ namespace monitoring_tool
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(263, 258);
+            this.label7.Location = new System.Drawing.Point(245, 254);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(151, 15);
             this.label7.TabIndex = 15;
@@ -189,7 +187,7 @@ namespace monitoring_tool
             this.timeFormat.Items.AddRange(new object[] {
             "minutes",
             "hours"});
-            this.timeFormat.Location = new System.Drawing.Point(340, 276);
+            this.timeFormat.Location = new System.Drawing.Point(322, 272);
             this.timeFormat.MaxDropDownItems = 2;
             this.timeFormat.Name = "timeFormat";
             this.timeFormat.Size = new System.Drawing.Size(62, 23);
@@ -208,7 +206,7 @@ namespace monitoring_tool
             // btnCancelConf
             // 
             this.btnCancelConf.BackColor = System.Drawing.Color.White;
-            this.btnCancelConf.Location = new System.Drawing.Point(236, 362);
+            this.btnCancelConf.Location = new System.Drawing.Point(220, 320);
             this.btnCancelConf.Name = "btnCancelConf";
             this.btnCancelConf.Size = new System.Drawing.Size(75, 28);
             this.btnCancelConf.TabIndex = 18;
@@ -229,7 +227,7 @@ namespace monitoring_tool
             // intervalAlertEmail
             // 
             this.intervalAlertEmail.Enabled = false;
-            this.intervalAlertEmail.Location = new System.Drawing.Point(282, 276);
+            this.intervalAlertEmail.Location = new System.Drawing.Point(264, 272);
             this.intervalAlertEmail.Name = "intervalAlertEmail";
             this.intervalAlertEmail.Size = new System.Drawing.Size(56, 23);
             this.intervalAlertEmail.TabIndex = 19;
@@ -237,7 +235,7 @@ namespace monitoring_tool
             // 
             // triggerTime
             // 
-            this.triggerTime.Location = new System.Drawing.Point(214, 71);
+            this.triggerTime.Location = new System.Drawing.Point(205, 67);
             this.triggerTime.Name = "triggerTime";
             this.triggerTime.Size = new System.Drawing.Size(55, 23);
             this.triggerTime.TabIndex = 21;
@@ -247,7 +245,7 @@ namespace monitoring_tool
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(257, 53);
+            this.label9.Location = new System.Drawing.Point(266, 49);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(98, 15);
             this.label9.TabIndex = 22;
@@ -256,7 +254,7 @@ namespace monitoring_tool
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(84, 64);
+            this.label10.Location = new System.Drawing.Point(75, 60);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(119, 30);
             this.label10.TabIndex = 23;
@@ -269,37 +267,20 @@ namespace monitoring_tool
             this.timeFormatInternalAlerts.Items.AddRange(new object[] {
             "minutes",
             "seconds"});
-            this.timeFormatInternalAlerts.Location = new System.Drawing.Point(275, 71);
+            this.timeFormatInternalAlerts.Location = new System.Drawing.Point(266, 67);
             this.timeFormatInternalAlerts.MaxDropDownItems = 2;
             this.timeFormatInternalAlerts.Name = "timeFormatInternalAlerts";
-            this.timeFormatInternalAlerts.Size = new System.Drawing.Size(62, 23);
+            this.timeFormatInternalAlerts.Size = new System.Drawing.Size(80, 23);
             this.timeFormatInternalAlerts.TabIndex = 24;
-            // 
-            // txtEmail2
-            // 
-            this.txtEmail2.Enabled = false;
-            this.txtEmail2.Location = new System.Drawing.Point(76, 308);
-            this.txtEmail2.Name = "txtEmail2";
-            this.txtEmail2.Size = new System.Drawing.Size(152, 23);
-            this.txtEmail2.TabIndex = 25;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 282);
+            this.label11.Location = new System.Drawing.Point(25, 278);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(58, 15);
+            this.label11.Size = new System.Drawing.Size(36, 15);
             this.label11.TabIndex = 28;
-            this.label11.Text = "Address 1";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 311);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(58, 15);
-            this.label12.TabIndex = 29;
-            this.label12.Text = "Address 2";
+            this.label11.Text = "Email";
             // 
             // AlertSettings
             // 
@@ -308,11 +289,9 @@ namespace monitoring_tool
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(195)))), ((int)(((byte)(196)))));
             this.CancelButton = this.btnCancelConf;
-            this.ClientSize = new System.Drawing.Size(417, 397);
+            this.ClientSize = new System.Drawing.Size(408, 355);
             this.ControlBox = false;
-            this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.txtEmail2);
             this.Controls.Add(this.timeFormatInternalAlerts);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
@@ -368,9 +347,7 @@ namespace monitoring_tool
         private System.Windows.Forms.Label label10;
         public System.Windows.Forms.TextBox triggerTime;
         public System.Windows.Forms.ComboBox timeFormatInternalAlerts;
-        public System.Windows.Forms.TextBox txtEmail2;
         public System.Windows.Forms.TextBox textEmail4;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
     }
 }

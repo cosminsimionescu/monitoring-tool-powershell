@@ -31,8 +31,8 @@ namespace monitoring_tool
                     AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
                     MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
 
-                    string emailTO = InstanceAlert.txtEmail.Text +
-                    InstanceAlert.txtEmail2.Text;
+                    string emailTO = InstanceAlert.txtEmail.Text;
+                    
                     string userName = InstanceServerSettings.txtUser.Text; //get username for the e-mail configuration from Mail Configuration window
                     string SMTP = InstanceServerSettings.txtSMTP.Text; //get SMTP server for the e-mail configuration from Mail Configuration window
                     string password = InstanceServerSettings.txtPassword.Text; //get password for the e-mail configuration from Mail Configuration window
@@ -47,10 +47,12 @@ namespace monitoring_tool
 
                         MailMessage mail = new MailMessage();
                         SmtpClient SmtpServer = new SmtpClient(SMTP);
-                        mail.From = new MailAddress(userName, "MONITORING TOOL - LICENTA");
+                        mail.From = new MailAddress(userName, "MONITORING TOOL-LICENTA");
                         mail.To.Add(emailTO);
-                        mail.Subject = "[ALERT]" + "[" + date + "] " + alertMessage + "   TRIGGERED ON " + " " + serverHit;
-                        mail.Body = "SERVER: " + serverHit + Environment.NewLine + "ALERT MESSAGE: " + bodyMessage + Environment.NewLine + "CURENT STATUS: " + value + "%" + " AT " + date;
+                        mail.Subject = "[ALERT]" + "[" + date + "] " + alertMessage +
+                        "   TRIGGERED ON " + " " + serverHit;
+                        mail.Body = "SERVER: " + serverHit + Environment.NewLine + "ALERT MESSAGE: " +
+                        bodyMessage + Environment.NewLine + "CURENT STATUS: " + value + "%" + " AT " + date;
 
                         SmtpServer.Port = 587;
                         SmtpServer.Credentials = new System.Net.NetworkCredential(userName, password); // credentials

@@ -22,42 +22,36 @@ namespace monitoring_tool
             InstanceRemoteSession = this;
         }
 
-        public async Task<string> NewPowerShell(string ServerName, string command)
+        public async Task<string> NewPowerShell(string serverName, string command)
         {
             string result = await Task.Run(() =>
             {
-                MainForm InstanceMainForm = MainForm.GetInstance();
                 Runspace runspace = RunspaceFactory.CreateRunspace();
-                PowerShell psSession = PowerShell.Create();
+                PowerShell powerShell = PowerShell.Create();
                 runspace.Open();
-                psSession.Runspace = runspace;
+                powerShell.Runspace = runspace;
 
-                psSession.Commands.AddScript("$sessions = New-PSSession -ComputerName " + ServerName + Environment.NewLine
-                 + "Invoke-Command -session $sessions -ScriptBlock {" + command + "}" + Environment.NewLine
-                 + "Remove-PSSession -Session $sessions");
+                powerShell.Commands.AddScript("$remoteSession = New-PSSession -ComputerName " + serverName + Environment.NewLine
+                 + "Invoke-Command -Session $remoteSession -ScriptBlock {" + command + "}" + Environment.NewLine
+                 + "Remove-PSSession -Session $remoteSession");
 
-                psSession.Commands.AddCommand("Out-String");
+                powerShell.Commands.AddCommand("Out-String");
 
-                Collection<PSObject> results = new Collection<PSObject>();
+                Collection<PSObject> output = new Collection<PSObject>();
                 try
                 {
-                    results = psSession.Invoke();
+                    output = powerShell.Invoke();
                 }
-
-                catch
-                {
-
-                }
+                catch { }
 
                 runspace.Close();
 
                 StringBuilder stringBuilder = new StringBuilder();
-
-                foreach (PSObject obj in results)
+                foreach (PSObject obj in output)
                 {
                     stringBuilder.AppendLine(obj.ToString());
                 }
-                psSession.Commands.AddCommand("Clear-Host");
+                powerShell.Commands.AddCommand("Clear-Host");
 
                 return stringBuilder.ToString();
             }

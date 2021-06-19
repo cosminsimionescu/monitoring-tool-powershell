@@ -87,5 +87,21 @@ namespace monitoring_tool
                 }
             }
         }
+
+        public SendEmail SendEmail
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public MainForm MainForm
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }

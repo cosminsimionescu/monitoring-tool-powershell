@@ -23,15 +23,14 @@ namespace monitoring_tool
         public void GetMemory()
         {
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
-            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
-            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
+            MainForm InstanceMainForm = MainForm.GetInstance();
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();
 
-            string memoryUsage_script = InstanceScripts.memory_Script(); //Memory usage script 
-            string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
+            string memoryUsage_script = InstanceScripts.memory_Script();
+            string targetServ = InstanceMainForm.targetServer.Text.Trim();
 
-            Task<string> task_Mem = InstanceRemoteSession.NewPowerShell(targetServ, memoryUsage_script); //task running the PS session
-
+            Task<string> task_Mem = InstanceRemoteSession.NewPowerShell(targetServ, memoryUsage_script);
             string taskResultMemory = task_Mem.Result;
 
             InstanceResults.ResultsMemory(taskResultMemory);
@@ -56,19 +55,18 @@ namespace monitoring_tool
         public void GetProcessCPU()
         {
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
-            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
-            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
+            MainForm InstanceMainForm = MainForm.GetInstance();
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();
 
-            string processCPU_script = InstanceScripts.processByCPU_Script(); //Procesess by CPU script
-            string TargetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
+            string processCPU_script = InstanceScripts.processByCPU_Script();
+            string TargetServ = InstanceMainForm.targetServer.Text.Trim();
 
-            Task<string> task_ProcByCPU = InstanceRemoteSession.NewPowerShell(TargetServ, processCPU_script); //task running the PS session
-            string resultTaskProcessCPU = task_ProcByCPU.Result;//forwarding the PowerShell output to the list
+            Task<string> task_ProcByCPU = InstanceRemoteSession.NewPowerShell(TargetServ, processCPU_script);
+            string resultTaskProcessCPU = task_ProcByCPU.Result;
 
             InstanceResults.ResultProcessCPU(resultTaskProcessCPU);
         }
-
 
         public void GetProcessMemory()
         {
@@ -89,17 +87,33 @@ namespace monitoring_tool
         public void GetVolume()
         {
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
-            MainForm InstanceMainForm = MainForm.GetInstance(); //MainForm class instance
-            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();//RemoteSession class instance
-            Scripts InstanceScripts = Scripts.GetInstanceScripts();//Scripts class instance
+            MainForm InstanceMainForm = MainForm.GetInstance();
+            RemoteSession InstanceRemoteSession = RemoteSession.GetInstanceRemoteSession();
+            Scripts InstanceScripts = Scripts.GetInstanceScripts();
 
-            string volumeUsage_script = InstanceScripts.volume_Script();//volume script
-            string targetServ = InstanceMainForm.targetServer.Text.Trim();//server for new PS session
+            string volumeUsage_script = InstanceScripts.volume_Script();
+            string targetServ = InstanceMainForm.targetServer.Text.Trim();
 
-            Task<string> task_Vol = InstanceRemoteSession.NewPowerShell(targetServ, volumeUsage_script); //task running the PS session
+            Task<string> task_Vol = InstanceRemoteSession.NewPowerShell(targetServ, volumeUsage_script);
             string resultTaskVolume = task_Vol.Result;
 
             InstanceResults.ResultVolume(resultTaskVolume);
+        }
+
+        internal RemoteSession RemoteSession
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        internal ParseResults ParseResults
+        {
+            get => default;
+            set
+            {
+            }
         }
     }
 }

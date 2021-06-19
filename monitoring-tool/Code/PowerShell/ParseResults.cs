@@ -26,8 +26,6 @@ namespace monitoring_tool
         public double cpuPercentage { get; set; }
         public Dictionary<string, double> driveInformations { get; set; } //dictionary for Drive name and freespace(%)
 
-
-
         public void ResultsMemory(string taskResultMemory)
         {
             string memoryUsage = taskResultMemory;
@@ -36,13 +34,10 @@ namespace monitoring_tool
             Thread.Sleep(35);
             InstanceMainForm.UpdateMemoryLoad(" "+ memoryUsage + "%");
             
-            Thread.Sleep(35);
             try {
             memoryPercentage = Convert.ToDouble(memoryUsage);
             }
-            catch
-            {
-            }
+            catch { }
         }
 
         public void ResultsCPU(string taskResultCPU)
@@ -50,19 +45,17 @@ namespace monitoring_tool
             string cpuUsage = taskResultCPU;
             MainForm InstanceMainForm = MainForm.GetInstance();
 
-            Thread.Sleep(35);
-            try {
-            cpuPercentage = Convert.ToDouble(cpuUsage);
+            Thread.Sleep(25);
+            InstanceMainForm.UpdateCpuLoad(" "+ cpuUsage + "%");
+
+            try
+            {
+                cpuPercentage = Convert.ToDouble(cpuUsage);
             }
             catch
             {
-                MessageBox.Show(@"Check the name or if the server is running" + Environment.NewLine + 
-                    Environment.NewLine  + "Server entered cannot be monitored");
 
-                InstanceMainForm.ResetApp();
             }
-            Thread.Sleep(35);
-            InstanceMainForm.UpdateCpuLoad(" "+ cpuUsage + "%");
         }
 
         public void ResultProcessCPU(string resultTaskProcessCPU)
@@ -141,6 +134,14 @@ namespace monitoring_tool
 
                 driveInformations = new Dictionary<string, double>();
                 driveInformations.Add(driveId, driveSpacePercentageValue);
+            }
+        }
+
+        public MainForm MainForm
+        {
+            get => default;
+            set
+            {
             }
         }
     }

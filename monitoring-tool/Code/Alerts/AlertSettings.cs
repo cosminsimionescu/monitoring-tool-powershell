@@ -22,7 +22,7 @@ namespace monitoring_tool
             InstanceAlert = this;
         }
 
-        public void ValidateConfiguration() // validation for alert settings
+        public void ValidateConfiguration()
         {
             ValidateInput checkInput = new ValidateInput();
 
@@ -34,13 +34,13 @@ namespace monitoring_tool
             checkInput.CpuThreshold = valcpuTrshld;
             checkInput.VolumeThreshold = valvolumeTrshld;
 
-            if (checkBoxEmail.CheckState == CheckState.Checked) { checkInput.Email = txtEmail.Text.Trim(); } else { }
-            if (checkBoxEmail.CheckState == CheckState.Checked) { checkInput.Email = txtEmail2.Text.Trim(); } else { }
-
+            if (checkBoxEmail.CheckState == CheckState.Checked)
+            {
+                checkInput.Email = txtEmail.Text.Trim();
+            }
             ValidationContext context = new ValidationContext(checkInput, null, null);
             List<ValidationResult> validationRes = new List<ValidationResult>();
             bool valid = Validator.TryValidateObject(checkInput, context, validationRes, true);
-
             if (!valid)
             {
                 foreach (ValidationResult validationResult in validationRes)
@@ -70,7 +70,6 @@ namespace monitoring_tool
                     MessageBox.Show("Complete all the fields");
                 }
             }
-
         }
 
         public void SaveFile() //save config file for alerts prefferences
@@ -79,36 +78,18 @@ namespace monitoring_tool
             {
 
                 if (checkBoxEmail.CheckState == CheckState.Checked &&
-                    intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() != "" && txtEmail2.Text.Trim() != "")
+                    intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() != "")
                 {
                     sendEmailIsChecked = "true";
                     sw.WriteLine(sendEmailIsChecked);
                     sw.WriteLine(txtEmail.Text.Trim());
-                    sw.WriteLine(txtEmail2.Text.Trim());
                     sw.WriteLine(intervalAlertEmail.Text.Trim());
                     sw.WriteLine(timeFormat.Text.Trim());
                 }
-                if (checkBoxEmail.CheckState == CheckState.Checked &&
-                     intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() == "" && txtEmail2.Text.Trim() != "")
+                else
                 {
-                    sendEmailIsChecked = "true";
-                    sw.WriteLine(sendEmailIsChecked);
-                    sw.WriteLine(txtEmail.Text.Trim());
-                    sw.WriteLine(txtEmail2.Text.Trim());
-                    sw.WriteLine(intervalAlertEmail.Text.Trim());
-                    sw.WriteLine(timeFormat.Text.Trim());
+                    MessageBox.Show("Complete all the fields");
                 }
-                if (checkBoxEmail.CheckState == CheckState.Checked &&
-                    intervalAlertEmail.Text.Trim() != "" && txtEmail.Text.Trim() != "" && txtEmail2.Text.Trim() == "")
-                {
-                    sendEmailIsChecked = "true";
-                    sw.WriteLine(sendEmailIsChecked);
-                    sw.WriteLine(txtEmail.Text.Trim());
-                    sw.WriteLine(txtEmail2.Text.Trim());
-                    sw.WriteLine(intervalAlertEmail.Text.Trim());
-                    sw.WriteLine(timeFormat.Text.Trim());
-                }
-
                 if (checkBoxEmail.CheckState == CheckState.Unchecked)
                 {
                     sendEmailIsChecked = "false";
@@ -132,14 +113,14 @@ namespace monitoring_tool
         {
             checkBoxEmail.CheckState = CheckState.Unchecked;
             txtEmail.Text = "";
-            txtEmail2.Text = "";
             intervalAlertEmail.Text = "";
             timeFormat.Text = "";
 
             memoryTrshld.Text = "85";
             cpuTrshld.Text = "85";
             volumeTrshld.Text = "10";
-            triggerTime.Text = "1";
+            triggerTime.Text = "15";
+            timeFormatInternalAlerts.Text = "minutes";
         }
 
         public void LoadConfigurationFile() // load config file for alerts prefferences
@@ -153,7 +134,6 @@ namespace monitoring_tool
                     {
                         checkBoxEmail.CheckState = CheckState.Checked;
                         txtEmail.Text = sr.ReadLine();
-                        txtEmail2.Text = sr.ReadLine();
                         intervalAlertEmail.Text = sr.ReadLine();
                         timeFormat.Text = sr.ReadLine();
                     }
@@ -161,7 +141,6 @@ namespace monitoring_tool
                     {
                         checkBoxEmail.CheckState = CheckState.Unchecked;
                         txtEmail.Text = "";
-                        txtEmail2.Text = "";
                         intervalAlertEmail.Text = "";
                         timeFormat.Text = "";
                     }
@@ -190,44 +169,43 @@ namespace monitoring_tool
 
         private void btnConfirmConf_Click(object sender, EventArgs e)
         {
-            ValidateConfiguration();
-            MainForm Instance = MainForm.GetInstance();
-            Instance.checkEmailAlerts.CheckState = CheckState.Checked;
-            Instance.checkEmailAlerts.CheckState = CheckState.Unchecked;
-            Instance.checkCpuAlert.CheckState = CheckState.Checked;
-            Instance.checkCpuAlert.CheckState = CheckState.Unchecked;
-            Instance.checkMemoryAlert.CheckState = CheckState.Checked;
-            Instance.checkMemoryAlert.CheckState = CheckState.Unchecked;
-            Instance.checkFreeSpaceAlert.CheckState = CheckState.Checked;
-            Instance.checkFreeSpaceAlert.CheckState = CheckState.Unchecked;
+                ValidateConfiguration();
+                MainForm Instance = MainForm.GetInstance();
+                Instance.checkEmailAlerts.CheckState = CheckState.Checked;
+                Instance.checkEmailAlerts.CheckState = CheckState.Unchecked;
+                Instance.checkCpuAlert.CheckState = CheckState.Checked;
+                Instance.checkCpuAlert.CheckState = CheckState.Unchecked;
+                Instance.checkMemoryAlert.CheckState = CheckState.Checked;
+                Instance.checkMemoryAlert.CheckState = CheckState.Unchecked;
+                Instance.checkFreeSpaceAlert.CheckState = CheckState.Checked;
+                Instance.checkFreeSpaceAlert.CheckState = CheckState.Unchecked;
         }
 
         private void btnCancelConf_Click(object sender, EventArgs e)
         {
+            LoadConfigurationFile();
             Hide();
         }
 
         private void checkBoxEmail_CheckStateChanged(object sender, EventArgs e)
         {
-            MainForm InstanceMainForm = MainForm.GetInstance();
+            MainForm Instance = MainForm.GetInstance();
 
             if (checkBoxEmail.CheckState == CheckState.Checked)
             {
                 txtEmail.Enabled = true;
-                txtEmail2.Enabled = true;
                 intervalAlertEmail.Enabled = true;
                 timeFormat.Enabled = true;
-                txtEmail.Text = "Enter e-mail address";
+                Instance.checkEmailAlerts.Enabled = true;
             }
             else
             {
-                InstanceMainForm.checkEmailAlerts.CheckState = CheckState.Unchecked;
+                Instance.checkEmailAlerts.Enabled = false;
 
                 timeFormat.Text = "";
                 intervalAlertEmail.Text = "";
                 txtEmail.Text = "";
                 txtEmail.Enabled = false;
-                txtEmail2.Enabled = false;
                 intervalAlertEmail.Enabled = false;
                 timeFormat.Enabled = false;
             }
@@ -235,7 +213,7 @@ namespace monitoring_tool
 
         private void memoryTrshld_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = !char.IsDigit(e.KeyChar) &  !char.IsWhiteSpace(e.KeyChar) & e.KeyChar != (char)Keys.Back;
+            e.Handled = !char.IsDigit(e.KeyChar) & !char.IsWhiteSpace(e.KeyChar) & e.KeyChar != (char)Keys.Back;
         }
 
         private void CPUTrshld_KeyPress(object sender, KeyPressEventArgs e)
@@ -256,6 +234,30 @@ namespace monitoring_tool
         private void triggerTime_KeyPress_1(object sender, KeyPressEventArgs e)
         {
             e.Handled = !char.IsDigit(e.KeyChar) & !char.IsWhiteSpace(e.KeyChar) & e.KeyChar != (char)Keys.Back;
+        }
+
+        public SendEmail SendEmail
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public ValidateInput ValidateInput
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        internal AlertsCheck AlertsCheck
+        {
+            get => default;
+            set
+            {
+            }
         }
     }
 }

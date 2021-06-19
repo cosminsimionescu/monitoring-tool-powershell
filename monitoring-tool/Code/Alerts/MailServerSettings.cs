@@ -24,11 +24,10 @@ namespace monitoring_tool
             InstanceConfigSMTP = this;
         }
 
-        private void btnConfirm_Click(object sender, EventArgs e) // Button for saving the config
+        private void btnConfirm_Click(object sender, EventArgs e)
         {
             SaveFile();
-            Hide();
-            MessageBox.Show("Configuration was saved");
+  
         }
 
         private void btnCancel_Click(object sender, EventArgs e) // Button for canceling the config
@@ -61,6 +60,9 @@ namespace monitoring_tool
                     sw.WriteLine(userName);
                     sw.WriteLine(password);
                     sw.WriteLine(SMTP);
+
+                    MessageBox.Show("Configuration was saved");
+                    Hide();
                 }
                 else
                 {
@@ -97,6 +99,14 @@ namespace monitoring_tool
                     }
                     sr.Close();
                 }
+            }
+        }
+
+        public SendEmail SendEmail
+        {
+            get => default;
+            set
+            {
             }
         }
     }

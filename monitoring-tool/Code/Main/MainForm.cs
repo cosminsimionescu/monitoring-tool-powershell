@@ -62,9 +62,9 @@ namespace monitoring_tool
         {
             StopApp();
             btn_StopApp.Visible = false;
-            targetServer.Enabled = true; //Enable text box to enter the server/ip address again
-            btn_Server.Enabled = true; //Enable the connect button
-            btn_Server.Visible = true; //Make the connect button visible
+            targetServer.Enabled = true; 
+            btn_Server.Enabled = true; 
+            btn_Server.Visible = true; 
             MessageBox.Show("Server monitoring was stopped");
         }
         public void StopApp()
@@ -238,26 +238,22 @@ namespace monitoring_tool
 
         public void UpdateMemoryAlert(string memoryAlert) //Update alerts for memory load on MainForm(Datagrid view)
         {
-
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
             DateTime Time = DateTime.Now; //time
             string date = Time.ToString();
             dataGridViewAlerts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
             dataGridViewAlerts.RowHeadersVisible = false;
             dataGridViewAlerts.Rows.Add(date, memoryAlert, InstanceResults.memoryPercentage + "%");
-
         }
 
         public void UpdateCPUAlert(string cpuAlert) //Update alerts for cpu load on MainForm(Datagrid view)
         {
-
             ParseResults InstanceResults = ParseResults.GetInstanceResults();
             DateTime Time = DateTime.Now; //time
             string date = Time.ToString();
             dataGridViewAlerts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
             dataGridViewAlerts.RowHeadersVisible = false;
             dataGridViewAlerts.Rows.Add(date, cpuAlert, InstanceResults.cpuPercentage + "%");
-
         }
 
         public void UpdateVolumeAlert(string volumeAlert, string driveName, double volumePercentage) //Update alerts for Free Space on MainForm(Datagrid view)
@@ -385,6 +381,7 @@ namespace monitoring_tool
         {
             AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
             MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
+            if (checkEmailAlerts.CheckState == CheckState.Checked) {
 
             if (checkEmailAlerts.CheckState == CheckState.Checked &&
                 InstanceAlert.checkBoxEmail.CheckState == CheckState.Checked &&
@@ -423,18 +420,21 @@ namespace monitoring_tool
             }
             else
             {
+                checkEmailAlerts.CheckState = CheckState.Unchecked;
                 timerEmailCpuAlerts.Enabled = false;
                 timerEmailMemoryAlerts.Enabled = false;
                 timerEmailFreeSpaceAlerts.Enabled = false;
+                MessageBox.Show("Check e-mail settings");
+                }
             }
+            else { }
+          
         }
 
         private async void timerCpuAlerts_Tick(object sender, EventArgs e)
         {
             bool sendEmail = false;
             AlertsCheck InstanceCheck = AlertsCheck.GetInstanceCheck();
-
-            InstanceCheck.AlertCpu(sendEmail);
 
             await Task.Run(() =>
            {
@@ -570,6 +570,30 @@ namespace monitoring_tool
             else
             {
                 InstanceServerSettings.BringToFront();
+            }
+        }
+
+        internal Tasks Tasks
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public ConfirmBox ConfirmBox
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        internal AlertsCheck AlertsCheck
+        {
+            get => default;
+            set
+            {
             }
         }
     }
