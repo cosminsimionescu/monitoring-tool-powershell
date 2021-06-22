@@ -235,29 +235,5 @@ namespace monitoring_tool
         {
             e.Handled = !char.IsDigit(e.KeyChar) & !char.IsWhiteSpace(e.KeyChar) & e.KeyChar != (char)Keys.Back;
         }
-
-        public SendEmail SendEmail
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public ValidateInput ValidateInput
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        internal AlertsCheck AlertsCheck
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }

@@ -572,29 +572,5 @@ namespace monitoring_tool
                 InstanceServerSettings.BringToFront();
             }
         }
-
-        internal Tasks Tasks
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public ConfirmBox ConfirmBox
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        internal AlertsCheck AlertsCheck
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }

@@ -136,13 +136,5 @@ namespace monitoring_tool
                 driveInformations.Add(driveId, driveSpacePercentageValue);
             }
         }
-
-        public MainForm MainForm
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }

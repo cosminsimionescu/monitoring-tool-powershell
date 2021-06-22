@@ -99,21 +99,5 @@ namespace monitoring_tool
 
             InstanceResults.ResultVolume(resultTaskVolume);
         }
-
-        internal RemoteSession RemoteSession
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        internal ParseResults ParseResults
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }

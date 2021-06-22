@@ -78,12 +78,5 @@ namespace monitoring_tool
             return volume;
         }
 
-        internal Tasks Tasks
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }

@@ -101,13 +101,5 @@ namespace monitoring_tool
                 }
             }
         }
-
-        public SendEmail SendEmail
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }
