@@ -1,4 +1,4 @@
 # monitoring-tool-powershell
 Monitoring tool with PowerShell
 
-This is an aplication wich represents an implementation of a monitoring tool for Windows servers based on PowerShell scripts integrated with C#. 
+This is an aplication wich represents a monitoring tool for Windows servers based on PowerShell scripts integrated with C#, using .NET 5.0 
