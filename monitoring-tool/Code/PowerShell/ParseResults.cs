@@ -24,7 +24,7 @@ namespace monitoring_tool
 
         public double memoryPercentage { get; set; }
         public double cpuPercentage { get; set; }
-        public Dictionary<string, double> driveInformations { get; set; } //dictionary for Drive name and freespace(%)
+        public Dictionary<string, double> driveInformations { get; set; }
 
         public void ResultsMemory(string taskResultMemory)
         {

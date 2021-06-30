@@ -26,7 +26,7 @@ namespace monitoring_tool
                 await Task.Run(() =>
                 {
 
-                    DateTime Time = DateTime.Now; //used for time in the e-mail
+                    DateTime Time = DateTime.Now;
 
                     AlertSettings InstanceAlert = AlertSettings.GetInstanceAlert();
                     MailServerSettings InstanceServerSettings = MailServerSettings.GetInstanceServerSettings();
@@ -56,6 +56,7 @@ namespace monitoring_tool
 
                         SmtpServer.Port = 587;
                         SmtpServer.Credentials = new System.Net.NetworkCredential(userName, password); // credentials
+
                         SmtpServer.EnableSsl = true; //enable SSL
 
                         SmtpServer.Send(mail);

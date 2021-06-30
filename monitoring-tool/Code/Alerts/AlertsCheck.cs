@@ -58,7 +58,7 @@ namespace monitoring_tool
 
             if (InstanceResults.cpuPercentage > cpuTreshold && sendEmail == true)
             {
-                InstanceSendEmail.SendAlertEmail(messageCpuEmail, messageCPUHit, InstanceResults.memoryPercentage);
+                InstanceSendEmail.SendAlertEmail(messageCpuEmail, messageCPUHit, InstanceResults.cpuPercentage);
             }
         }
 
