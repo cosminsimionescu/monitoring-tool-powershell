@@ -53,9 +53,11 @@ internal sealed class MainForm : Form
     private bool transitioning;
     private bool closeAfterStop;
     private bool suppressAlertToggles;
+    private readonly bool demoMode;
 
-    public MainForm(MonitoringService service, ISettingsStore settingsStore, AppSettings settings, IEmailSender emailSender, ILogger<MainForm> logger)
+    public MainForm(MonitoringService service, ISettingsStore settingsStore, AppSettings settings, IEmailSender emailSender, ILogger<MainForm> logger, bool demoMode = false)
     {
+        this.demoMode = demoMode;
         this.service = service;
         this.settingsStore = settingsStore;
         this.settings = settings;
@@ -65,7 +67,7 @@ internal sealed class MainForm : Form
         // Must be created on the UI thread: callbacks are posted to this thread's SynchronizationContext.
         this.progress = new Progress<MonitoringEvent>(this.OnMonitoringEvent);
 
-        this.Text = "Monitoring Tool";
+        this.Text = this.WindowTitle(null);
         this.AutoScaleMode = AutoScaleMode.Dpi;
         this.MinimumSize = new Size(980, 680);
         this.Size = new Size(1240, 820);
@@ -76,7 +78,17 @@ internal sealed class MainForm : Form
         this.serverBox.Text = settings.LastServer;
         this.ApplySettingsToUi();
         this.SetState(MonitoringState.Stopped, "Enter a server name and press Start.");
+
+        if (demoMode)
+        {
+            // Simulated data, no remote connection: start straight away so the UI can be explored.
+            this.serverBox.Text = "demo-server";
+            this.Shown += async (_, _) => await this.ToggleMonitoringAsync();
+        }
     }
+
+    private string WindowTitle(string? computer) =>
+        (computer is null ? "Monitoring Tool" : $"Monitoring Tool — {computer}") + (this.demoMode ? "  [DEMO DATA]" : "");
 
     protected override async void OnFormClosing(FormClosingEventArgs e)
     {
@@ -127,6 +139,17 @@ internal sealed class MainForm : Form
         connectionBar.Controls.Add(this.serverBox);
         connectionBar.Controls.Add(this.startStopButton);
         connectionBar.Controls.Add(this.stateBadge);
+        if (this.demoMode)
+        {
+            connectionBar.Controls.Add(new Label
+            {
+                Text = "DEMO MODE: simulated data, no server connection",
+                AutoSize = true,
+                ForeColor = Theme.Critical,
+                Font = new Font(this.Font, FontStyle.Bold),
+                Margin = new Padding(16, 7, 0, 0),
+            });
+        }
         this.serverBox.Margin = new Padding(0, 3, 6, 0);
         this.startStopButton.Click += async (_, _) => await this.ToggleMonitoringAsync();
         this.serverBox.KeyDown += async (_, e) =>
@@ -346,7 +369,7 @@ internal sealed class MainForm : Form
         this.cpuCard.SetValue(s.CpuPercent, this.settings.Alerts.CpuThresholdPercent, $"Alert at {this.settings.Alerts.CpuThresholdPercent} %");
         this.memoryCard.SetValue(s.MemoryPercent, this.settings.Alerts.MemoryThresholdPercent, $"{s.UsedMemoryGb:N1} GB of {s.TotalMemoryGb:N1} GB used");
         this.serverCard.SetText(s.ComputerName, $"Up {FormatUptime(s.Uptime)}");
-        this.Text = $"Monitoring Tool — {s.ComputerName}";
+        this.Text = this.WindowTitle(s.ComputerName);
         this.MarkUpdated(s.Timestamp);
     }
 
@@ -380,7 +403,7 @@ internal sealed class MainForm : Form
 
         if (newState == MonitoringState.Stopped)
         {
-            this.Text = "Monitoring Tool";
+            this.Text = this.WindowTitle(null);
             this.startStopButton.Text = "Start";
             this.serverBox.Enabled = !this.transitioning;
         }

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using MonitoringTool.App.Forms;
 using MonitoringTool.App.Infrastructure;
 using MonitoringTool.Core.Alerts;
+using MonitoringTool.Core.Collection;
 using MonitoringTool.Core.Monitoring;
 using MonitoringTool.Core.Settings;
 
@@ -10,7 +11,7 @@ namespace MonitoringTool.App;
 internal static class Program
 {
     [STAThread]
-    private static void Main()
+    private static void Main(string[] args)
     {
         // Generated from the Application* properties in the .csproj (DPI mode, visual styles, default font).
         ApplicationConfiguration.Initialize();
@@ -37,9 +38,11 @@ internal static class Program
         var settings = LoadSettings(store, log);
 
         var emailSender = new MailKitEmailSender();
-        var service = new MonitoringService(new PowerShellCollectorFactory(loggerFactory), emailSender, TimeProvider.System, loggerFactory.CreateLogger<MonitoringService>());
+        var demo = args.Contains("--demo", StringComparer.OrdinalIgnoreCase);
+        IMetricsCollectorFactory collectors = demo ? new DemoCollectorFactory() : new PowerShellCollectorFactory(loggerFactory);
+        var service = new MonitoringService(collectors, emailSender, TimeProvider.System, loggerFactory.CreateLogger<MonitoringService>());
 
-        Application.Run(new MainForm(service, store, settings, emailSender, loggerFactory.CreateLogger<MainForm>()));
+        Application.Run(new MainForm(service, store, settings, emailSender, loggerFactory.CreateLogger<MainForm>(), demo));
     }
 
     private static AppSettings LoadSettings(JsonSettingsStore store, ILogger log)

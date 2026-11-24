@@ -6,6 +6,11 @@ e-mail alerts.
 
 Built on **.NET 10** (WinForms) and the **PowerShell 7.6 SDK**.
 
+![Monitoring Tool main window (demo mode, simulated data)](docs/screenshot-demo.png)
+
+*Screenshot taken with `MonitoringTool.exe --demo`, which shows simulated data without connecting
+to a server. It was captured under Wine (no window frame, substitute font), so it looks slightly different on Windows.*
+
 ## Requirements
 
 **On the machine running the tool**
@@ -38,6 +43,9 @@ start the tool. The same text is under **Help → Remote server setup** in the a
 3. Use the **Notify on** check boxes above the alert list to turn alert types on or off;
    thresholds and repeat intervals are under **Settings → Alerts**.
 4. For e-mail alerts, configure **Settings → E-mail server** and use **Send test e-mail**.
+
+To try the UI without a server, start it with `MonitoringTool.exe --demo`
+(or `dotnet run --project src/MonitoringTool.App -- --demo`).
 
 An alert is shown when a threshold is crossed. While the condition lasts it is repeated every
 *N* minutes (separately for in-app and e-mail), and a *Resolved* entry follows when the value

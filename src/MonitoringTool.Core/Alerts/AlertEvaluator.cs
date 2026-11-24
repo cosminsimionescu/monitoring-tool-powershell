@@ -38,7 +38,7 @@ public sealed class AlertEvaluator(TimeProvider timeProvider)
             seen.Add(key);
             this.Check(results, server, settings, key, settings.DiskEnabled,
                 disk.FreePercent, settings.DiskFreeThresholdPercent, breachedWhenAbove: false,
-                v => $"Low free space on {disk.Drive}: {v:0.#}% free, {disk.FreeGb:0.#} GB (threshold {settings.DiskFreeThresholdPercent}%)",
+                v => $"Low free space on {disk.Drive} {v:0.#}% free ({disk.FreeGb:0.#} GB), threshold {settings.DiskFreeThresholdPercent}%",
                 v => $"Free space on {disk.Drive} is back to normal ({v:0.#}% free)");
         }
 
