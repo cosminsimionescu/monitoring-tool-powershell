@@ -8,14 +8,14 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
       - run: dotnet build MonitoringTool.slnx -c Release
       - run: dotnet test --solution MonitoringTool.slnx -c Release --no-build
       - run: dotnet publish src/MonitoringTool.App -c Release -r win-x64 --self-contained false -o publish
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: MonitoringTool-win-x64
           path: publish
