@@ -1,0 +1,29 @@
+root = true
+
+[*]
+indent_style = space
+insert_final_newline = true
+charset = utf-8
+
+[*.{csproj,props,targets,slnx,json,yml}]
+indent_size = 2
+
+[*.{cs,ps1}]
+indent_size = 4
+
+[*.cs]
+# Desktop app logging volume is tiny; LoggerMessage source generators would add noise for no gain.
+dotnet_diagnostic.CA1848.severity = none
+dotnet_diagnostic.CA1873.severity = none
+# Not a library: ConfigureAwait(false) is used in Core, but UI code must resume on the UI thread.
+dotnet_diagnostic.CA2007.severity = none
+# Messages are intentionally English-only.
+dotnet_diagnostic.CA1303.severity = none
+csharp_style_namespace_declarations = file_scoped:warning
+
+[tests/**.cs]
+# Descriptive_test_names_with_underscores are the convention here.
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CA1826.severity = none
+dotnet_diagnostic.CA1859.severity = none
+dotnet_diagnostic.CA2007.severity = none
