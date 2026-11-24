@@ -4,6 +4,7 @@ using System.Management.Automation.Remoting;
 using System.Management.Automation.Runspaces;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Collection;
 using MonitoringTool.Core.Models;
 
@@ -28,7 +29,8 @@ internal sealed class PowerShellCollectorFactory(ILoggerFactory loggerFactory) :
 internal sealed class PowerShellRemoteCollector(string target, TimeSpan commandTimeout, ILogger<PowerShellRemoteCollector> logger)
     : IMetricsCollector
 {
-    private const int MaxConcurrentCommands = 3;
+    /// <summary>3 metric jobs + up to 5 concurrent checks (the orchestrator enforces the check limit).</summary>
+    private const int MaxConcurrentCommands = 8;
 
     private static readonly string SummaryScript = LoadScript("GetSummary.ps1");
     private static readonly string ProcessesScript = LoadScript("GetTopProcesses.ps1");
@@ -85,6 +87,13 @@ internal sealed class PowerShellRemoteCollector(string target, TimeSpan commandT
         return new DisksSnapshot(disks, DateTimeOffset.Now);
     }
 
+    public async Task<CheckRunOutput> RunCheckAsync(CheckDefinition check, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(check);
+        var (output, errors) = await this.InvokeRawAsync(check.Script, null, TimeSpan.FromSeconds(check.TimeoutSeconds), cancellationToken).ConfigureAwait(false);
+        return new CheckRunOutput([.. output.Select(ToCheckRecord)], errors);
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (this.disposed)
@@ -113,6 +122,22 @@ internal sealed class PowerShellRemoteCollector(string target, TimeSpan commandT
 
     private async Task<IReadOnlyList<PSObject>> InvokeAsync(string script, Dictionary<string, object>? parameters, CancellationToken cancellationToken)
     {
+        var (output, errors) = await this.InvokeRawAsync(script, parameters, commandTimeout, cancellationToken).ConfigureAwait(false);
+        if (output.Count == 0 && errors.Count > 0)
+        {
+            throw new InvalidOperationException(errors[0]);
+        }
+
+        return output;
+    }
+
+    /// <summary>Runs a script remotely; returns its output and the messages of non-terminating errors.</summary>
+    private async Task<(IReadOnlyList<PSObject> Output, IReadOnlyList<string> Errors)> InvokeRawAsync(
+        string script,
+        Dictionary<string, object>? parameters,
+        TimeSpan timeout,
+        CancellationToken cancellationToken)
+    {
         var runspacePool = await this.GetPoolAsync(cancellationToken).ConfigureAwait(false);
 
         using var ps = PowerShell.Create();
@@ -124,7 +149,7 @@ internal sealed class PowerShellRemoteCollector(string target, TimeSpan commandT
         }
 
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeoutCts.CancelAfter(commandTimeout);
+        timeoutCts.CancelAfter(timeout);
         using var registration = timeoutCts.Token.Register(() =>
         {
             try
@@ -145,7 +170,7 @@ internal sealed class PowerShellRemoteCollector(string target, TimeSpan commandT
         catch (PipelineStoppedException) when (timeoutCts.IsCancellationRequested)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            throw new TimeoutException($"The command did not complete within {commandTimeout.TotalSeconds:0} seconds.");
+            throw new TimeoutException($"The command did not complete within {timeout.TotalSeconds:0} seconds.");
         }
         catch (Exception ex) when (ex is PSRemotingTransportException or InvalidRunspacePoolStateException)
         {
@@ -153,14 +178,20 @@ internal sealed class PowerShellRemoteCollector(string target, TimeSpan commandT
             throw new InvalidOperationException($"Connection to {this.Target} lost: {ex.Message}", ex);
         }
 
-        if (output.Count == 0 && ps.HadErrors && ps.Streams.Error.Count > 0)
-        {
-            var error = ps.Streams.Error[0];
-            throw new InvalidOperationException(error.Exception?.Message ?? error.ToString());
-        }
-
-        return [.. output];
+        var errors = ps.Streams.Error.Select(e => e.Exception?.Message ?? e.ToString()).ToList();
+        return ([.. output], errors);
     }
+
+    /// <summary>Unwraps one object written by a check script (see CheckOutputInterpreter for the contract).</summary>
+    private static CheckOutputRecord ToCheckRecord(PSObject o) => o.BaseObject switch
+    {
+        string text => new CheckOutputRecord(null, text, null),
+        bool ok => new CheckOutputRecord(ok ? "Ok" : "Critical", null, null),
+        _ => new CheckOutputRecord(
+            o.Properties["Status"]?.Value?.ToString(),
+            o.Properties["Message"]?.Value?.ToString(),
+            o.Properties["Value"]?.Value is { } v && double.TryParse(Convert.ToString(v is PSObject p ? p.BaseObject : v, CultureInfo.InvariantCulture), NumberStyles.Float, CultureInfo.InvariantCulture, out var d) ? d : null),
+    };
 
     private async Task<RunspacePool> GetPoolAsync(CancellationToken cancellationToken)
     {
@@ -192,7 +223,9 @@ internal sealed class PowerShellRemoteCollector(string target, TimeSpan commandT
             {
                 ComputerName = this.Target,
                 OpenTimeout = (int)TimeSpan.FromSeconds(30).TotalMilliseconds,
-                OperationTimeout = (int)commandTimeout.Add(TimeSpan.FromSeconds(30)).TotalMilliseconds,
+                // Must outlast the longest allowed command (custom checks may run up to MaxTimeoutSeconds);
+                // our own per-command timeout stops scripts much earlier.
+                OperationTimeout = (int)TimeSpan.FromSeconds(Math.Max(commandTimeout.TotalSeconds, CheckScriptParser.MaxTimeoutSeconds) + 30).TotalMilliseconds,
             };
 
             var newPool = RunspaceFactory.CreateRunspacePool(1, MaxConcurrentCommands, connectionInfo);

@@ -1,4 +1,5 @@
 using MonitoringTool.Core.Alerts;
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Models;
 
 namespace MonitoringTool.Core.Monitoring;
@@ -31,3 +32,7 @@ public sealed record AlertsRaised(IReadOnlyList<AlertNotification> Alerts) : Mon
 public sealed record CollectionFailed(string Area, string Message, DateTimeOffset Timestamp) : MonitoringEvent;
 
 public sealed record EmailResult(AlertNotification Alert, bool Succeeded, string? Error) : MonitoringEvent;
+
+public sealed record CheckStarted(string CheckId) : MonitoringEvent;
+
+public sealed record CheckCompleted(CheckResult Result) : MonitoringEvent;

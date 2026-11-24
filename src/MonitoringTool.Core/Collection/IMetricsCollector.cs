@@ -1,3 +1,4 @@
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Models;
 
 namespace MonitoringTool.Core.Collection;
@@ -18,7 +19,16 @@ public interface IMetricsCollector : IAsyncDisposable
     Task<ProcessesSnapshot> GetTopProcessesAsync(int count, CancellationToken cancellationToken);
 
     Task<DisksSnapshot> GetDisksAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Runs a custom check script on the target and returns its raw output. Must stop the script and
+    /// throw <see cref="TimeoutException"/> after <see cref="CheckDefinition.TimeoutSeconds"/>.
+    /// </summary>
+    Task<CheckRunOutput> RunCheckAsync(CheckDefinition check, CancellationToken cancellationToken);
 }
+
+/// <summary>What a check script produced: its output objects and the messages of any errors it wrote.</summary>
+public sealed record CheckRunOutput(IReadOnlyList<CheckOutputRecord> Records, IReadOnlyList<string> Errors);
 
 public interface IMetricsCollectorFactory
 {

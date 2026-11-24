@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Time.Testing;
 using MonitoringTool.Core.Alerts;
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Collection;
 using MonitoringTool.Core.Models;
 using MonitoringTool.Core.Monitoring;
@@ -26,7 +27,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
     [Fact]
     public async Task Start_connects_reports_running_and_collects_everything_immediately()
     {
-        await this.service.StartAsync("srv01", new AppSettings(), this.progress, TestContext.Current.CancellationToken);
+        await this.service.StartAsync("srv01", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken);
 
         Assert.True(this.service.IsRunning);
         await WaitUntil(() => this.progress.Of<SummaryUpdated>().Any() && this.progress.Of<ProcessesUpdated>().Any() && this.progress.Of<DisksUpdated>().Any());
@@ -38,7 +39,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
     public async Task Polls_again_on_each_interval()
     {
         var settings = new AppSettings { Polling = new PollingSettings { SummaryIntervalSeconds = 10 } };
-        await this.service.StartAsync("srv01", settings, this.progress, TestContext.Current.CancellationToken);
+        await this.service.StartAsync("srv01", settings, [], this.progress, TestContext.Current.CancellationToken);
         await WaitUntil(() => this.collector.SummaryCalls == 1);
 
         this.time.Advance(TimeSpan.FromSeconds(10));
@@ -54,7 +55,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
         // v1 started a new thread + remote session on every timer tick regardless of whether the
         // previous one had finished; with a 30 s CPU sample and a 9 s timer they piled up without bound.
         this.collector.SummaryGate = new TaskCompletionSource();
-        await this.service.StartAsync("srv01", new AppSettings(), this.progress, TestContext.Current.CancellationToken);
+        await this.service.StartAsync("srv01", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken);
         await WaitUntil(() => this.collector.SummaryCalls == 1);
 
         for (var i = 0; i < 20; i++)
@@ -81,7 +82,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
     public async Task Failures_are_reported_and_polling_recovers()
     {
         this.collector.FailDisks = true;
-        await this.service.StartAsync("srv01", new AppSettings(), this.progress, TestContext.Current.CancellationToken);
+        await this.service.StartAsync("srv01", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken);
 
         await WaitUntil(() => this.progress.Of<CollectionFailed>().Any(f => f.Area == "Disks"));
         Assert.Contains(this.progress.Of<StatusChanged>(), s => s.State == MonitoringState.Degraded);
@@ -99,7 +100,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
     {
         this.collector.FailConnect = true;
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => this.service.StartAsync("srv01", new AppSettings(), this.progress, TestContext.Current.CancellationToken));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => this.service.StartAsync("srv01", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken));
 
         Assert.False(this.service.IsRunning);
         Assert.Equal(MonitoringState.Stopped, this.progress.Of<StatusChanged>().Last().State);
@@ -110,7 +111,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
     public async Task Stop_cancels_in_flight_requests_promptly()
     {
         this.collector.SummaryGate = new TaskCompletionSource(); // never completes on its own
-        await this.service.StartAsync("srv01", new AppSettings(), this.progress, TestContext.Current.CancellationToken);
+        await this.service.StartAsync("srv01", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken);
         await WaitUntil(() => this.collector.SummaryCalls == 1);
 
         await this.service.StopAsync().WaitAsync(WaitTimeout, TestContext.Current.CancellationToken);
@@ -130,7 +131,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
             Smtp = new SmtpSettings { Host = "smtp.example.com", UserName = "alerts@example.com" },
         };
 
-        await this.service.StartAsync("srv01", settings, this.progress, TestContext.Current.CancellationToken);
+        await this.service.StartAsync("srv01", settings, [], this.progress, TestContext.Current.CancellationToken);
 
         await WaitUntil(() => this.progress.Of<AlertsRaised>().Any());
         await WaitUntil(() => this.email.Sent.Count == 1);
@@ -144,7 +145,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
     public async Task Settings_updates_apply_without_restart()
     {
         this.collector.Cpu = 70;
-        await this.service.StartAsync("srv01", new AppSettings(), this.progress, TestContext.Current.CancellationToken);
+        await this.service.StartAsync("srv01", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken);
         await WaitUntil(() => this.collector.SummaryCalls == 1);
         Assert.Empty(this.progress.Of<AlertsRaised>());
 
@@ -157,11 +158,11 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
     [Fact]
     public async Task Cannot_start_twice()
     {
-        await this.service.StartAsync("srv01", new AppSettings(), this.progress, TestContext.Current.CancellationToken);
-        await Assert.ThrowsAsync<InvalidOperationException>(() => this.service.StartAsync("srv02", new AppSettings(), this.progress, TestContext.Current.CancellationToken));
+        await this.service.StartAsync("srv01", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => this.service.StartAsync("srv02", new AppSettings(), [], this.progress, TestContext.Current.CancellationToken));
     }
 
-    private static async Task WaitUntil(Func<bool> condition)
+    internal static async Task WaitUntil(Func<bool> condition)
     {
         var deadline = DateTime.UtcNow + WaitTimeout;
         while (!condition())
@@ -175,7 +176,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
         }
     }
 
-    private sealed class RecordingProgress : IProgress<MonitoringEvent>
+    internal sealed class RecordingProgress : IProgress<MonitoringEvent>
     {
         private readonly ConcurrentQueue<MonitoringEvent> events = new();
 
@@ -184,12 +185,12 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
         public IReadOnlyList<T> Of<T>() => this.events.OfType<T>().ToList();
     }
 
-    private sealed class FakeFactory(IMetricsCollector collector) : IMetricsCollectorFactory
+    internal sealed class FakeFactory(IMetricsCollector collector) : IMetricsCollectorFactory
     {
         public IMetricsCollector Create(string target, TimeSpan commandTimeout) => collector;
     }
 
-    private sealed class FakeEmailSender : IEmailSender
+    internal sealed class FakeEmailSender : IEmailSender
     {
         public ConcurrentBag<(string Subject, string Body)> Sent { get; } = [];
 
@@ -200,7 +201,7 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
         }
     }
 
-    private sealed class FakeCollector : IMetricsCollector
+    internal sealed class FakeCollector : IMetricsCollector
     {
         private int summaryCalls;
         private int inFlightSummary;
@@ -256,6 +257,17 @@ public sealed class MonitoringServiceTests : IAsyncDisposable
         public Task<DisksSnapshot> GetDisksAsync(CancellationToken cancellationToken) => this.FailDisks
             ? Task.FromException<DisksSnapshot>(new InvalidOperationException("Access denied"))
             : Task.FromResult(new DisksSnapshot([new DiskUsage("C:", "OS", 100, 50)], DateTimeOffset.UtcNow));
+
+        public Func<CheckDefinition, CancellationToken, Task<CheckRunOutput>> CheckHandler { get; set; } =
+            (_, _) => Task.FromResult(new CheckRunOutput([new CheckOutputRecord("Ok", "fine", null)], []));
+
+        public ConcurrentQueue<string> CheckRuns { get; } = new();
+
+        public Task<CheckRunOutput> RunCheckAsync(CheckDefinition check, CancellationToken cancellationToken)
+        {
+            this.CheckRuns.Enqueue(check.Id);
+            return this.CheckHandler(check, cancellationToken);
+        }
 
         public ValueTask DisposeAsync()
         {

@@ -52,17 +52,31 @@ public sealed class MailKitEmailSender : IEmailSender
     public static (string Subject, string Body) Format(AlertNotification alert)
     {
         ArgumentNullException.ThrowIfNull(alert);
-        var tag = alert.Kind == AlertKind.Resolved ? "[RESOLVED]" : "[ALERT]";
+        var tag = alert.Kind == AlertKind.Resolved ? "[RESOLVED]"
+            : alert.Level == AlertLevel.Warning ? "[WARNING]"
+            : "[ALERT]";
         var subject = $"{tag} {alert.Server}: {alert.Message}";
-        var body = string.Join(Environment.NewLine,
+        var unit = alert.Unit.Length > 0 ? " " + alert.Unit : "";
+
+        var lines = new List<string>
+        {
             $"Server:    {alert.Server}",
-            $"Status:    {alert.Kind}",
+            $"Status:    {alert.Kind} ({alert.Level})",
             $"Message:   {alert.Message}",
-            $"Value:     {alert.Value.ToString("0.##", CultureInfo.InvariantCulture)}%",
-            $"Threshold: {alert.Threshold.ToString("0.##", CultureInfo.InvariantCulture)}%",
-            $"Time:      {alert.Timestamp.ToLocalTime():yyyy-MM-dd HH:mm:ss zzz}",
-            "",
-            "Sent by Monitoring Tool.");
-        return (subject, body);
+        };
+        if (alert.Value is { } value)
+        {
+            lines.Add($"Value:     {value.ToString("0.##", CultureInfo.InvariantCulture)}{unit}");
+        }
+
+        if (alert.Threshold is { } threshold)
+        {
+            lines.Add($"Threshold: {threshold.ToString("0.##", CultureInfo.InvariantCulture)}{unit}");
+        }
+
+        lines.Add(string.Create(CultureInfo.InvariantCulture, $"Time:      {alert.Timestamp.ToLocalTime():yyyy-MM-dd HH:mm:ss zzz}"));
+        lines.Add("");
+        lines.Add("Sent by Monitoring Tool.");
+        return (subject, string.Join(Environment.NewLine, lines));
     }
 }

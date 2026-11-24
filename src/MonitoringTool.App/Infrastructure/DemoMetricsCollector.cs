@@ -1,3 +1,4 @@
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Collection;
 using MonitoringTool.Core.Models;
 
@@ -52,6 +53,21 @@ internal sealed class DemoMetricsCollector(string target) : IMetricsCollector
             new DiskUsage("D:", "Data", 931.5, 61.2),
             new DiskUsage("E:", "Logs", 249.9, 118.3),
         ], DateTimeOffset.Now);
+    }
+
+    public async Task<CheckRunOutput> RunCheckAsync(CheckDefinition check, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(check);
+        await Task.Delay(300 + this.random.Next(700), cancellationToken).ConfigureAwait(false);
+        CheckOutputRecord record = check.Id switch
+        {
+            "pending-reboot" => new("Warning", "Reboot pending (Windows Update)", null),
+            "expiring-certificates" => new("Warning", "web01.contoso.local expires in 12 day(s)", 12),
+            "recent-system-errors" => new("Warning", "3 error event(s) in the last hour: Service Control Manager x2, disk x1", 3),
+            "stopped-auto-services" => new("Ok", "All automatic services are running", 0),
+            _ => new("Ok", "OK (simulated)", null),
+        };
+        return new CheckRunOutput([record], []);
     }
 
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;

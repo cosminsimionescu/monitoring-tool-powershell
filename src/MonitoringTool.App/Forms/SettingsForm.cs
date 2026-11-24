@@ -50,6 +50,7 @@ internal sealed class SettingsForm : Form
     private readonly NumericUpDown disksInterval = Number(10, 86400);
     private readonly NumericUpDown topCount = Number(1, 100);
     private readonly NumericUpDown commandTimeout = Number(5, 600);
+    private readonly NumericUpDown maxConcurrentChecks = Number(1, 5);
 
     public SettingsForm(AppSettings settings, IEmailSender emailSender, SettingsPage page)
     {
@@ -206,6 +207,7 @@ internal sealed class SettingsForm : Form
         Row(t, "Refresh disks every", this.disksInterval, "seconds");
         Row(t, "Processes to show", this.topCount);
         Row(t, "Remote command timeout", this.commandTimeout, "seconds (applies on next start)");
+        Row(t, "Custom checks in parallel", this.maxConcurrentChecks, "(applies on next start or reload)");
         return new TabPage("Polling") { Controls = { t }, UseVisualStyleBackColor = true };
     }
 
@@ -234,6 +236,7 @@ internal sealed class SettingsForm : Form
         this.disksInterval.Value = Clamp(this.disksInterval, s.Polling.DisksIntervalSeconds);
         this.topCount.Value = Clamp(this.topCount, s.Polling.TopProcessCount);
         this.commandTimeout.Value = Clamp(this.commandTimeout, s.Polling.CommandTimeoutSeconds);
+        this.maxConcurrentChecks.Value = Clamp(this.maxConcurrentChecks, s.Checks.MaxConcurrentChecks);
     }
 
     private static decimal Clamp(NumericUpDown box, int value) => Math.Clamp(value, box.Minimum, box.Maximum);
@@ -272,6 +275,7 @@ internal sealed class SettingsForm : Form
             TopProcessCount = (int)this.topCount.Value,
             CommandTimeoutSeconds = (int)this.commandTimeout.Value,
         },
+        Checks = this.original.Checks with { MaxConcurrentChecks = (int)this.maxConcurrentChecks.Value },
     };
 
     private void UpdateEnabledState()

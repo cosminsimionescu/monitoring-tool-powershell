@@ -13,8 +13,41 @@ public sealed record AppSettings
 
     public SmtpSettings Smtp { get; init; } = new();
 
+    public ChecksSettings Checks { get; init; } = new();
+
     public IReadOnlyList<string> Validate() =>
-        [.. Polling.Validate(), .. Alerts.Validate(), .. Alerts.EmailEnabled ? Smtp.Validate() : []];
+        [.. Polling.Validate(), .. Alerts.Validate(), .. Checks.Validate(), .. Alerts.EmailEnabled ? Smtp.Validate() : []];
+}
+
+public sealed record ChecksSettings
+{
+    /// <summary>Raise in-app/e-mail alerts when a check reports Warning or Critical.</summary>
+    public bool AlertsEnabled { get; init; } = true;
+
+    /// <summary>Check ids (script file names) the user switched off.</summary>
+    public IReadOnlyList<string> DisabledCheckIds { get; init; } = [];
+
+    /// <summary>
+    /// How many custom checks may run on the server at the same time. Keeps a large check library
+    /// from saturating the remote session and delaying the built-in metrics.
+    /// </summary>
+    public int MaxConcurrentChecks { get; init; } = 2;
+
+    public bool IsEnabled(string checkId) => !DisabledCheckIds.Contains(checkId, StringComparer.OrdinalIgnoreCase);
+
+    public ChecksSettings WithEnabled(string checkId, bool enabled) => this with
+    {
+        DisabledCheckIds = enabled
+            ? [.. DisabledCheckIds.Where(id => !string.Equals(id, checkId, StringComparison.OrdinalIgnoreCase))]
+            : [.. DisabledCheckIds.Where(id => !string.Equals(id, checkId, StringComparison.OrdinalIgnoreCase)), checkId],
+    };
+
+    public IReadOnlyList<string> Validate()
+    {
+        var errors = new List<string>();
+        PollingSettings.Check(errors, MaxConcurrentChecks, 1, 5, "Checks running at the same time");
+        return errors;
+    }
 }
 
 public sealed record PollingSettings

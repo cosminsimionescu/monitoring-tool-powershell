@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using MonitoringTool.App.Forms;
 using MonitoringTool.App.Infrastructure;
 using MonitoringTool.Core.Alerts;
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Collection;
 using MonitoringTool.Core.Monitoring;
 using MonitoringTool.Core.Settings;
@@ -42,7 +43,33 @@ internal static class Program
         IMetricsCollectorFactory collectors = demo ? new DemoCollectorFactory() : new PowerShellCollectorFactory(loggerFactory);
         var service = new MonitoringService(collectors, emailSender, TimeProvider.System, loggerFactory.CreateLogger<MonitoringService>());
 
-        Application.Run(new MainForm(service, store, settings, emailSender, loggerFactory.CreateLogger<MainForm>(), demo));
+        // Built-in checks ship next to the exe; the user's folder can add checks or override them by name.
+        var builtInChecks = Path.Combine(AppContext.BaseDirectory, "Checks");
+        var userChecks = PrepareUserChecksFolder(builtInChecks, log);
+        CheckLibrary LoadChecks() => CheckLibrary.Load([builtInChecks, userChecks]);
+
+        Application.Run(new MainForm(service, store, settings, emailSender, loggerFactory.CreateLogger<MainForm>(), LoadChecks, userChecks, demo));
+    }
+
+    private static string PrepareUserChecksFolder(string builtInChecks, ILogger log)
+    {
+        var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MonitoringTool", "checks");
+        try
+        {
+            Directory.CreateDirectory(folder);
+            var template = Path.Combine(builtInChecks, "_template.ps1");
+            var target = Path.Combine(folder, "_template.ps1");
+            if (File.Exists(template) && !File.Exists(target))
+            {
+                File.Copy(template, target);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            log.LogWarning(ex, "Could not prepare the custom checks folder {Folder}", folder);
+        }
+
+        return folder;
     }
 
     private static AppSettings LoadSettings(JsonSettingsStore store, ILogger log)

@@ -28,4 +28,9 @@
     <EmbeddedResource Include="Scripts\*.ps1" LogicalName="Scripts.%(Filename)%(Extension)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Built-in custom checks ship as plain files next to the exe so they can be read and copied. -->
+    <None Include="Checks\*.ps1" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

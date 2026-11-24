@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Time.Testing;
 using MonitoringTool.Core.Alerts;
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Models;
 using MonitoringTool.Core.Settings;
 
@@ -114,6 +115,43 @@ public sealed class AlertEvaluatorTests
         Assert.Empty(this.evaluator.Evaluate("srv", new DisksSnapshot([], this.time.GetUtcNow()), this.settings));
         Assert.Equal(AlertKind.Raised, Assert.Single(this.evaluator.Evaluate("srv", low, this.settings)).Kind);
     }
+
+    [Fact]
+    public void Check_warning_escalates_to_critical_and_unknown_changes_nothing()
+    {
+        var warning = Assert.Single(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Warning), this.settings, alertsEnabled: true));
+        Assert.Equal((AlertKind.Raised, AlertLevel.Warning), (warning.Kind, warning.Level));
+        Assert.Null(warning.Value);
+
+        Assert.Empty(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Unknown), this.settings, alertsEnabled: true));
+        Assert.Empty(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Warning), this.settings, alertsEnabled: true));
+
+        var critical = Assert.Single(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Critical), this.settings, alertsEnabled: true));
+        Assert.Equal((AlertKind.Raised, AlertLevel.Critical), (critical.Kind, critical.Level));
+
+        var resolved = Assert.Single(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Ok), this.settings, alertsEnabled: true));
+        Assert.Equal(AlertKind.Resolved, resolved.Kind);
+        Assert.Equal("Pending reboot is OK again", resolved.Message);
+    }
+
+    [Fact]
+    public void Check_alerts_disabled_resolves_and_suppresses()
+    {
+        Assert.Single(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Critical), this.settings, alertsEnabled: true));
+        Assert.Equal(AlertKind.Resolved, Assert.Single(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Critical), this.settings, alertsEnabled: false)).Kind);
+        Assert.Empty(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Critical), this.settings, alertsEnabled: false));
+    }
+
+    [Fact]
+    public void Removed_checks_are_forgotten()
+    {
+        Assert.Single(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Critical), this.settings, alertsEnabled: true));
+        this.evaluator.RetainChecks([]);
+        Assert.Equal(AlertKind.Raised, Assert.Single(this.evaluator.Evaluate("srv", this.CheckResult(CheckStatus.Critical), this.settings, alertsEnabled: true)).Kind);
+    }
+
+    private CheckResult CheckResult(CheckStatus status) =>
+        new("pending-reboot", "Pending reboot", status, status.ToString(), null, this.time.GetUtcNow(), TimeSpan.FromSeconds(1));
 
     private SystemSummary Summary(double cpu = 10, double memory = 10) =>
         new("srv", cpu, 100, memory, TimeSpan.FromHours(1), this.time.GetUtcNow());

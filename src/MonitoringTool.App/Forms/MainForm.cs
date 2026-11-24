@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MonitoringTool.App.Controls;
 using MonitoringTool.App.Infrastructure;
 using MonitoringTool.Core.Alerts;
+using MonitoringTool.Core.Checks;
 using MonitoringTool.Core.Collection;
 using MonitoringTool.Core.Models;
 using MonitoringTool.Core.Monitoring;
@@ -45,6 +46,11 @@ internal sealed class MainForm : Form
     private readonly ToolStripStatusLabel statusMessage = new() { Spring = true, TextAlign = ContentAlignment.MiddleLeft };
     private readonly ToolStripStatusLabel statusUpdated = new() { ForeColor = Theme.Muted };
     private readonly ToolStripMenuItem remoteSessionMenu = new("Open remote PowerShell session to server");
+    private readonly ChecksPanel checksPanel = new();
+    private readonly TabPage checksTab = new("Checks") { UseVisualStyleBackColor = true };
+    private readonly Func<CheckLibrary> loadChecks;
+    private readonly string userChecksDirectory;
+    private CheckLibrary checkLibrary = CheckLibrary.Empty;
 
     private Font? boldGridFont;
     private AppSettings settings;
@@ -55,8 +61,13 @@ internal sealed class MainForm : Form
     private bool suppressAlertToggles;
     private readonly bool demoMode;
 
-    public MainForm(MonitoringService service, ISettingsStore settingsStore, AppSettings settings, IEmailSender emailSender, ILogger<MainForm> logger, bool demoMode = false)
+    public MainForm(MonitoringService service, ISettingsStore settingsStore, AppSettings settings, IEmailSender emailSender, ILogger<MainForm> logger,
+        Func<CheckLibrary> loadChecks,
+        string userChecksDirectory,
+        bool demoMode = false)
     {
+        this.loadChecks = loadChecks;
+        this.userChecksDirectory = userChecksDirectory;
         this.demoMode = demoMode;
         this.service = service;
         this.settingsStore = settingsStore;
@@ -78,6 +89,8 @@ internal sealed class MainForm : Form
         this.serverBox.Text = settings.LastServer;
         this.ApplySettingsToUi();
         this.SetState(MonitoringState.Stopped, "Enter a server name and press Start.");
+        this.WireChecksPanel();
+        this.Load += (_, _) => this.LoadCheckLibrary();
 
         if (demoMode)
         {
@@ -213,10 +226,18 @@ internal sealed class MainForm : Form
 
         var alertsSection = new Section("Alerts", this.alertGrid, alertsLabel, this.cpuAlertCheck, this.memoryAlertCheck, this.diskAlertCheck, this.emailAlertCheck, clearButton);
 
-        // Resizable split between live data and the alert log.
+        // Bottom area: alert log and custom checks as tabs.
+        var alertsTab = new TabPage("Alerts") { UseVisualStyleBackColor = true };
+        alertsTab.Controls.Add(alertsSection);
+        this.checksTab.Controls.Add(this.checksPanel);
+        var bottomTabs = new TabControl { Dock = DockStyle.Fill, Padding = new Point(12, 4) };
+        bottomTabs.TabPages.Add(alertsTab);
+        bottomTabs.TabPages.Add(this.checksTab);
+
+        // Resizable split between live data and the bottom tabs.
         var split = new SplitContainer { Dock = DockStyle.Fill, Orientation = Orientation.Horizontal, SplitterWidth = 6 };
         split.Panel1.Controls.Add(grids);
-        split.Panel2.Controls.Add(alertsSection);
+        split.Panel2.Controls.Add(bottomTabs);
         this.Load += (_, _) => split.SplitterDistance = (int)(split.Height * 0.58);
 
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(8, 0, 8, 4) };
@@ -245,6 +266,8 @@ internal sealed class MainForm : Form
         settingsMenu.DropDownItems.Add("&Alerts…", null, (_, _) => this.ShowSettings(SettingsPage.Alerts));
         settingsMenu.DropDownItems.Add("&E-mail server…", null, (_, _) => this.ShowSettings(SettingsPage.Email));
         settingsMenu.DropDownItems.Add("&Polling…", null, (_, _) => this.ShowSettings(SettingsPage.Polling));
+        settingsMenu.DropDownItems.Add(new ToolStripSeparator());
+        settingsMenu.DropDownItems.Add("Open custom &checks folder", null, (_, _) => OpenFolder(this.userChecksDirectory));
 
         var tools = new ToolStripMenuItem("&Tools");
         tools.DropDownItems.Add("PowerShell console (administrator)", null, (_, _) => this.LaunchPowerShell(null));
@@ -254,6 +277,7 @@ internal sealed class MainForm : Form
 
         var help = new ToolStripMenuItem("&Help");
         help.DropDownItems.Add("Remote server &setup…", null, (_, _) => ShowSetupHelp(this));
+        help.DropDownItems.Add("Writing custom &checks…", null, (_, _) => this.ShowChecksHelp());
 
         var menu = new MenuStrip();
         menu.Items.AddRange([file, settingsMenu, tools, help]);
@@ -293,7 +317,7 @@ internal sealed class MainForm : Form
             this.UseWaitCursor = true;
 
             // Connecting can take many seconds on an unreachable host; the UI stays responsive meanwhile.
-            await this.service.StartAsync(server, this.settings, this.progress);
+            await this.service.StartAsync(server, this.settings, this.checkLibrary.Checks, this.progress);
             this.AddLogEntry("Info", $"Started monitoring {server}", "");
         }
         catch (Exception ex)
@@ -346,13 +370,20 @@ internal sealed class MainForm : Form
                 {
                     var severity = alert.Kind switch
                     {
+                        AlertKind.Raised when alert.Level == AlertLevel.Warning => "Warning",
                         AlertKind.Raised => "Alert",
                         AlertKind.Ongoing => "Still active",
                         _ => "Resolved",
                     };
-                    this.AddLogEntry(severity, alert.Message, $"{alert.Value:0.#} %", alert.Timestamp.LocalDateTime);
+                    this.AddLogEntry(severity, alert.Message, alert.FormatValue(), alert.Timestamp.LocalDateTime);
                 }
 
+                break;
+            case CheckStarted c:
+                this.checksPanel.OnCheckStarted(c.CheckId);
+                break;
+            case CheckCompleted c:
+                this.checksPanel.OnCheckCompleted(c.Result);
                 break;
             case EmailResult { Succeeded: false } r:
                 this.AddLogEntry("E-mail failed", r.Error ?? "Unknown error", "");
@@ -400,6 +431,8 @@ internal sealed class MainForm : Form
         }
 
         this.lastProblem = newState == MonitoringState.Degraded ? message : null;
+
+        this.checksPanel.SetRunning(newState is MonitoringState.Running or MonitoringState.Degraded);
 
         if (newState == MonitoringState.Stopped)
         {
@@ -460,7 +493,7 @@ internal sealed class MainForm : Form
         e.CellStyle.ForeColor = text switch
         {
             "Alert" or "Error" or "E-mail failed" => Theme.Critical,
-            "Still active" => Theme.Warning,
+            "Still active" or "Warning" => Theme.Warning,
             "Resolved" => Theme.Ok,
             _ => Theme.Muted,
         };
@@ -532,6 +565,72 @@ internal sealed class MainForm : Form
             this.statusMessage.Text = "Settings could not be saved: " + ex.Message;
         }
     }
+
+    // ---------------------------------------------------------------- custom checks
+
+    private void WireChecksPanel()
+    {
+        this.checksPanel.OpenFolderRequested += (_, _) => OpenFolder(this.userChecksDirectory);
+        this.checksPanel.ReloadRequested += async (_, _) => await this.ReloadChecksAsync();
+        this.checksPanel.RunNowRequested += async (_, id) =>
+        {
+            if (!await this.service.RunCheckNowAsync(id))
+            {
+                this.statusMessage.Text = "The check is already running or monitoring is stopped.";
+            }
+        };
+        this.checksPanel.CheckEnabledChanged += (_, e) =>
+            this.SaveSettings(this.settings with { Checks = this.settings.Checks.WithEnabled(e.CheckId, e.Enabled) });
+        this.checksPanel.AlertsToggled += (_, on) =>
+            this.SaveSettings(this.settings with { Checks = this.settings.Checks with { AlertsEnabled = on } });
+        this.checksPanel.FailingCountChanged += (_, failing) =>
+            this.checksTab.Text = failing > 0 ? $"Checks ({failing} failing)" : "Checks";
+    }
+
+    private void LoadCheckLibrary()
+    {
+        try
+        {
+            this.checkLibrary = this.loadChecks();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            this.logger.LogError(ex, "Loading checks failed");
+            this.checkLibrary = CheckLibrary.Empty;
+            this.AddLogEntry("Error", "Custom checks could not be loaded: " + ex.Message, "");
+        }
+
+        foreach (var error in this.checkLibrary.Errors)
+        {
+            this.AddLogEntry("Error", error, "");
+        }
+
+        this.checksPanel.SetDefinitions(this.checkLibrary.Checks, this.settings.Checks);
+    }
+
+    private async Task ReloadChecksAsync()
+    {
+        this.LoadCheckLibrary();
+        if (this.service.IsRunning)
+        {
+            await this.service.ReloadChecksAsync(this.checkLibrary.Checks);
+        }
+
+        this.AddLogEntry("Info", $"Loaded {this.checkLibrary.Checks.Count} custom check(s)", "");
+    }
+
+    private void ShowChecksHelp() => MessageBox.Show(
+        this,
+        "A custom check is a PowerShell script (.ps1) that runs on the monitored server on its own schedule." + Environment.NewLine + Environment.NewLine +
+        "1. Open the checks folder (Settings → Open custom checks folder)." + Environment.NewLine +
+        "2. Copy _template.ps1 to a new name without the leading underscore and edit it." + Environment.NewLine +
+        "3. Press \"Reload checks\" on the Checks tab." + Environment.NewLine + Environment.NewLine +
+        "The script should output objects with Status ('Ok', 'Warning' or 'Critical'), Message and optionally Value." + Environment.NewLine +
+        "Optional header comments set the schedule:  # @name: …   # @interval: 300   # @timeout: 60" + Environment.NewLine + Environment.NewLine +
+        "A file with the same name as a built-in check replaces it.",
+        "Writing custom checks",
+        MessageBoxButtons.OK,
+        MessageBoxIcon.Information);
 
     // ---------------------------------------------------------------- tools
 

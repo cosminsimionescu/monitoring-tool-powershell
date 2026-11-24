@@ -10,6 +10,8 @@
   <ItemGroup>
     <PackageReference Include="xunit.v3" Version="4.0.3" />
     <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.11.1" />
+    <!-- Only the PowerShell parser is used, to syntax-check the shipped .ps1 files on any OS. -->
+    <PackageReference Include="System.Management.Automation" Version="7.6.10" />
   </ItemGroup>
 
   <ItemGroup>
