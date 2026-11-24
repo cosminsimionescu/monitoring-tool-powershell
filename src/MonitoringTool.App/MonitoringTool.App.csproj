@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>MonitoringTool.App</RootNamespace>
+    <AssemblyName>MonitoringTool</AssemblyName>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationVisualStyles>true</ApplicationVisualStyles>
+    <ApplicationUseCompatibleTextRendering>false</ApplicationUseCompatibleTextRendering>
+    <ApplicationDefaultFont>Segoe UI, 9pt</ApplicationDefaultFont>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- PowerShell 7.6 is the LTS line built on .NET 10. -->
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.6.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.15" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonitoringTool.Core\MonitoringTool.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Remote scripts live in .ps1 files so they can be read/tested in an editor, and are embedded at build time. -->
+    <EmbeddedResource Include="Scripts\*.ps1" LogicalName="Scripts.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
